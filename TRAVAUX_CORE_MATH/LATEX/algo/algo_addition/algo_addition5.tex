@@ -1,0 +1,21 @@
+\subsubsection{Addition d'un Double-Double avec un Triple-Double}
+
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Add233}}
+\begin{algorithmic}[1]
+\Input $a_h$, $a_{\ell}$  is a double-double and $b_h$, $b_m$, $b_{\ell}$ is a triple-double numbers.
+\Condition $1$ $\lvert b_h \rvert \le 2^{-2}.\lvert a_h \rvert$
+\Condition $\lvert a_l \rvert \le 2^{-53} .\lvert a_h \rvert$
+\Condition $\lvert b_m \rvert \le 2^{-\beta_o} .\lvert b_h \rvert$
+\Condition $\lvert b_l \rvert \le 2^{-\beta_u} .\lvert b_m \rvert$
+\Condition $\beta_o \ge 4$, $\beta_u \ge 1$ 
+\Output $r_h$, $r_m$, $r_{\ell}$ is a triple-double numbers.
+\State $r_h,t_1 = Add112Cond(a_h,b_h)$\\
+    $t_2,t_3 = Add112Cond(a_{\ell},b_m)$\\
+    $t_4,t_5 = Add112Cond(t_1,t_2)$\\
+    $t_6 = t_3+b_{\ell}$\\
+    $t_7 = t_6+t_5$\\
+    $r_m,r_{\ell} = Add112Cond(t_4,t_7)$\\
+    return $r_h$, $r_m$, $r_{\ell}$
+\end{algorithmic}
+\end{algorithm}

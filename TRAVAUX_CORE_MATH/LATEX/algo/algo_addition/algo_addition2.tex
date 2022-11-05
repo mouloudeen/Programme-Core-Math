@@ -1,0 +1,147 @@
+\subsection{Add122}
+See algorithm \ref{algo:Add122}
+\begin{lem}[Add122] Let $a$ a \textbf{Double} number and $(b_h,b_{\ell})$ a \textbf{Double-Double} number, with $\lvert a \rvert \ge \lvert b_h \rvert$, $s$ and $t$ result of $Add122(a,b_h,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so:
+\begin{itemize}
+    
+    \item $(1)$ $s+t = a+b_h+b_{\ell} + \theta$ with $\lvert \theta \rvert \le u.\lvert t \rvert$
+    \item  $(2)$ $ \lvert t \rvert \le 2.u. \lvert s \rvert$
+\end{itemize}
+\end{lem}
+$2.u = 2^{-52}$ for $RNDN$ and $2.u = 2^{-51}$ for the other rounding modes.
+
+\begin{proof} \color{-yellow}
+$(1)$ We suppose $\lvert a \rvert \ge \lvert b_h \rvert $ 
+and there is no \textbf{overflow}.\\
+We have:
+\begin{itemize}
+    \item $s+ \ell = Add112(a,b_h)$ according to Lemma \ref{lem:add112} $\Rightarrow$ $s+\ell$ is exactly equal to $a+b_h$.
+    \item $t = \circ (\ell + b_{\ell})$ $\Rightarrow$ $t = \ell + b_{\ell}+ \theta$ according to the collary \ref{coroll:UX} we have $\lvert \theta \rvert \le u. \lvert t \rvert$
+\end{itemize}
+So, we have $s+t = a+ b_h - \ell +l+b_{\ell} + \theta_1$ $\Rightarrow$ $s+t = a+ b_h + b_{\ell} + \theta_1$ $\Rightarrow$ $s+t = a+b + \theta $ with 
+$\lvert \theta \rvert \le u. \lvert t \rvert$.\\
+
+$(2)$ We suppose $\lvert a \rvert \ge \lvert b_h \rvert $
+and there is no \textbf{overflow}.\\
+We have:
+\begin{itemize}
+    \item $t= \circ(\ell + b_{\ell})$ $\Rightarrow$ $t= \ell + b_{\ell} +  \epsilon$
+    with $\lvert \epsilon \rvert \le u. \lvert t \rvert$
+    \item $s+ \ell = Add112(a,b_h)$ according to Lemma \ref{lem:add112} $\Rightarrow$ $s+\ell =a+b_h$ and  $\lvert \ell \rvert \le u. \lvert s \rvert$ $\Rightarrow$
+    
+    $$ \lvert s + \ell \rvert \ge \lvert s  \rvert - \lvert \ell \rvert $$
+    $$ \lvert s + \ell \rvert \ge \lvert s  \rvert - u.\lvert s \rvert $$
+    $$ \lvert s + \ell \rvert \ge (1 - u).\lvert s \rvert $$
+    $\Rightarrow$
+    $$(1 - u).\lvert s \rvert \le \lvert a+ b_h \rvert$$
+    $$\lvert s \rvert \le \frac{1}{1-u}.\lvert a+ b_h \rvert$$
+    As $\lvert \ell \rvert \le u. \lvert s \rvert$ $\Rightarrow$
+    $$\lvert \ell \rvert \le \frac{u}{1-u}.\lvert a+ b_h \rvert$$
+    As $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$ and $\lvert a \rvert \ge \lvert b_h \rvert$
+    $\Rightarrow$ $\lvert b_{\ell} \rvert \le u.\lvert a \rvert $ and that $\lvert a \rvert \le 2.\lvert a+b_h \rvert$ $\Rightarrow$\\
+    $$ \lvert b_{\ell} \rvert \le 2.u. \lvert a+b_h \rvert$$
+    $$\lvert t \rvert \le \frac{u}{1-u}. \lvert a+b_h \rvert + 2.u. \lvert a+b_h \rvert + u . \lvert t \rvert$$
+    $$(1 - u).\lvert t \rvert \le (\frac{u}{1-u}  + 2.u). \lvert a+b_h \rvert$$
+    $$\lvert t \rvert \le \frac{1}{1-u}.(\frac{u}{1-u}  + 2.u). \lvert a+b_h \rvert$$
+    We seek the upper bound of $\lvert a+b_h \rvert $ in function of $\lvert s \rvert$:
+    $$\lvert a+b_h \rvert \le (1+u). \lvert s \rvert$$
+    $\Rightarrow$
+    $$\lvert t \rvert \le \frac{1}{1-u}.(\frac{u}{1-u}  + 2.u). (1+u). \lvert s \rvert$$
+   $$\lvert t \rvert \le \frac{(-2.u^2+2.u).(u+1)}{(1-u)^2}.\lvert s \rvert$$  
+    As $\frac{(-2.u^2+2.u).(u+1)}{(1-u)^2} \le 2.u$
+    We have:
+    $$\lvert t \rvert \le 2.u.\lvert s \rvert$$
+\end{itemize}
+\end{proof}
+
+
+\begin{theo}[Relative error algorithm $Add122$ without occurring of cancellation] \label{the1:add122}
+Let $a$ a \textbf{double} number and $(b_h,b_{\ell})$ a \textbf{double-double} number are the arguments of the function $Add122$:\\
+If $a$ and $b_h$ are the same sign, so:\\
+$$s+t = (a+b_h+b_{\ell})(1+\epsilon)$$ with $\lvert \epsilon \rvert \le 2.u^2$.
+\end{theo}
+$2.u^2= 2^{-105}$ for $RNDN$ and $2.u^2 = 2^{-103}$ for the other rounding modes.
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $4.2$ proof's(\cite{lauter2005basic}).\\
+We have $\lvert a \rvert \ge \lvert b_h \rvert$, either $a > 0$ and $b_h > 0$ or $a < 0$ and $b_h < 0$. As they're symmetric, we only use $a > 0$ and $b_h > 0$.\\
+Based on the algorithm ($Add122$), we have:\\
+$t = \circ (l +b_{\ell})$ according to collary \ref{cor:ux} 
+$\Rightarrow$ $t = (l+b_{\ell}).(1+\epsilon)$ with $\lvert \epsilon \rvert \le u$.\\
+
+$$t = \ell + b_{\ell} + \delta$$
+with  $\delta = (\ell   + b_{\ell}) .\epsilon$
+We calculate $\lvert \delta \rvert$, so we have:\\
+$$ \lvert \delta \rvert = \lvert (\ell + b_{\ell}).\epsilon$$
+according to the triangle inequality, we have:
+
+$$ \lvert \delta \rvert \le \lvert \ell  .\epsilon \rvert + \lvert  b_{\ell}.\epsilon \rvert$$
+$$\lvert \delta \rvert \le \lvert \epsilon \rvert .(\lvert \ell   \rvert + \lvert  b_{\ell}\rvert)$$ 
+ 
+
+Based on Lemma \ref{lem:add112}, we have $\lvert l \rvert \le u.\lvert s \rvert $ 
+$\Rightarrow$ $\lvert s+\ell \rvert \ge (1-u).\lvert s \rvert$ $\Rightarrow$
+$(1-u).\lvert s \rvert \le \lvert a + b_h \rvert$ $\Rightarrow$ $\lvert s \rvert \le \frac{1}{1-u}.\lvert a + b_h \rvert$ $\Rightarrow$ $\lvert \ell \rvert \le \frac{u}{1-u}.\lvert a + b_h \rvert$
+
+So we have:
+$$\lvert \delta \rvert \le  \lvert \epsilon \rvert .( \frac{u}{1-u}.\lvert a + b_h \rvert + \lvert  b_{\ell}\rvert)$$ 
+we have  $\lvert b_{\ell}  \rvert \le u. \lvert b_h \rvert \le u. \lvert a \rvert \le u. \lvert a  + b_h\rvert$ $\Rightarrow$
+$$\lvert \delta \rvert \le \lvert \epsilon \rvert .(\frac{u}{1-u}. \lvert a + b_h \rvert + u. \lvert a + b_h \rvert)$$ 
+$$\lvert \delta \rvert \le \lvert \epsilon \rvert .\frac{-u^2+2.u}{1-u}. \lvert a + b_h \rvert $$
+As $\frac{-u^2+2.u}{1-u} \le 2.u$ and $\lvert \epsilon \rvert \le u$
+$\Rightarrow$
+$$\lvert \delta \rvert \le 2.u^2. \lvert a + b_h \rvert $$
+
+
+$$ \lvert b_{\ell} \rvert \le u.\lvert a \rvert $$
+
+$$ \lvert b_{\ell} \rvert \le u.\lvert a + b_h\rvert $$
+Now we search a lower bound for $\lvert a+b_h+b_{\ell} \rvert $ in function $\lvert a+b_h \rvert $ \\
+$$ \lvert  a + b_h  + b_{\ell} \rvert \le \lvert a + b_h\rvert +  \lvert b_{\ell}\rvert$$
+So we have:
+$$ \lvert  a + b_h  + b_{\ell} \rvert \ge (1 - u)\lvert a + b_h\rvert $$
+and we knows that $\lvert \delta \rvert \le \lvert a + b_h \rvert \times  2.u^2$ $\Rightarrow$
+ $$\lvert \delta \rvert \le \lvert a + b_h + b_{\ell} \rvert (\frac{1}{1-u}).2.u^2$$
+ After the calculations, we have :\\
+ $$\lvert \delta \rvert \le \lvert a + b_h + b_{\ell} \rvert . \lvert \epsilon \rvert$$
+ with $\lvert \epsilon \rvert \le \frac{2.u^2}{1-u} \le 2.u^2$
+\end{proof}
+
+
+\begin{theo}[ Relative error algorithm $Add122$ with a bounded cancellation]
+Let $a$ a \textbf{Double} number  and ($b_h$, $b_{\ell}$) a \textbf{double-double} number . We have for the algorithm $Add122$ with
+$a$ and ($b_h$, $b_{\ell}$) it's arguments.\\
+If $a$ and $b_h$ are different sign and we suppose $\lvert b_h \rvert \le 2^{-\mu} \lvert a \rvert $ with $\mu \ge 1$.\\
+So :
+$$ s+t = (a+  (b_h + b_{\ell}))(1+\epsilon)$$
+with $$\lvert \epsilon \rvert \le 2.u^2 .\frac{2^{-53 - \mu}}{1 - 2^{-\mu} - u} \le 2.(2.u^2) = 4.u^2$$
+\end{theo}
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $4.3$ proof's(\cite{lauter2005basic}).\\
+We suppose $\lvert b_h \rvert \le 2^{-\mu} \lvert a \rvert$ with $\mu \ge 1$.
+First we look for the upper bound, using the results of the proof of Theorem \ref{the1:add122}. We have:\\
+$$\lvert b_{\ell} \rvert \le u.\lvert b_h \rvert \le u.2^{ - \mu}\lvert a \rvert $$\\
+then we search the lower bound for $\lvert a+b_h \rvert$ in function of $\lvert a \rvert$:\\
+$$\lvert a + b_h \rvert \ge (1-2^{ -\mu}).\lvert a\rvert$$
+So we have:
+$$\lvert b_{\ell}  \rvert \le \frac{u.2^{ - \mu}}{1- 2^{-\mu}}\lvert a + b_h\rvert$$
+
+So:
+$$ \lvert \delta \rvert \le \lvert a_h + b_h \rvert .2.u^2 .\frac{u.2^{- \mu}}{1 - 2^{-\mu}} $$
+Now, we search the lower bound for $\lvert a + b_h +b_{\ell} \rvert$ depending on $\lvert a + b_h \rvert$.\\
+We have :
+
+$$\lvert b_{\ell}  \rvert \le \frac{u.2^{ - \mu}}{1- 2^{-\mu}}\lvert a + b_h\rvert$$
+$$\lvert a + b_h +b_{\ell} \rvert \ge  \lvert a + b_h \rvert \frac{1 - 2^{-\mu} -u}{1 - 2^{-\mu}}$$
+So we have for $\lvert \delta \rvert $:
+$$ \lvert \delta \rvert \le \lvert a + b_h + b_{\ell} \rvert. \frac{1 - 2^{-\mu}}{1 - 2^{-\mu} -u} .2.u^2 .\frac{u.2^{ - \mu}}{1 - 2^{-\mu}} $$
+$$ \lvert \delta \rvert \le \lvert a + b_h + b_{\ell} \rvert.  2.u^2.\frac{u.2^{ - \mu}}{1 - 2^{-\mu} - u} $$
+So:
+$$\lvert \epsilon \rvert \le  2.u^2 .\frac{2^{-53 - \mu}}{1 - 2^{-\mu} - u}$$
+As $\mu \ge 1$, we want the upper bound of $\frac{u.2^{ - \mu}}{1 - 2^{-\mu} - u}$ $\Rightarrow$
+$$\frac{2^{-54}}{1/2 -2^{-52}} \le 2$$
+because $ 2^{-53}\le u \le 2^{-52}$
+So :
+$$\lvert \epsilon \rvert \le 2.2.u^2=4.u^2$$
+\end{proof}
+

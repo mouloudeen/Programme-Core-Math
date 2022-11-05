@@ -1,0 +1,70 @@
+\usepackage{mathtools}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[standard]{ntheorem}
+\usepackage{appendix}
+\usepackage{caption}
+\usepackage{listings}
+\lstset{language=C}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{pgf, tikz}
+\usetikzlibrary{arrows}
+%\newcommand{\poubelle}[1]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{prop}{Proposition}
+\newtheorem{defin}{Definition}
+\newtheorem{theo}{Theorem}
+\newtheorem{coroll}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{profl}{Lemma's proof}
+\newtheorem{proft}{Theorem's proof}
+\newtheorem{profc}{Corollary's proof}
+\newtheorem{prope}{Property}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{hyperref}
+
+\lstset{language=C, numbers=left, numberstyle=\tiny,stepnumber=1,numbersep=5pt, basicstyle=\scriptsize,
+upquote=true,
+aboveskip={1.5\baselineskip},
+columns=fullflexible,
+showstringspaces=false,
+extendedchars=true,
+breaklines=true,
+showtabs=false,
+showspaces=false,
+showstringspaces=false,
+identifierstyle=\ttfamily,
+keywordstyle=\color[rgb]{0,0,1},
+commentstyle=\color[rgb]{0.133,0.545,0.133},
+stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+}
+%\usepackage{biblatex}
+\usepackage{minted}
+%\renewcommand{\thefootnote}{\roman{footnote}} % chiffres romains minuscules
+%\renewcommand{\thefootnote}{\Roman{footnote}} % chiffres romains majuscules
+
+\usepackage[ruled]{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}%
+\algnewcommand\algorithmiccondition{\textbf{Condition:}}
+\algnewcommand\Condition{\item[\algorithmiccondition]}%
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}%         
+
+\setcounter{secnumdepth}{3}
+\usepackage[babel=true]{csquotes} % csquotes va utiliser la langue définie dans babel
+

@@ -1,0 +1,70 @@
+\subsection{Mul122}
+See algorithm \ref{algo:Mul122}
+\begin{lem}[Mul122] Let $a$ a \textbf{Double} number and $(b_h,b_{\ell})$ a \textbf{Double-Double} number, $r_1$ and $r_2$ result of $Mul122(a,b_h,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so $\lvert r_2 \rvert \le u. \lvert r_1 \rvert$.
+\end{lem}
+
+\begin{proof} \color{-yellow}
+We know $\lvert b_{\ell} \rvert \le u.\lvert b_h \rvert$
+
+ In the algorithme $Mul122$, we see $r_1, r_2 = Add112(t_1, t_6)$, bases on the lemma \ref{lem:add112}, we have $\lvert r_2 \rvert \le u.\lvert r_1 \rvert$.
+\end{proof}
+
+\begin{theo}[Relative error algorithm $Mul122$]
+
+Let $a$ a \textbf{double} number and $(b_h,b_{\ell})$ a \textbf{double-double} number are the arguments of the function $Mul122$:\\
+So:
+$$r_1+r_2 = (a. (b_h+b_{\ell})).(1+\epsilon)$$ with $\lvert \epsilon \rvert \le 3.u^2$.
+\end{theo}
+
+$3.u^2 = 2^{-104.41}$ for $RNDN$ and $3.u^2 = 2^{-102.41}$ for the other rounding modes.
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $4.7$ proof's(\cite{lauter2005basic}).\\
+We have from Algorithm \ref{algo:Mul122}:\\
+$r_1,r_2 = Add112(t_1,t_4)$ according to $Add112$ $\Rightarrow$ $r_1+r_2 = t_1+t_4$\\
+$t_4 = \circ (t_2+t_3)$ $\Rightarrow$ $t_4 = (t_2+t_3)(1+\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le u$\\
+$t_3 = \circ (a.b_{\ell})$ $\Rightarrow$ $t_3 = (a.b_{\ell})(1+\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le u$\\
+$t_1,t_2 = Mul112(a,b_h)$ according to $Mul112$  $\Rightarrow$ $\lvert t_2 \rvert \le u .\lvert t_1 \rvert$ and
+$t_1 + t_2 =  a \times b_h $\\
+So we have :
+$$t_4 = (t_2 +a.b_{\ell}.(1+\epsilon_2)).(1+\epsilon_1)$$
+$$t_4 = t_2 +a.b_{\ell}+ a.b_{\ell}.\epsilon_2+ t_2.\epsilon_1 + a.b_{\ell}.\epsilon_1+ a.b_{\ell}.\epsilon_2.\epsilon_1$$
+as $r_1+r_2 = t_1+t_4$ $\Rightarrow$
+$$r_1+r_2 = t_1 +(t_2 +a.b_{\ell}+ a.b_{\ell}.\epsilon_2+ t_2.\epsilon_1 + a.b_{\ell}.\epsilon_1+ a.b_{\ell}.\epsilon_2.\epsilon_1) $$
+but $t_1+t_2 = a.b_h$ $\Rightarrow$
+$$r_1+r_2 =a.b_h +a.b_{\ell}+ a.b_{\ell}.\epsilon_2+ t_2.\epsilon_1 + a.b_{\ell}.\epsilon_1+ a.b_{\ell}.\epsilon_2.\epsilon_1 $$
+$$r_1+r_2 = a.b_h+a. b_{\ell} + \delta $$ 
+with 
+$$\delta = t_2.\epsilon_1 + a.b_{\ell}.\epsilon_2 + a.b_{\ell}.\epsilon_1 + a.b_{\ell}.\epsilon_2.\epsilon_1$$
+So we have:
+$$ \lvert \delta \rvert \le \lvert t_2.\epsilon_1 \rvert + \lvert a.b_l.(\epsilon_1 + \epsilon_2 + \epsilon_2.\epsilon_1  )\rvert  $$
+as we know that $\lvert \epsilon_1 \rvert \le u$ and $\lvert \epsilon_2 \rvert \le u$ $\Rightarrow$
+$$ \lvert \delta \rvert \le \lvert t_2 \rvert .u + \lvert a.b_{\ell} \rvert .(u^2 +2.u)  $$
+According to the conditions of the algorithm :\\
+ $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$ $\Rightarrow$
+$\lvert a \times b_{\ell} \rvert \le u. \lvert a. b_h\rvert$ .   
+So:
+$$ \lvert \delta \rvert \le \lvert t_2 \rvert .u + u.\lvert a.b_h \rvert .(u^2 +2.u)  $$
+$$ \lvert \delta \rvert \le \lvert t_2 \rvert .u + \lvert a.b_h \rvert .(u^3 +2.u^2) $$
+As $a.b_h = t_1 + t_2$ and that $ \lvert t_2 \rvert \le u. \lvert t_1 \rvert$, we have  $ \lvert a.b_h \rvert \ge \lvert (1 + \frac{1}{u}) . t_2 \rvert$ but $1+ \frac{1}{u} > 0$ $\Rightarrow$
+$$ (1 + \frac{1}{u}) .\lvert t_1 \rvert  \le \lvert a.b_h \rvert $$
+$$  \frac{1+u}{u} .\lvert t_2 \rvert  \le \lvert a.b_h \rvert $$
+$$   \lvert t_2 \rvert  \le \frac{u}{1+u}. \lvert a.b_h \rvert $$
+So :
+$$ \lvert \delta \rvert \le \frac{u^2}{1+u}. \lvert a.b_h \rvert  + \lvert a.b_h \rvert .(u^3 +2.u^2) $$
+After calculate,
+$\Rightarrow$
+$$ \lvert \delta \rvert \le \frac{u^4+3.u^3+3.u^2}{1+u}. \lvert a.b_h \rvert $$
+Now , we search a lower bound for $\lvert a_h .(b_h + b_{\ell}) \rvert $ in fuction of  $\lvert a_h.b_h \rvert $.\\
+For to calculate this lower bound, we need to search the upper bound of $\lvert a.b_{\ell}\rvert$. So we have:
+$$\lvert a.b_{\ell}  \rvert \le u.\lvert a.b_h \rvert$$
+So we have:
+$$\lvert a.(b_h + b_{\ell}) \rvert \ge (1 - u).\lvert a_h.b_h \rvert  $$
+$$\frac{1}{1 - u}.\lvert a.(b_h + b_{\ell}) \rvert \ge \lvert a_h.b_h \rvert  $$
+For the calculation of relative error, we have:
+$$ \lvert \delta \rvert \le  \frac{u^4+3.u^3+3.u^2}{1-u^2} . \lvert a.b_h \rvert $$
+As $\frac{u^4+3.u^3+3.u^2}{1-u^2} \le 3.u^2$
+$\Rightarrow$ $\lvert \delta \rvert \le  3.u^2.\lvert a.(b_h + b_{\ell}) \lvert $.\\
+For $r_1+r_2 = (a. (b_h+b_{\ell})).(1+\epsilon)$
+We have that $\lvert \epsilon \rvert \le 3.u^2$
+\end{proof}

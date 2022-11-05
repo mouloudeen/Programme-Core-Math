@@ -1,0 +1,8 @@
+Random test with MPFR with RNDN
+0 errors on 1000000000 cases 
+Random test with MPFR with RNDU
+0 errors on 1000000000 cases 
+Random test with MPFR with RNDD
+0 errors on 1000000000 cases 
+Random test with MPFR with RNDZ
+0 errors on 1000000000 cases 

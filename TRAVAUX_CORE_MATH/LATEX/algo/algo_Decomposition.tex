@@ -1,0 +1,14 @@
+\section{Algorithme de calculs}
+
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Split}}
+\begin{algorithmic}[1]
+\Input $x$ is a 53-bit floating-point numbers.
+\Output  $a_h$ and $a_{\ell}$ are 53-bit floating-point numbers: $a_h$: main value and $a_{\ell}$: error value.
+\State $C = 2^{27}+1$\\
+ $z = x\times C$\\
+ $a_h = z -(z-x)$\\
+ $a_l = x - ah$\\
+ return $(a_h,a_{\ell})$
+\end{algorithmic}
+\end{algorithm}

@@ -1,0 +1,170 @@
+\subsection{Add333}
+See algorithm \ref{algo:Add333}
+\begin{lem}[Add333] Let $(a_h, a_m, a_{\ell})$ and $(b_h, b_m, b_{\ell})$ are   \textbf{triple-Double} number, $r_h$, $r_m$ and  $r_{\ell}$ result of $Add333(a_h, a_m,a_{\ell},b_h,b_m,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so: $ \lvert r_{\ell} \rvert \le u. \lvert r_m \rvert$, $\lvert r_m \rvert \le 2^{-2}.\lvert r_h \rvert$ and $\lvert r_{\ell} \rvert \le 2^{-2}.u.\lvert r_h \rvert$
+
+\end{lem}
+
+\begin{proof} \color{-yellow}
+\begin{itemize}
+    \item $r_h+r_{\ell} = Add112(t_7,t_8)$ According to $Add112$ $\Rightarrow$ $\lvert r_{\ell} \rvert \le u. \lvert r_h \rvert$.
+    \item $t_8 = \circ (t_5 + t_6)$ according to collary \ref{cor:ux}: $t_8 = (t_5 +t_6).(1 + \epsilon_1)$ with $\lvert \epsilon_1 \rvert \le u $
+    \item $t_5 =\circ (t_3 + t_4)$ according to collary \ref{cor:ux}: $t_5 = (t_3 +t_4).(1 +\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le u$
+    \item $t_6 =\circ (a_{\ell}+b_{\ell})$ according to collary \ref{cor:ux}: $t_6 = (a_{\ell}+b_{\ell}).(1 +\epsilon_3)$ with $\lvert \epsilon_3 \rvert \le u.$
+    \item $t_7 + t_4 = Add112(t_1, t_2)$ according to $Add112$: $ \lvert t_4 \rvert \le u.\lvert t_7 \rvert $ $\Rightarrow$ $\lvert t_7 + t_4 \rvert \ge (1-u). \lvert t_7 \rvert$  $\Rightarrow$ $(1-u). \lvert t_7 \rvert \le \lvert t_1 + t_2 \rvert$ $\Rightarrow$ $\lvert t_7 \rvert \le \frac{1}{1-u}.\lvert t_1 + t_2 \rvert$ $\Rightarrow$ $\lvert t_4 \rvert \le \frac{u}{1-u}.\lvert t_1 + t_2 \rvert$
+    \item $t_2 + t_3 = Add112Cond(a_m,b_m)$ according to $Add112$: $ \lvert t_3 \rvert \le u.\lvert t_2 \rvert $ $\Rightarrow$ $\lvert t_3 \rvert \le \frac{u}{1-u}. \lvert a_m +b_m \rvert$ 
+    \item $\lvert t_5 \rvert \le (\lvert t_3 \rvert + \lvert t_4 \rvert)(1+u)$ $\Rightarrow$
+$\lvert t_5 \rvert \le (\frac{u}{1-u}. \lvert a_m +b_m \rvert + \frac{u}{1-u}.\lvert t_1 + t_2 \rvert)(1+u)$ 
+\end{itemize}
+thanks to the condition $Add112$ $\Rightarrow$ $\lvert t_1 \rvert \ge \lvert t_2 \rvert$ $\Rightarrow$ 
+$$\lvert t_5 \rvert \le (\frac{u}{1-u}. \lvert a_m +b_m \rvert + \frac{2.u}{1-u}. \lvert t_1  \rvert)(1+u)$$
+$$\lvert t_5 \rvert \le (u. \lvert a_m +b_m \rvert + 2.u. \lvert t_1  \rvert)$$
+As $\lvert t_1 \rvert \le u.\lvert r_h \rvert$ $\Rightarrow$
+$$\lvert t_5 \rvert \le (u. \lvert a_m +b_m \rvert + 2.u^2. \lvert r_h  \rvert)$$
+As $\lvert a_m \rvert \le 2^{-\alpha_o} .\lvert a_h \rvert$ and that $\lvert b_m \rvert \le 2^{-\beta_o} .\lvert b_h \rvert \le 2^{-\beta_o}.\frac{3}{4}. \lvert a_h \rvert$, so we have:
+$$\lvert a_m +b_m \rvert \le (2^{-\alpha_o} +  2^{-\beta_o}.\frac{3}{4}).\lvert a_h \rvert $$
+We search the lower bound of $\lvert a_h \rvert$ in function of $\lvert a_h + b_h \rvert$ and as $b_h \le \frac{3}{4}).\lvert a_h \rvert$\\
+$$\lvert a_h + b_h \rvert \ge (1 - \frac{3}{4}).\lvert a_h \rvert$$
+$$\lvert a_h \rvert \le 4.\lvert a_h + b_h \rvert $$
+$\Rightarrow$
+$$\lvert a_m +b_m \rvert \le (2^{-\alpha_o} +  2^{-\beta_o}.\frac{3}{4}).4.\lvert a_h + b_h \rvert $$
+$$\lvert a_m +b_m \rvert \le (2^{-\alpha_o+2} +  2^{-\beta_o}.3).\lvert a_h + b_h \rvert $$
+But we know that $\lvert a_h + b_h \rvert \le (1+u).\lvert r_h \rvert $\\
+$$\lvert a_m +b_m \rvert \le (2^{-\alpha_o+2} +  2^{-\beta_o}.3).(1+u).\lvert r_h \rvert$$
+but $\alpha_o \ge 4$ and $\beta_o \ge 4$ 
+$$\lvert a_m +b_m \rvert \le 7.2^{-4}.(1+u).\lvert r_h \rvert$$
+$$\lvert t_5 \rvert \le (u. 7.2^{-4}.(1+u).\lvert r_h \rvert + 2.u^2. \lvert r_h  \rvert)$$
+After calculating, we have  
+$$\lvert t_5 \rvert \le  (2+7.2^{-4}).u^2+7.2^{-4}.u). \lvert r_h  \rvert$$
+
+We know that $t_6 = (a_{\ell} + b_{\ell})(1+\epsilon_3)$ $\Rightarrow$
+$$\lvert t_6 \rvert \le \lvert a_{\ell} + b_{\ell} \rvert .(1+u) $$
+As $ \lvert a_{\ell} \rvert \le 2^{-\alpha_u}.\lvert a_m \rvert \le 2^{-\alpha_u-\alpha_o} .\lvert a_h \rvert$ and that $\lvert b_{\ell} \rvert  \le 2^{-\beta_u}.\lvert b_m \rvert \le 2^{-\beta_u-\beta_o} .\lvert b_h \rvert \le 2^{-\beta_u-\beta_o}.\frac{3}{4}. \lvert a_h \rvert$, so we have:
+$$ \lvert a_{\ell} + b_{\ell} \rvert \le (2^{-\alpha_u-\alpha_o}+2^{-\beta_u-\beta_o}.\frac{3}{4}).\lvert a_h \rvert$$
+$$ \lvert a_{\ell} + b_{\ell} \rvert \le (2^{-\alpha_u-\alpha_o+2}+2^{-\beta_u-\beta_o}.3).\lvert a_h +b_h \rvert$$
+As $\alpha_o \ge 4$, $\alpha_u \ge 1$, $\beta_o \ge 4$ and $\beta_u \ge 1$, $\Rightarrow$
+$$ \lvert a_{\ell} + b_{\ell} \rvert \le (2^{-3}+2^{-5}.3).\lvert a_h +b_h \rvert$$
+$$ \lvert a_{\ell} + b_{\ell} \rvert \le 7.2^{-5}.\lvert a_h +b_h \rvert$$
+$\Rightarrow$
+$$\lvert t_6 \rvert \le 7.2^{-5}.(1+u).\lvert r_h \rvert .(1+u) $$
+$$\lvert t_6 \rvert \le (7.2^{-5} + 7.2^{-4}.u + 7.2^{-5}.u^2).\lvert r_h \rvert $$
+$\Rightarrow$
+$$ \lvert t_8 \rvert \le (\lvert t_5 \rvert  + \lvert t_6 \rvert).(1 + u)$$
+$$ \lvert t_8 \rvert \le ((2+7.2^{-4}).u^2+7.2^{-4}.u). \lvert r_h  \rvert  + (7.2^{-5} + 7.2^{-4}.u + 7.2^{-5}.u^2).\lvert r_h \rvert).(1 + u)$$
+After the calculations, we have :
+$$ \lvert t_8 \rvert \le ((2+7.2^{-4}+7.2^{-5}).u^3+(2+7.2^{-4}+7.2^{-5}+7.2^{-3}).u^2+ (7.2^{-5}+7.2^{-3}).u +7.2^{-5}) . \lvert r_h  \rvert  $$
+Now we look at the calculation of upper bound of $\lvert t_7 \rvert$ in function of $\lvert r_h \rvert $.
+we have $\lvert t_7 \rvert \le \frac{1}{1-u}.\lvert t_1 + t_2 \rvert$ thanks to the condition of $Add112$, we have:
+$$\lvert t_7 \rvert \le \\frac{2}{1-u}. \lvert t_1 \rvert$$
+As $\lvert t_1 \rvert \le u.\lvert r_h \rvert$ $\Rightarrow$
+$$\lvert t_7 \rvert \le \frac{2.u}{1-u}. \lvert r_h \rvert$$
+We have :
+$$\lvert r_m + r_{\ell} \rvert \le \lvert t_7 \rvert + \lvert t_8 \rvert $$
+$$\lvert r_m + r_{\ell} \rvert \le \frac{2.u}{1-u}. \lvert r_h \rvert + ((2+7.2^{-4}+7.2^{-5}).u^3+(2+7.2^{-4}+7.2^{-5}+7.2^{-3}).u^2+ (7.2^{-5}+7.2^{-3}).u +7.2^{-5}) . \lvert r_h  \rvert $$
+We have $\frac{2.u}{1-u}+((2+7.2^{-4}+7.2^{-5}).u^3+(2+7.2^{-4}+7.2^{-5}+7.2^{-3}).u^2+ (7.2^{-5}+7.2^{-3}).u +7.2^{-5}) \le 2^{-2}$
+$\Rightarrow$
+$$\lvert r_m + r_{\ell} \rvert \le 2^{-2}.\lvert r_h \rvert$$
+As $\lvert r_h \rvert \le u. \lvert r_{\ell} \rvert$ $\Rightarrow$ $(1 - u). \lvert r_m \rvert \le \lvert r_m + r_{\ell} \rvert$ $\Rightarrow$
+$$\lvert r_m \rvert \le \frac{1}{1-u}.2^{-2}.\lvert r_h \rvert$$
+$$\lvert r_m \rvert \le 2^{-2}.\lvert r_h \rvert$$
+and 
+$$\lvert r_{\ell} \rvert \le 2^{-2}.u.\lvert r_h \rvert$$
+\end{proof}
+
+\begin{theo}[Relative errror algorithm $Add333$]
+
+Let  $(a_h,a_m,a_{\ell})$ and $(b_h,b_m,b_{\ell})$ are \textbf{triple-double} numbers and arguments of the function $Add333$.\\
+So:\\
+$$r_h +r_m +r_{\ell} = ((a_h+ a_m +a_{\ell})+(b_h+ b_m +b_{\ell})).(1+\epsilon)$$ with $\lvert \epsilon \rvert \le (4.u^4 + 5.u^3+ u^2).2^{-min(\alpha_o,\beta_o)+5}  + (u^2+2.u).2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+5}$
+\end{theo}
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $5.2$ prof's(\cite{lauter2005basic}).\\
+According to $Add333$ and thanks to $Add112$, we have these results:
+$$\lvert r_{\ell} \rvert \le u. \lvert r_{\ell} \rvert$$
+$$\lvert t_4 \rvert \le u. \lvert t_7 \rvert$$
+$$\lvert t_3 \rvert \le u. \lvert t_2 \rvert$$
+$$\lvert t_1 \rvert \le u. \lvert r_h \rvert$$
+We search the upper bound of $\lvert r_h \rvert$ in function of $\lvert a_h \rvert$.
+$$\lvert t_1 +r_h \rvert = \lvert a_h +b_h \rvert$$
+As $\lvert b_h \rvert \le \frac{3}{4}. \lvert a_h \rvert$
+$$\lvert t_1 +r_h \rvert \le (1+ \frac{3}{4}) . \lvert a_h  \rvert$$
+$$\lvert t_1 +r_h \rvert \le \frac{7}{4} . \lvert a_h  \rvert \le 2 . \lvert a_h  \rvert$$
+As $\lvert t_1 \rvert \le u. \lvert r_h \rvert$
+$$\lvert t_1 +r_h \rvert \ge (1- u) . \lvert r_h  \rvert$$
+So we have:
+$$\lvert r_h \rvert \le \frac{2}{1-u}. \lvert a_h \rvert$$
+As $\lvert t_1 \rvert \le u. \lvert r_h \rvert$
+$$\lvert t_1 \rvert \le \frac{2.u}{1-u}. \lvert a_h \rvert$$
+Now, we calculate for all $\lvert t_i \rvert $ with $2\le i \le 8$ their upper bounds in function of $\lvert a_h \rvert$.
+As calculated previously with $r_h$ , we have:
+$$\lvert t_2 \rvert \le \frac{1}{1-u}. \lvert a_m + b_m \rvert $$
+As $\lvert a_m \rvert \le 2^{-\alpha_o}.\lvert a_h \rvert$ and that $\lvert b_m \rvert \le 2^{-\beta_o}.\lvert b_h \rvert \le 2^{-\beta_o}.\frac{3}{4}.\lvert a_h \rvert$ 
+$\Rightarrow$
+$$\lvert t_2 \rvert \le \frac{1}{1-u}.(2^{-\alpha_o} + 2^{-\beta_o}.\frac{3}{4}). \lvert a_h \rvert $$
+As $\frac{3}{4} \le 1$ $\Rightarrow$
+$$\lvert t_2 \rvert \le \frac{1}{1-u}.(2^{-\alpha_o} + 2^{-\beta_o}). \lvert a_h \rvert $$
+$$\lvert t_2 \rvert \le \frac{1}{1-u}.2^{-min(\alpha_o,\beta_o)+1} . \lvert a_h \rvert $$
+As $\lvert t_3 \rvert \le u. \lvert t_2 \rvert $ $\Rightarrow$
+$$\lvert t_3 \rvert \le \frac{u}{1-u}.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert $$
+Same for $\lvert t_7 \rvert $, we have:
+$$\lvert t_7 \rvert \le \frac{1}{1-u}. \lvert t_1 + t_2 \rvert $$
+$$\lvert t_7 \rvert \le \frac{1}{1-u}. (\frac{2.u}{1-u}. \lvert a_h \rvert + \frac{1}{1-u}.2^{-min(\alpha_o,\beta_o)+1}.\lvert a_h \rvert) $$
+$$\lvert t_7 \rvert \le \frac{1}{(1-u)^2}. (2.u+ 2^{-min(\alpha_o,\beta_o)+1}). \lvert a_h \rvert  $$
+In case where $2.u = 2^{-min(\alpha_o,\beta_o)+1}$, we have:
+$$\lvert t_7 \rvert \le \frac{1}{(1-u)^2}.  2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert  $$
+As $\lvert t_4 \rvert \le u. \lvert t_7 \rvert $ $\Rightarrow$
+$$\lvert t_4 \rvert \le \frac{u}{(1-u)^2}.  2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert  $$
+For $t_6$:
+$$\lvert t_6 \rvert \le (\lvert a_{\ell} \rvert + \lvert b_{\ell} \rvert).(1+u) $$
+As $\lvert a_{\ell} \rvert \le 2^{-\alpha_u} .\lvert a_m \rvert  \le 2^{-\alpha_u -\alpha_o} .\lvert a_h \rvert $ and $\lvert b_{\ell} \rvert \le 2^{-\beta_u} .\lvert b_m \rvert \le  2^{-\beta_u -\beta_o} .\lvert b_h \rvert \le  2^{-\beta_u -\beta_o}.\frac{3}{4} .\lvert a_h \rvert$ $\Rightarrow$
+$$\lvert t_6 \rvert \le (2^{-\alpha_u -\alpha_o} .\lvert a_h \rvert + 2^{-\beta_u -\beta_o}.\frac{3}{4} .\lvert a_h \rvert).(1+u)$$
+$$\lvert t_6 \rvert \le (1+u).2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+1} .\lvert a_h \rvert $$
+And $t_5$, we have:
+$$\lvert t_5 \rvert \le (\lvert t_3 \rvert + \lvert t_4 \rvert ).(1+u)$$
+$$\lvert t_5 \rvert \le (1+u).(\frac{u}{1-u}.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert +   \frac{u}{(1-u)^2}.  2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert )$$
+$$\lvert t_5 \rvert \le (1+u).\frac{u}{(1-u)^2}((1-u).2^{-min(\alpha_o,\beta_o)+1}. + u.  2^{-min(\alpha_o,\beta_o)+2}). \lvert a_h \rvert $$
+$$\lvert t_5 \rvert \le (1+u).\frac{u^2}{(1-u)^2}.(1+u).2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert $$
+After the calculation:
+$$\lvert t_5 \rvert \le \frac{u^3+2.u^2+u}{(1-u)^2}.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert $$
+Simplifying, we have:\\
+As $\frac{u^3+2.u^2+u}{(1-u)^2} \le u$ $\Rightarrow$
+$$\lvert t_5 \rvert \le u.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert $$ 
+and similarly for the others:
+$$\lvert r_h \rvert \le 2 .\lvert a_h \rvert$$
+$$\lvert t_1 \rvert \le 2.u. \lvert a_h \rvert$$
+$$\lvert t_2 \rvert \le 2^{-min(\alpha_o,\beta_o)+1} . \lvert a_h \rvert $$
+$$\lvert t_3 \rvert \le u.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert $$
+$$\lvert t_4 \rvert \le u^2. 2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert  $$
+$$\lvert t_6 \rvert \le 2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+1} .\lvert a_h \rvert $$
+$$\lvert t_7 \rvert \le u. 2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert $$
+As $r_m + r_{\ell} = t_7 + t_8$, we calculated $t_8$:
+$$t_8 = (t_5 + t_6).(1+\epsilon_1)$$
+with $\lvert \epsilon_1 \rvert \le u$
+$$t_8 = ((t_3+t_4).(1+\epsilon_2) + (a_{\ell}+b_{\ell}).(1+ \epsilon_3)).(1+\epsilon_1)$$
+with $\lvert \epsilon_2 \rvert \le u$ and 
+$\lvert \epsilon_3 \rvert \le u$
+After the calculations:
+$$t_8 = t_3 + t_4 + a_{\ell} + b_{\ell} + \delta$$
+with $\delta = t_3.(\epsilon_2 + \epsilon_1 + \epsilon_2.\epsilon_1) + t_4.(\epsilon_2 + \epsilon_1 + \epsilon_2.\epsilon_1) + a_{\ell}.(\epsilon_3 + \epsilon_1 + \epsilon_3.\epsilon_1) + b_{\ell}.(\epsilon_3 + \epsilon_1 + \epsilon_3.\epsilon_1) $\\
+We seek the upper bound of $\lvert \delta \rvert$ in function of $\lvert a_h \rvert$ :
+$$ \lvert \delta \rvert \le \lvert t_3.(\epsilon_2 + \epsilon_1 + \epsilon_2.\epsilon_1) \rvert + \lvert t_4.(\epsilon_2 + \epsilon_1 + \epsilon_2.\epsilon_1) \rvert + \lvert a_{\ell}.(\epsilon_3 + \epsilon_1 + \epsilon_3.\epsilon_1) \rvert + \lvert b_{\ell}.(\epsilon_3 + \epsilon_1 + \epsilon_3.\epsilon_1) \rvert$$
+As $\lvert \epsilon_i \rvert \le u$ with $1\le i \le 3$ $\Rightarrow$
+$$ \lvert \delta \rvert \le (2.u + u^2).(\lvert t_3 \rvert + \lvert t_4\rvert + \lvert a_{\ell} \rvert + \lvert b_{\ell} \rvert)$$
+$$ \lvert \delta \rvert \le (2.u + u^2).(u.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert + u^2. 2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert + 2^{-\alpha_u -\alpha_o} .\lvert a_h \rvert + 2^{-\beta_u -\beta_o}.\frac{3}{4} .\lvert a_h \rvert)$$
+$$ \lvert \delta \rvert \le (2.u + u^2).(u.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert + u^2. 2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert + 2^{-\alpha_u -\alpha_o} .\lvert a_h \rvert + 2^{-\beta_u -\beta_o}\lvert a_h \rvert)$$
+$$ \lvert \delta \rvert \le (2.u + u^2).(u.2^{-min(\alpha_o,\beta_o)+1}. \lvert a_h \rvert + u^2. 2^{-min(\alpha_o,\beta_o)+2}. \lvert a_h \rvert + 2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+1} .\lvert a_h \rvert)$$
+$$ \lvert \delta \rvert \le ((4.u^4 + 5.u^3+ u^2).2^{-min(\alpha_o,\beta_o)+1}.  + (u^2+2.u).2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+1} ).\lvert a_h \rvert$$
+We look the lower bound of $\lvert a_h \rvert $ in function of $\lvert a_h +b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert$:
+$$\lvert b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert \le \lvert b_h \rvert + \lvert a_m \rvert + \lvert b_m \rvert + \lvert a_{\ell} \rvert + \lvert b_{\ell} \rvert$$
+$$\lvert b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert \le \frac{3}{4}.\lvert a_h \rvert + 2^{-\alpha_o}.\lvert a_h \rvert + \frac{3}{4}.2^{-\beta_o}.\lvert a_h \rvert + 2^{-\alpha_o-\alpha_u}\lvert a_h \rvert + \frac{3}{4}.2^{-\beta_o - \beta_u}.\lvert a_h \rvert$$
+with the condition of this algorithm, after calculate:
+$$\lvert b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert \le \frac{117}{128}.\lvert a_h \rvert $$
+As $\frac{117}{128} < \frac{15}{16} $ $\Rightarrow$
+$$\lvert b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert \le \frac{15}{16}.\lvert a_h \rvert $$
+We can say that:
+$$\lvert a_h +b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert \ge \frac{1}{16}.\lvert a_h \rvert $$ 
+We have :
+$$ \lvert \delta \rvert \le 16.((4.u^4 + 5.u^3+ u^2).2^{-min(\alpha_o,\beta_o)+1}  + (u^2+2.u).2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+1} ).\lvert a_h +b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert$$
+$$ \lvert \delta \rvert \le ((4.u^4 + 5.u^3+ u^2).2^{-min(\alpha_o,\beta_o)+5}  + (u^2+2.u).2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+5} ).\lvert a_h +b_h + a_m +b_m + a_{\ell} + b_{\ell} \rvert$$
+So we have $\lvert \epsilon \rvert \le (4.u^4 + 5.u^3+ u^2).2^{-min(\alpha_o,\beta_o)+5}  + (u^2+2.u).2^{-min(\alpha_u +\alpha_o,\beta_u +\beta_o)+5}$
+\end{proof}

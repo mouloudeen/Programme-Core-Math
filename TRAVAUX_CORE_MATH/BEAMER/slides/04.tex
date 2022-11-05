@@ -1,0 +1,201 @@
+\section{Algorithm}
+\subsection{Operator precision calculation}
+\begin{frame}{Operator precision calculation}
+
+
+ \begin{itemize}
+    \item <1-> $X = \circ(x)$
+     \item <2-> relative error  $= \frac{X - x}{\lvert x \rvert}$
+    \item <3-> $X =  x . (1 + \epsilon)$ with $\lvert \epsilon \rvert \le u$.
+ \end{itemize} 
+ \end{frame}
+ 
+ \begin{frame}{Example of operator precision calculation}
+   \tiny 
+  \begin{algo}{Algorithm : \textbf{$Add122$}}\\
+Input : $a$ \textbf{Double} number and $(b_h,b_{\ell})$  \textbf{Double-Double} number\\
+Condition : $\lvert a \rvert \ge \lvert b_h \rvert $ and $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$\\
+Output : $s$ and $t$ are \textbf{Double} numbers. $s$ is the main value and $t$ is the error value.
+\begin{enumerate}
+\item $s,\ell = Add112(a,b_h)$\\ 
+ \item   $t = \ell +b_{\ell}$\\ 
+ \item   return $s$, $t$
+\end{enumerate}
+\end{algo}
+\begin{itemize}
+    \item $\lvert a \rvert \ge \lvert b_h \rvert$,
+    \item $a > 0$ and $b_h > 0$ 
+    \item $t = (\ell +b_{\ell}).(1+\epsilon)$ with $\lvert \epsilon \rvert \le u$
+    \item $$t = \ell + b_{\ell} + \delta$$
+with  $\delta = (\ell   + b_{\ell}) .\epsilon$
+    \item $$\lvert \delta \rvert \le \lvert \epsilon \rvert .(\lvert \ell   \rvert + \lvert  b_{\ell}\rvert)$$ 
+    \item  $\lvert s+\ell \rvert \ge (1-u).\lvert s \rvert$ $\Rightarrow$
+$(1-u).\lvert s \rvert \le \lvert a + b_h \rvert$ $\Rightarrow$ $\lvert s \rvert \le \frac{1}{1-u}.\lvert a + b_h \rvert$ $\Rightarrow$ $\lvert \ell \rvert \le \frac{u}{1-u}.\lvert a + b_h \rvert$
+\item  $$\lvert \delta \rvert \le  \lvert \epsilon \rvert .( \frac{u}{1-u}.\lvert a + b_h \rvert + \lvert  b_{\ell}\rvert)$$ 
+
+\end{itemize} 
+\end{frame}
+\begin{frame}{Example of operator precision calculation}
+ \tiny 
+  \begin{algo}{Algorithm : \textbf{$Add122$}}\\
+Input : $a$ \textbf{Double} number and $(b_h,b_{\ell})$  \textbf{Double-Double} number\\
+Condition : $\lvert a \rvert \ge \lvert b_h \rvert $ and $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$\\
+Output : $s$ and $t$ are \textbf{Double} numbers. $s$ is the main value and $t$ is the error value.
+\begin{enumerate}
+\item $s,\ell = Add112(a,b_h)$\\ 
+ \item   $t = \ell +b_{\ell}$\\ 
+ \item   return $s$, $t$
+\end{enumerate}
+\end{algo}
+\begin{itemize} 
+ \item $\lvert \delta \rvert \le \lvert \epsilon \rvert .\frac{-u^2+2.u}{1-u}. \lvert a + b_h \rvert $\\
+ \item  As $\frac{-u^2+2.u}{1-u} \le 2.u$ and $\lvert \epsilon \rvert \le u$
+ \item  $$\lvert \delta \rvert \le 2.u^2. \lvert a + b_h \rvert $$
+ \item $$ \lvert  a + b_h  + b_{\ell} \rvert \le \lvert a + b_h\rvert +  \lvert b_{\ell}\rvert$$
+ \item $$ \lvert  a + b_h  + b_{\ell} \rvert \ge (1 - u)\lvert a + b_h\rvert $$
+ \item $$\lvert \delta \rvert \le \lvert a + b_h + b_{\ell} \rvert (\frac{1}{1-u}).2.u^2$$
+ \item $\lvert \epsilon \rvert \le \frac{2.u^2}{1-u} \le 2.u^2$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example of operator precision calculation}
+ \tiny 
+  \begin{algo}{Algorithm : \textbf{$Add122$}}\\
+Input : $a$ \textbf{Double} number and $(b_h,b_{\ell})$  \textbf{Double-Double} number\\
+Condition : $\lvert a \rvert \ge \lvert b_h \rvert $ and $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$\\
+Output : $s$ and $t$ are \textbf{Double} numbers. $s$ is the main value and $t$ is the error value.
+\begin{enumerate}
+\item $s,\ell = Add112(a,b_h)$\\ 
+ \item   $t = \ell +b_{\ell}$\\ 
+ \item   return $s$, $t$
+\end{enumerate}
+\end{algo}
+\begin{itemize} 
+ \item $$\lvert \delta \rvert \le 2.u^2. \lvert a + b_h \rvert $$
+ \item $$ \lvert  a + b_h  + b_{\ell} \rvert \le \lvert a + b_h\rvert +  \lvert b_{\ell}\rvert$$
+ \item $$ \lvert  a + b_h  + b_{\ell} \rvert \ge (1 - u)\lvert a + b_h\rvert $$
+ \item $$\lvert \delta \rvert \le \lvert a + b_h + b_{\ell} \rvert (\frac{1}{1-u}).2.u^2$$
+ \item $\lvert \epsilon \rvert \le \frac{2.u^2}{1-u} \le 2.u^2$
+ \item $s+t = (a+(b_h + b_{\ell}))(1+\epsilon) $ with $\lvert \epsilon \rvert \le 2.u^2$
+\end{itemize}
+\end{frame}
+
+\subsection{Logarithme}
+\begin{frame}{$crlog_{fast}$}
+  \tiny 
+  \begin{algo}{Algorithm : \textbf{$crlog_{fast}$} (Part $1$)}\\
+ Condition $x$ is a \textbf{double} number and is not to close to $1$.\\
+Condition $m_1$ and $i$ are results made after calculating $x$.\\
+Condition $table_{\alpha_{i}}$  $table_{\log(\alpha_{i})}$ and are calculated with our method with \textbf{Tang} and \textbf{Gal}'s method.\\
+Condition $log(2)$ in \textbf{double-double}: $h_{\log2} = 0x1.62e42fefa38p-1$ and $l_{\log2} = 0x1.ef35793c7673p-45$ \\
+Input : $x$ is a \textbf{double} number, $i$ is a \textbf{Integer} number and $m_1$ is \textbf{double} number.\\
+Output : Approximation of $\log(x)$ in \textbf{double} number.
+ \begin{enumerate}
+\item $h_r,\ell_r = Mul122(m_1, \alpha_i )$
+\item $h,\ell = Add122(-1,h_r,\ell_r)$
+\item $F_1 = f_4 + h.(f_5 + h.(f_6+ h.(f_7)))$
+\item $hh_2,\ell\ell_2 = Mul222(h,\ell,h,\ell)$\\
+\item $hh_4,\ell\ell_4 = Mul222(hh_2,\ell\ell_2,hh_2,\ell\ell_2)$\\
+\item $ffh_0,ff\ell_0 = Mul122(f_1,h,\ell)$\\
+\item $ffh_3,ff\ell_3 = Mul122(f_3,h,\ell)$\\
+\item $ffh_2,ff\ell_2 = Add122(f_2,ffh_3,ff\ell_3)$\\
+\item $fhx_2,ff\ell x_2 = Mul222(hh_2,\ell\ell_2,ffh_2,ff\ell_2)$\\
+\item$ffhx_4,ff\ell x_4 = Mul122(F_1,hh_4,\ell\ell_4)$\\
+\item$ffhx_0,ff\ell x_0 = Add222(ffh_0, ff\ell_0, ffhx_2, ff\ell x_2)$\\
+\end{enumerate}
+\end{algo}
+\end{frame}
+\begin{frame}{$crlog_{fast}$}
+  \tiny 
+  \begin{algo}{Algorithm : \textbf{$crlog_{fast}$} (Part $2$)}\\
+ \begin{enumerate}
+\setcounter{enumi}{11}
+\item$h_4,\ell_4 = Add222(ffhx_0,ff\ell x_0, ffhx_4,ff\ell x_4)$\\
+\item $h_5,\ell_5 = Add122(\log_{\alpha_i}, h_4, \ell_4)$\\
+\item $e_{hlog2},e_{\ell log2} = Mul122(e, h_{\log2}, \ell_{\log2})$\\
+\item $h_6, \ell_6 = Add222(e_{hlog2}, e_{\ell log2},h_5,\ell_5)$\\
+ \item return  $(h_6, \ell_6)$
+\end{enumerate}
+\end{algo}
+\end{frame}
+
+\begin{frame}{$crlog_{accurate}$}
+   \tiny 
+  \begin{algo}{Algorithm : \textbf{$crlog_{accurate}$}}
+
+Condition $x$ is a \textbf{double} number and is not to close to $1$.\\
+Condition $m_1$ and $i$ are results made after calculating $x$.\\
+Condition $table_{\alpha_{i}}$  $table_{\log(\alpha_{i})}$ are of tables of \textbf{Double-Double} and are calculated with \textbf{Tang}.\\
+Condition $log(2)$ in \textbf{double-double}: $h_{\log2} = 0x1.62e42fefa39efp-1$ and $l_{\log2} = 0x1.abc9e3b39803fp-56$ \\
+Input : $x$ is a \textbf{double} number, $i$ is a \textbf{Integer} number and $m_1$ is a \textbf{double} number.\\
+Output : Approximation of $\log(x)$ in \textbf{double} number.
+ \begin{enumerate}
+\item $h_r,\ell_r = Mul122(m_1,\alpha_i_h, \alpha_i_{\ell} )$
+\item $h,\ell = Add122(-1,h_r,\ell_r)$
+\item $h_1, \ell_1 = Mul222(G[0][0], G[0][1],h,\ell)$
+\item $for \ (j = 1, j<11,j++)$
+\item $\ \ h_2,\ell_2 = Add222(G[j][0], G[j][1],h_1, \ell_1)$
+\item $\ \  h_1, \ell_1 = Mul222(h_2,\ell_2,h,\ell)$ 
+\item $h_5,\ell_5 = Add222(\log_{\alpha_i}, h_1, \ell_1)$
+\item $e_{hlog2},e_{\ell log2} = Mul122(e, h_{\log2}, \ell_{\log2})$
+\item $h_6, \ell_6 = Add222(e_{hlog2}, e_{\ell log2},h_5,\ell_5)$
+\item return  $h_6 + \ell_6$
+\end{enumerate}
+\end{algo}
+\end{frame}
+
+\begin{frame}{$crlog_{advanced}$}
+\tiny
+ \begin{algo}{Algorithm : \textbf{$crlog_{advanced}$}}
+
+ Input : $x$ is a \textbf{double} number, $i$ is a \textbf{Integer} number.\\
+ Output : Approximation of $\log(x)$ in \textbf{double} number.
+ \begin{enumerate}
+\item $h_r,m_r,\ell_r = Mul133(m_1, \alpha_i_h,  \alpha_i_m,\alpha_i_{\ell} )$
+\item $h,m,\ell = Add133(-1,h_r,\ell_r)$
+\item $h_1, m_1,\ell_1 = Mul333(U[0][0], U[0][1], U[0][2],h,m,\ell)$
+\item $for \ (j = 1, j<14,j++)$
+\item $\ \ h_2,m_2,\ell_2 = Add333(U[j][0], U[j][1], U[j][2],h_1,m_1, \ell_1)$
+\item $\ \  h_1, m_1,\ell_1 = Mul333(h_2,m_2,\ell_2,h,m,\ell)$ 
+\item $h_5,m_5,\ell_5 = Add333(\log_{\alpha_i}_h,\log_{\alpha_i}_m,\log_{\alpha_i}_{\ell}, h_1, m_1,\ell_1)$
+\item $e_{hlog2},e_{mlog2},e_{\ell log2} = Mul133(e, h_{\log2}, m_{\log2}, \ell_{\log2})$
+\item $h_6, m_6,\ell_6 = Add333(e_{hlog2},e_{mlog2},e_{\ell log2},h_5,m_5,\ell_5)$
+\item $m_{\ell} = m_6+\ell_6 $
+\item return  $h_6 + m_{\ell}$
+\end{enumerate}
+\end{algo} 
+\end{frame}
+
+\begin{frame}{$\log$}
+\tiny
+ \begin{algo}{Algorithm: $\log$} \\
+Condition :$x$ is a \textbf{double} number.\\
+Condition :$err_{fast} = 0x1.6b6b11ea279ecp-59$ and $err_{accurate} = 0x1.810c9a86fc45ep-99$\\
+Output :$\log(x)$ in \textbf{double} number.
+\begin{enumerate}
+    \item $h_6,\ell_6 = cr\log_{fast}(x)$ 
+\item $left  = h_6 + FMA(-err_{fast}, h_6, \ell_6)$
+\item $right = h_6 + FMA(+err_{fast}, h_6, \ell_6)$
+\item $if (right== left)$
+\item \ \ return $left$
+\item $h_6,l_6 = cr\log_{accurate}(x)$
+\item $left  = h_6 + FMA(-err_{fast}, h_6, \ell_6)$
+\item $right = h_6 + FMA(+err_{accurate}, h_6, \ell_6)$
+\item $if (right== left)$\\
+\item \ \ return $left$
+\item return $cr\log_{advanced}(x)$
+\end{enumerate}
+\end{algo}   
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+    \item This code has been verified thanks to \textbf{Sage} and the \textbf{MPFR library} in \textbf{C}.
+    \item 
+    ./perf.sh log:\\ 
+    $84.164$ :number of cycles of our logarithm\\
+    $15.918$ : number of cycles of logarithm of system library (\textbf{GNU libc}).
+    \item More information about COREMATH project: \url{https://core-math.gitlabpages.inria.fr}
+\end{itemize}    
+\end{frame}
+

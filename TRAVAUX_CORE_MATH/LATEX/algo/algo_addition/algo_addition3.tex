@@ -1,0 +1,123 @@
+\subsection{Add222}
+See algorithm \ref{algo:Add222}
+\begin{lem}[Add222]
+Let $(a_h, a_{\ell})$ and $(b_h, b_{\ell})$ \textbf{Double-Double} numbers, with $\lvert a_h \rvert \ge \lvert b_h \rvert$, $s$ and $t$ result of $Add222(a_h,a_{\ell},b_h,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so:
+
+ $$\lvert t \rvert \le 6.u.\lvert s\rvert$$
+
+\end{lem}
+$6.u = 2^{-50.4}$ for $RNDN$ and $6.u = 2^{-49.4}$ for the other rounding modes.
+
+\begin{proof} \color{-yellow}
+According to $Add222$ $\Rightarrow$:
+$t = \circ(m+b_{\ell})$ (corrollary \ref{cor:ux}) $\Rightarrow$ $t \le (m+b_{\ell})(1 +\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le u$.
+$$\lvert t \rvert \le (\lvert m \rvert + \lvert b_{\ell} \rvert).\lvert 1 +\epsilon_1 \rvert$$
+We have : $m = \circ(\ell + a_{\ell})$ $\Rightarrow$ $m = (\ell+a_{\ell}).(1 +\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le u$ $\Rightarrow$.
+$$\lvert t \rvert \le (\lvert (\ell+a_{\ell})(1 +\epsilon_2) \rvert + \lvert b_{\ell} \rvert).\lvert 1 +\epsilon_1 \rvert$$
+After calculate, we have:
+$$\lvert t \rvert \le \lvert \ell \rvert .\lvert 1 + \epsilon_1 + \epsilon_2 + \epsilon_1.\epsilon_2  \rvert  + \lvert a_{\ell} \rvert .\lvert 1 + \epsilon_1 + \epsilon_2 + \epsilon_1.\epsilon_2  \rvert + \lvert b_{\ell} \rvert.\lvert 1 +\epsilon_1 \rvert$$
+As $\lvert \epsilon_1 \rvert \le u$ and $\lvert \epsilon_2  \rvert \le u$ $\Rightarrow$
+$$\lvert t \rvert \le \lvert \ell \rvert .( 1 + 2.u + u^2 )  + \lvert a_{\ell} \rvert .( 1 + 2.u + u^2 ) + \lvert b_{\ell} \rvert.( 1+ u)$$
+As :
+$$ \lvert a_{\ell} \rvert \le u.\lvert a_h \rvert \le 2.u.\lvert a_h + b_h \rvert$$
+$$\lvert b_{\ell} \rvert \le u.\lvert b_h \rvert \le u.\lvert a_h \rvert \le 2.u.\lvert a_h + b_h \rvert$$
+and that $a_h+b_h = s+\ell$ $\Rightarrow$
+$$\lvert t \rvert \le \lvert \ell \rvert .( 1 + 2.u + u^2 )  + 2.u.( 1 + 2.u + u^2 ).\lvert s+ \ell \rvert  + 2.u.( 1+ u).\lvert s+ \ell \rvert$$
+We know that $\lvert \ell \rvert \le u.\lvert s \rvert$, after calculate, we have:
+$$\lvert t \rvert \le (u^4+5.u^3+7.u^2+3.u).\lvert s\rvert$$
+As $(2.u^4+9.u^3+12.u^2+5.u) \le 6.u$
+$$\lvert t \rvert \le 6.u.\lvert s\rvert$$
+
+\end{proof}
+
+\begin{theo}[Relative error algorithm $Add222$ without occurring of cancellation]
+Let ($a_h$, $a_{\ell}$) and ($b_h$, $b_{\ell}$) the \textbf{double-double} . We have for the algorithm $Add222$ with ($a_h$, $a_{\ell}$) and ($b_h$, $b_{\ell}$) it's arguments.\\
+If $a_h$ and $b_h$ have the same sign, so:\\
+$$ s+t = ((a_h+a_{\ell}) + (b_h + b_{\ell}))(1+\epsilon)$$
+with $\lvert \epsilon \rvert \le 3.u^2$ 
+\end{theo}
+$3.u^2 = 2^{-104.4}$ for $RNDN$ and $3.u^2 = 2^{-102.4}$ for the other rounding modes.
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $4.2$ proof's(\cite{lauter2005basic}).\\
+We have $\lvert a_h \rvert \ge \lvert b_h \rvert$, either $a_h > 0$ and $b_h > 0$ or $a_h < 0$ and $b_h < 0$. As they're symmetric, we only use $a_h > 0$ and $b_h > 0$.\\
+Based on the algorithm ($Add222$), we have:\\
+$t = \circ (m +b_{\ell})$ according to corollary \ref{cor:ux} 
+$\Rightarrow$ $t = (m+b_{\ell})(1+\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le u$.\\
+$$t = (\circ (\ell+ a_{\ell})+b_{\ell})(1+\epsilon_1)$$ \\
+$$t = ((\ell +a_{\ell})(1+\epsilon_2) + b_{\ell})(1+\epsilon_1)$$ with $\lvert \epsilon_2 \rvert \le u$.\\
+$$t = \ell + a_{\ell} + b_{\ell} + \delta$$
+with  $\delta = (\ell + a_{\ell}  + b_{\ell}) \epsilon_1 + (\ell + a_{\ell}) \epsilon_1 \epsilon_2$.\\ 
+We calculate $\lvert \delta \rvert$, so we have:\\
+$$ \lvert \delta \rvert = \lvert (\ell + a_{\ell} + b_{\ell})\epsilon_1 + (\ell + a_{\ell})\epsilon_1 \epsilon_2 \rvert$$
+according to the triangle inequality, we have:
+$$ \lvert \delta \rvert \le \lvert (\ell + a_{\ell} + b_{\ell})\epsilon_1 \rvert + \lvert (\ell + a_{\ell})\epsilon_1 \epsilon_2 \rvert$$
+$$ \lvert \delta \rvert \le \lvert \ell  \epsilon_1\rvert + \lvert \ell  \epsilon_1 \epsilon_2 \rvert + \lvert (a_{\ell} + b_{\ell})\epsilon_1 \rvert + \lvert  a_{\ell}\epsilon_1 \epsilon_2 \rvert$$
+$$ \lvert \delta \rvert \le \lvert \ell \rvert (\lvert \epsilon_1\rvert + \lvert   \epsilon_1 \epsilon_2 \rvert) + \lvert (a_{\ell} + b_{\ell})\epsilon_1 \rvert + \lvert  a_{\ell}\epsilon_1 \epsilon_2 \rvert$$ 
+
+$$ \lvert \delta \rvert \le \lvert \ell \rvert .( \lvert \epsilon_1 \rvert+  \lvert \epsilon_1 \epsilon_2\rvert) + \lvert (a_{\ell} + b_{\ell}) \rvert. \lvert \epsilon_1 \rvert + \lvert  a_{\ell} \rvert.\lvert \epsilon_1 \epsilon_2 \rvert $$ 
+$$ \lvert \delta \rvert \le \lvert \ell \rvert .(\lvert \epsilon_1 \rvert+  \lvert \epsilon_1 \epsilon_2 \rvert) + \lvert (a_{\ell} + b_{\ell}) \rvert .\lvert \epsilon_1 \rvert  + \lvert  (a_{\ell} + b_{\ell}) \rvert .\lvert \epsilon_1 \epsilon_2 \rvert $$ 
+$$ \lvert \delta \rvert \le (\lvert \ell \rvert  + \lvert (a_{\ell} + b_{\ell}) \rvert) .\lvert \epsilon_1+ \epsilon_1 \epsilon_2 \rvert$$ 
+Based on Lemma \ref{lem:add112}, we have $\lvert l \rvert \le u.\lvert s \rvert $ and as $\lvert s \rvert \le \lvert a_h + b_h \rvert $ $\Rightarrow$ $\lvert l \rvert \le u.\lvert a_h + b_h \rvert $.\\
+$$\lvert \delta \rvert \le (u. \lvert a_h + b_h \rvert + \lvert a_{\ell} \rvert + \lvert b_{\ell} \rvert) .\lvert \epsilon_1+ \epsilon_1 \epsilon_2 \rvert$$
+we have $\lvert a_{\ell} \rvert \le u. \lvert a_h \rvert \le u. \lvert a_h  + b_h\rvert$ and  $\lvert b_{\ell} \le u. \lvert b_h \rvert \le u. \lvert a_h  + b_h\rvert$ $\Rightarrow$
+$$\lvert \delta \rvert \le (u. \lvert a_h + b_h \rvert + u. \lvert a_h + b_h \rvert + u. \lvert a_h + b_h \rvert) .\lvert \epsilon_1+ \epsilon_1 \epsilon_2 \rvert$$
+$$\lvert \delta \rvert \le \lvert a_h + b_h \rvert \times  3 .u .\lvert \epsilon_1+ \epsilon_1 \epsilon_2 \rvert$$
+$$\lvert \delta \rvert \le \lvert a_h + b_h \rvert \times  3 .u. ( u+ u^2)$$
+$$\lvert \delta \rvert \le \lvert a_h + b_h \rvert \times  3  .( u^2+ u^3)$$
+
+We seek the upper bound of $\lvert a_h + b_h \rvert$  in function of $ \lvert a_h + b_h + a_{\ell} + b_{\ell} \rvert $:\\
+$$\lvert a_{\ell} + b_{\ell} \rvert \le \lvert a_{\ell} \rvert + \lvert b_{\ell} \rvert $$
+$$ \lvert a_{\ell} + b_{\ell} \rvert \le u.\lvert a_h \rvert + u.\lvert b_h \rvert $$
+$$ \lvert a_{\ell} + b_{\ell} \rvert \le 2.u.\lvert a_h \rvert $$
+$$ \lvert a_{\ell} + b_{\ell} \rvert \le 2.u.\lvert a_h + b_h\rvert $$
+$\Rightarrow$
+$$ \lvert  a_h + b_h + a_{\ell} + b_{\ell} \rvert \ge (1 - 2.u)\lvert a_h + b_h\rvert $$
+and we know that $\lvert \delta \rvert \le \lvert a_h + b_h \rvert \times  3 .( u^2+ u^3)$ $\Rightarrow$
+ $$\lvert \delta \rvert \le \lvert a_h +a_l + b_h + b_{\ell} \rvert (\frac{1}{1-2.u}) 3 .( u^2+ u^3)$$
+ $$\lvert \delta \rvert \le \lvert a_h +a_l + b_h + b_{\ell} \rvert (\frac{ 3.u^2+ 3.u^3}{1-2.u})$$
+ but $\frac{ 3.u^2+ 3.u^3}{1-2.u} \le 3.u^2$
+  we have :\\
+ $$\lvert \epsilon \rvert \le 3.u^2$$
+\end{proof}
+
+\begin{theo}[ Relative error algorithm $Add222$ with a bounded cancellation]
+Let ($a_h$, $a_{\ell}$) and ($b_h$, $b_{\ell}$) are the \textbf{double-double} number . We have for the algorithm $Add222$ with
+($a_h$, $a_{\ell}$) and ($b_h$, $b_{\ell}$) it's arguments.\\
+If $a_h$ and $b_h$ are different sign and we suppose $\lvert b_h \rvert \le 2^{-\mu} \lvert a_h \rvert $ with $\mu \ge 1$.\\
+So :
+$$ s+t = ((a_h+a_{\ell}) + (b_h + b_{\ell}))(1+\epsilon)$$
+with $$\lvert \epsilon \rvert \le 3.u^2. \frac{1-2^{-\mu -1}}{1 - 2^{-\mu} - 2.u} \le 2.3.u^2 = 6.u^2$$
+\end{theo}
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $4.3$ proof's(\cite{lauter2005basic}).\\
+We suppose $\lvert b_h \rvert \le 2^{-\mu} \lvert a_h \rvert$ with $\mu \ge 1$.
+First we look for the upper bound, using the results of the proof of Theorem $4.1.1$. We have:\\
+$$\lvert b_{\ell} \rvert \le u.\lvert b_h \rvert \le u.2^{- \mu}\lvert a_h \rvert $$\\
+then we search the lower bound:\\
+$$\lvert a_h + b_h \rvert \ge (1 -2^{- \mu}).\lvert a_h\rvert$$
+As $\lvert a_{\ell} \rvert \le u. \lvert a_h \rvert$ and $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert \le u.2^{-\mu}. \lvert a_h \rvert$.
+$$\lvert a_{\ell}  \rvert \le \frac{u}{1- 2^{-\mu}}\lvert a_h + b_h\rvert$$
+and 
+$$\lvert b_{\ell}  \rvert \le \frac{u.2^{- \mu}}{1- 2^{-\mu}}\lvert a_h + b_h\rvert$$
+$\Rightarrow$ 
+$$u+u.2^{- \mu}\le 1 - 2^{-\mu -1}$$ because of $\mu \ge 1$\\
+So:
+$$ \lvert \delta \rvert \le \lvert a_h + b_h \rvert .3.u^2 .\frac{1 - 2^{-\mu -1}}{1 - 2^{-\mu}} $$
+Now, we search the lower bound for $\lvert a_h +a_{\ell} + b_h +b_{\ell} \rvert $ depending on $\lvert a_h + b_h \rvert$.\\
+We have:
+$$\lvert a_{\ell} + b_{\ell} \rvert \le \lvert a_{\ell} \rvert + \lvert b_{\ell} \rvert$$
+$$\lvert a_{\ell} + b_{\ell} \rvert \le 2.u.\lvert a_h \rvert$$
+$$\lvert a_{\ell} + b_{\ell} \rvert \le \frac{2.u}{1 - 2^{-\mu}}\lvert a_h + b_h \rvert$$
+$$\lvert a_h +a_{\ell} + b_h +b_{\ell} \rvert \ge  \lvert a_h + b_h \rvert \frac{1 - 2^{-\mu} -2.u}{1 - 2^{-\mu}}$$
+So we have for $\lvert \delta \rvert $:
+$$ \lvert \delta \rvert \le \lvert a_h + a_{\ell} + b_h + b_{\ell} \rvert. \frac{1 - 2^{-\mu}}{1 - 2^{-\mu} -2.u} .3.u^2 .\frac{1 - 2^{-\mu -1}}{1 - 2^{-\mu}} $$
+$$ \lvert \delta \rvert \le \lvert a_h + a_{\ell} + b_h + b_{\ell} \rvert.  3.u^2 .\frac{1 - 2^{-\mu -1}}{1 - 2^{-\mu} - 2.u} $$
+So:
+$$\lvert \epsilon \rvert \le 3.u^2 .\frac{1 - 2^{-\mu -1}}{1 - 2^{-\mu} - 2.u}$$
+As $\mu \ge 1$, we want the upper bound of $\frac{1 - 2^{-\mu -1}}{1 - 2^{-\mu} - 2.u}$ $\Rightarrow$
+$$\frac{3/4}{1/2 -2.u} \le 2$$
+So :
+$$\lvert \epsilon \rvert \le 2.3.u^2 = 6.u^2$$
+\end{proof}

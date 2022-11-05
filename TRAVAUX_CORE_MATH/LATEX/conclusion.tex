@@ -1,0 +1,15 @@
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}.
+In our report, we studied addition and multiplication functions which have as arguments either \textbf{Double} , \textbf{Double-Double} or \textbf{Triple-Double} that resulted in \textbf{Double-Double} or in \textbf{Triple-Double}.\\
+We noticed that the calculations of \textbf{Double-Double} numbers were more precise than the calculations of \textbf{Doubles} numbers and also that the operations of \textbf{Triple-Double} numbers were more precise than those of \textbf{Double- Double} numbers and \textbf{Double} numbers.\\
+\ \\
+We also shown how to implement the $cr\log$ and calculate the bounds of each thanks to their relative error calculations. We managed to implement our logarithm thanks to the bounds of $cr\log_{fast}$ and $cr\log_{accurate}$. Inaddition to this, We have shown how bounds were used in the logarithm.\\
+For each $cr\log$, we calculated $\alpha_i$ and also their $\log(\alpha_i)$. $cr\log{fast}$ used $\alpha_i$ which are \textbf{Double} and have precision of $71$ bits, while $cr\log{accurate}$ used $\alpha_i $ which are \textbf{Double-Double} and have a precision of approximately $107$ bits and the $cr\log_{advanced}$ used $\alpha_i$ which are \textbf{Triple-Double} and which have a precision of about $160$ bits.\\
+\ \\
+We noticed that, while the $cr\log_{fast}$ has faster internal calculations than those of $cr\log_{accurate}$, the internal operations of $cr\log_{accurate}$ is faster than those of du $cr\log_{advanced}$.\\
+\ \\
+In our research, we managed to implement the logarithm with the calculation algorithms, and We tested it on millions of worst cases. \\
+\ \\
+To our mind ,it would be necessary to test the speed of the code, by trying to make it faster. Like for example, changing the $cr\log_{fast}$ so that its error bound would be more smaller. \\
+Thanks to this logarithm, we could implement the logarithm in base $2$ ($\log_2)$ and base 10 ($\log_{10})$.
+Moreover, we could Implement the logarithm with correct rounding for $binary80$ and $binary128$ and the same for ($\log_2)$ and ($\log_{10})$.\\

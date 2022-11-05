@@ -1,0 +1,63 @@
+\section{Steps to calculate crlog}
+\begin{frame}{Correct rounding methodology}
+\begin{enumerate}
+    \item $cr\log_{fast}$  computes an approximation $y$ of $f (x)$ with a small error bound $\epsilon_1$;
+ \item rounding test :$[y - \epsilon_1, y + \epsilon_1]$ 
+ \item $cr\log{accurate}$ computes an approximation $y$ of $f (x)$ with a small error bound $\epsilon_2$ with $\lvert \epsilon_2 \rvert < \lvert \epsilon_1 \rvert  $
+ \item rounding test :$[y -  \epsilon_2, y + \epsilon_2]$
+ \item $cr\log{advanced}$ give us the correctly rounded value.
+\end{enumerate}    
+\end{frame}
+
+\begin{frame}{Fast path}
+    \begin{enumerate}
+        \item Special cases
+        \item Argument reduction
+        \item Polynomial approximation and evaluation
+        \item Result construction
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Special cases}
+\begin{itemize}
+   
+
+\item input is $NaN$ 
+    \item Input is negatif 
+    \item Input is $+0$ or $-0$ 
+    \item Input is $+\infty$ 
+    \item Input is a \textbf{subnormal} number. We transform it into \textbf{normal} number then we calculate as if it is normal.
+   \end{itemize} 
+\end{frame}
+
+\begin{frame}{Argument reduction}
+
+   \begin{itemize}
+       \item <1-> $x = 2^E \times m$
+        \item <2-> $log(x) = E \times \log(2)+\log(m)$
+        \item <3-> Condition before to use \textbf{Tang}'s algorithm: $1 < m < 2$\\
+          $1.b........b$ with $b \in \left\{0,1 \right\}$
+        \item <4-> $k$ significant bits after the initial $1$, $i = Integer(k.bits)$\\
+        $1.\underbrace{b..b}_{k \ bits}.....b$ with $b \in \left\{0,1 \right\}$
+        \item <5-> $\alpha_i = \frac{2^k}{2^k+i}$ 
+        \item <6-> $m= \frac{m \times \alpha_i}{\alpha_i}$ $\Rightarrow$ $\log(m) = \log(m * \alpha_i) - \log(\alpha_i)$
+        \item <7-> $1 < m^{\prime} < 1+\frac{1}{2^k}$ with $m^{'} = m \times \alpha_i$\\
+        $1.\underbrace{0..0}_{k \ bits}.....b$ with $b \in \left\{0,1 \right\}$
+        \end{itemize}
+\end{frame}
+
+\begin{frame}{Polynomial approximation and evaluation}
+\begin{itemize}
+    \item <1-> $1 < m^{\prime} < 1+\frac{1}{2^k}$
+    \item <2-> $\log(1+t)$ 
+    \item <3-> $t =  m^{\prime} - 1$ 
+    \item <4-> $0 < t \le \frac{1}{2^k} $
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Result construction}
+    \begin{itemize}
+        \item $P$ the Polynomial approximation and evaluation
+        \item $\log(x) = E.\log(2) +P(t) - \log(\alpha_i)$
+    \end{itemize}
+\end{frame}

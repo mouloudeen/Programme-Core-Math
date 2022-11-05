@@ -1,0 +1,27 @@
+\section{Analyse d'erreur de $cr\log_{fast}$}
+
+On va commencer à analyser l'erreur relative de la fonction d'approximation $f$ de degré $7$ de $\log(1+x)$.\\
+\subsection{Analyse d'erreur de $f$}
+D'après notre fonction $cr\log_{fast}$,on a que $r = m*\alpha_i-1$ et on a que $r$ est représenté en (double,double) par $(h,l)$.\\ 
+$$\log(x) \approx e*\log(2)+f(r)-\log_{\alpha_i}$$.
+$$f(r) = r(f_1+r(f_2+r(f_3+r(f_4+r(f_5+r(f_6+r*f_7))))))$$
+En intégrant $(h,l)$, on a :
+$$f(h+l) \approx (h+l)(f_1+(h+l)(f_2+(h+l)(f_3+(h+l)(f_4+r(f_5+r(f_6+r*f_7))))))$$
+L'erreur relative du polynôme $f(r)$:\\
+$$\epsilon_{meth} = \frac{f(r)-\log(1+r)}{\log(1+r)}$$
+
+\subsection{Analyse d'erreur de $cr\log_{fast}$}
+
+Après la réduction d'argument, on a que $1\leq m < 2$.On utilise $8$ bits de la mantisse pour calculer $\alpha_i$ d'où $\alpha_i$ et $\log_{\alpha_i}$ seront tabulés sur $256$ valeurs de $i$.\\
+$$\log_{\alpha_i} = \log(\alpha_i)(1+\epsilon)\ avec \ |\epsilon| \le 2^{-71}$$
+$$|r| = |m\times \alpha_i-1| \le 1 + 2^{-8}$$(cf Approche de \textbf{Tang})\\
+$h_r+{\ell}_r=m\times \alpha_i$ et $h+{\ell} = m\times \alpha_i-1$.
+$$h+{\ell} \approx h_r- 1.0 +{\ell}_r  \approx m\times \alpha_i-1$$
+$$hr = \circ (m\times \alpha_i)$$
+$$  \le \circ (1+2^{-8})$$
+$$= 1+2^{-8}$$
+$$ < 2$$
+D'après l'approche de \textbf{Tang}:\\
+$$1<h_r<1+2^{-8}$$
+$$\frac{1}{2}<h_r<2$$.\\
+

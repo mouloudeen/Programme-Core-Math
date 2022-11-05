@@ -1,0 +1,10 @@
+load('load.sage')
+load('cr_log.sage')
+x = RR('0x1.03e90f7831304p+1',16)
+
+hA,mA,lA = cr_log_accurate_path_advanced(x,U)
+A = RR(hA).exact_rational()+(RR(mA).exact_rational()+RR(lA).exact_rational())
+B = log(x.exact_rational())
+C = R200((B-A)/B)
+D = R200((-log(abs(C)))/log(2.0))
+print("Le nombre de bits de précisions : %f" %(D))

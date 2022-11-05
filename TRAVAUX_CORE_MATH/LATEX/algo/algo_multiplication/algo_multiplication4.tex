@@ -1,0 +1,153 @@
+\section{Multiplication Operators}
+\subsection{Mul133}
+See algorithm \ref{algo:Mul133} 
+
+\begin{lem}[Mul133] Let $a$ a \textbf{double} number and $(b_h, b_m, b_{\ell})$ a   \textbf{triple-Double} number, $r_h$, $r_m$ and  $r_{\ell}$ result of $Mul133(a,b_h,b_m,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so: $ \lvert r_{\ell} \rvert \le u. \lvert r_m \rvert$ , $\lvert r_m \rvert \le (u + 2^{-\beta_o+1} + 2^{-\beta_o -\beta_u+1}).\lvert r_h \rvert$ and $\lvert r_{\ell} \rvert \le u.(u^2 + 2^{-\beta_o+1} + 2^{-\beta_o -\beta_u+1}).\lvert r_h \rvert$.
+\end{lem}
+
+\begin{proof} \color{-yellow}
+According to $Mul133$, we have :\\
+$r_m + r_{\ell} = Add112(t_9,t_{10})$ According to $Add112$ $\Rightarrow$  $\lvert r_{\ell} \rvert \le u. \lvert r_m \rvert$.\\
+$t_{10} = \circ(t_7 + t_8)$ According to collary \ref{cor:ux}: $t_{10} = (t_7 + t_8).(1+\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le u$\\
+$t_8 = \circ(t_4 + t_5)$ According to collary \ref{cor:ux}:  $t_8 = (t_4 + t_5).(1+\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le u$\\
+$t_9 + t_7 = Add112(t_2,t_3)$ According to $Add112$ $\Rightarrow$  $\lvert t_7 \rvert \le u. \lvert t_9 \rvert$ and $t_9 + t_7 = t_2 + t_3$.\\
+$t_5 = \circ(a.b_{\ell})$ According to collary \ref{cor:ux}: $t_5 = (a.b_{\ell}).(1+\epsilon_3)$ with $\lvert \epsilon_3 \rvert \le u$\\
+$t_3 + t_4 = Add112(a,b_m)$ According to $Add112$ $\Rightarrow$  $\lvert t_4 \rvert \le u. \lvert t_3 \rvert$ and $t_3 + t_4 = a + b_m$.\\
+$r_h + t_2 = Mul112(a,b_h)$ According to $Mul112$ $\Rightarrow$  $\lvert t_2 \rvert \le u. \lvert r_h \rvert$ and $r_h + t_2 = a . b_h$.\\
+We search the upper bound for $\lvert a.b_h \rvert$ in function of $\lvert r_h \rvert$ to find the upper bound of $\lvert a.b_m \rvert$
+$$\lvert a.b_h \rvert \le \lvert r_h \rvert + \lvert t_2 \rvert$$
+As $\lvert t_2 \rvert \le u. \lvert r_h \rvert$ $\Rightarrow$
+$$\lvert a.b_h \rvert \le (1+u).\lvert r_h \rvert $$
+As $\lvert b_m \rvert \le 2^{-\beta_o}.\lvert b_h \rvert$ $\Rightarrow$
+$$\lvert a.b_m \rvert \le 2^{-\beta_o}.\lvert a.b_h \rvert$$
+$$\lvert a.b_m \rvert \le 2^{-\beta_o}.(1+u).\lvert r_h \rvert$$
+We have $t_3 + t_4 = a.b_m$, so:
+$$\lvert t_3 + t_4 \rvert \le  2^{-\beta_o}.(1+u).\lvert r_h \rvert$$
+As $\lvert t_4 \rvert u. \lvert t_3 \rvert $, so we have:
+$$(1-u). \lvert t_3 \rvert \le \lvert t_3 + t_4 \rvert$$
+$\Rightarrow$
+$$\lvert t_3 \rvert \le 2^{-\beta_o}.(1+u).\frac{1}{1-u}.\lvert r_h \rvert$$
+and 
+$$\lvert t_4 \rvert \le 2^{-\beta_o}.(1+u).\frac{u}{1-u}.\lvert r_h \rvert$$
+As $\lvert b_{\ell} \rvert \le 2^{-\beta_u}.\lvert b_m \rvert$ $\Rightarrow$
+$\lvert b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}.\lvert b_h \rvert$ $\Rightarrow$
+$$ \lvert a.b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}.\lvert a.b_h \rvert$$
+$$ \lvert a.b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}.(1+u).\lvert r_h \rvert$$
+As $t_5 = (a.b_{\ell}).(1+\epsilon_3)$ $\Rightarrow$
+$$\lvert t_5 \rvert \le \lvert (a.b_{\ell}).(1+\epsilon_3) \rvert$$
+As $\lvert \epsilon_3 \rvert \le u$ $\Rightarrow$
+$$\lvert t_5 \rvert \le (1+u)^2.2^{-\beta_o -\beta_u}.\lvert r_h \rvert$$
+As $t_9 + t_7 = t_2 + t_3$ and $\lvert t_7 \rvert \le u. \lvert t_9 \rvert$:
+$$(1-u). \lvert t_9 \rvert \le \lvert t_9 + t_7 \rvert$$
+$$ \lvert t_9 \rvert \le \frac{1}{1-u}.(\lvert t_2 \rvert + \lvert t_3 \rvert)$$
+$$ \lvert t_9 \rvert \le \frac{1}{1-u}.(u. \lvert r_h \rvert + 2^{-\beta_o}.(1+u).\frac{1}{1-u}.\lvert r_h \rvert)$$
+$$ \lvert t_9 \rvert \le \frac{1}{1-u}.(u+ 2^{-\beta_o}\frac{u+1}{1-u}).\lvert r_h \rvert$$ 
+and so:
+$ \lvert t_7 \rvert \le \frac{u}{1-u}.(u+ 2^{-\beta_o}\frac{u+1}{1-u}).\lvert r_h \rvert$
+We know that $t_8 = (t_4 + t_5).(1+\epsilon_2)$ and that $\lvert \epsilon_2 \rvert \le u$ $\Rightarrow$
+$$\lvert t_8 \rvert \le (1+u).(\lvert t_4 \rvert + \lvert t_5 \rvert) $$
+$$\lvert t_8 \rvert \le (1+u).(2^{-\beta_o}.(1+u).\frac{u}{1-u}.\lvert r_h \rvert + (1+u)^2.2^{-\beta_o -\beta_u}.\lvert r_h \rvert) $$
+$$\lvert t_8 \rvert \le (1+u)^2.(2^{-\beta_o}.\frac{u}{1-u} + (1+u).2^{-\beta_o -\beta_u}).\lvert r_h \rvert $$
+We have $t_{10} = (t_7 + t_8).(1+\epsilon_1)$ and that $\lvert \epsilon_1 \rvert \le u$ $\Rightarrow$
+$$\lvert t_{10} \rvert \le (1+u).(\lvert t_7 \rvert + \lvert t_8 \rvert) $$
+$$\lvert t_{10} \rvert \le (1+u).(\frac{u}{1-u}.(u+ 2^{-\beta_o}\frac{u+1}{1-u}) + (1+u)^2.(2^{-\beta_o}.\frac{u}{1-u} + (1+u).2^{-\beta_o -\beta_u})).\lvert r_h \rvert $$
+$$\lvert t_{10} \rvert \le(\frac{u^3+u^2}{1-u}+ 2^{-\beta_o}\frac{-u^5-2.u^4+u^3+4.u^2+2u}{(1-u)^2}+ 2^{-\beta_o -\beta_u}.(u+1)^4).\lvert r_h \rvert  $$
+And finally, $r_h + r_{\ell} = t_9 + t_{10}$, so:
+$$\lvert r_m + r_{\ell}  \rvert \le \frac{1}{1-u}.(u+ 2^{-\beta_o}\frac{u+1}{1-u}).\lvert r_h \rvert$$
+$$ + (\frac{u^3+u^2}{1-u}+ 2^{-\beta_o}\frac{-u^5-2.u^4+u^3+4.u^2+2u}{(1-u)^2}+ 2^{-\beta_o -\beta_u}.(u+1)^4).\lvert r_h \rvert $$
+$$\lvert r_m + r_{\ell}  \rvert \le (\frac{u^3 + u^2 +u}{1-u} + 2^{-\beta_o}.  \frac{-u^5-2.u^4+u^3+4.u^2+3.u+1}{(1-u)^2}  + 2^{-\beta_o -\beta_u}.(1+u)^4).\lvert r_h \rvert  $$
+As $\frac{u^3+u^2+u}{1-u} \le u$, $\lvert \frac{-u^5-2.u^4+u^3+4.u^2+3.u+1}{(1-u)^2} \rvert \le 2$ and $(1+u)^4 \le 2$
+$$\lvert r_m + r_{\ell}  \rvert \le (u + 2^{-\beta_o+1} + 2^{-\beta_o -\beta_u+1}).\lvert r_h \rvert  $$
+As $\lvert r_{\ell} \rvert \le u. \lvert r_m \rvert$ $\Rightarrow$
+$$(1 - u). \lvert r_m \rvert \le \lvert r_m + r_{\ell} \rvert$$
+$$(1 - u). \lvert r_m \rvert \le (u + 2^{-\beta_o+1} + 2^{-\beta_o -\beta_u+1}).\lvert r_h \rvert$$
+$$\lvert r_m \rvert \le \lvert \frac{1}{1-u} \rvert.(u + 2^{-\beta_o+1} + 2^{-\beta_o -\beta_u+1}).\lvert r_h \rvert$$
+$$\lvert r_m \rvert \le (u + 2^{-\beta_o+1} + 2^{-\beta_o -\beta_u+1}).\lvert r_h \rvert$$
+and 
+$$\lvert r_{\ell} \rvert \le u.(u^2 + 2^{-\beta_o+1} + 2^{-\beta_o -\beta_u+1}).\lvert r_h \rvert$$
+\end{proof}
+
+\begin{theo}[Relative error algorithm $Mul133$]
+
+Let $a$ a \textbf{double} number and $(b_h,b_m,b_{\ell})$ a \textbf{triple-double} number are the arguments of the function $Mul133$.\\
+So:\\
+$$r_h +r_m +r_{\ell} = (a. (b_h+ b_m +b_{\ell})).(1+\epsilon)$$ with $\lvert \epsilon \rvert \le \frac{u^4 + 4.u^3.2^{-\beta_o} + 4.u.2^{-\beta_o - \beta_u}}{1-(2^{-\beta_o} +  2^{-\beta_o -\beta_u})} \le 2.u^4 + u^3.2^{-\beta_o+3} + u.2^{-\beta_o - \beta_u +3}$.
+\end{theo}
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $5.2$ prof's(\cite{lauter2005basic}).\\
+According to $Add333$ and thanks to $Add112$ and $Mul112$, we have these results:
+$$\lvert t_2 \rvert \le u.\lvert r_h \rvert $$
+$$\lvert t_4 \rvert \le u.\lvert t_3 \rvert $$
+$$\lvert t_7 \rvert \le u.\lvert t_9 \rvert $$
+$$\lvert r_{\ell} \rvert \le u.\lvert r_m \rvert $$
+
+We search for all $ \lvert t_i \rvert $ with $2\le i \le 10$, their upper bound in function of $\lvert a.b_h \rvert$.\\
+As $r_h + t_2 = a.b_h$ and $\lvert t_2 \rvert \le u.\lvert r_h \rvert $, we have
+$ (1- u). \lvert r_h \rvert \le \lvert r_h + t_2 \rvert$
+$\Rightarrow$
+$$(1- u). \lvert r_h \rvert \le \lvert a.b_h \rvert$$
+$$\lvert r_h \rvert \le \lvert \frac{1}{1-u} .  \lvert a.b_h \rvert$$
+$\Rightarrow$
+$$\lvert t_2 \rvert \le \lvert \frac{u}{1-u} . \lvert a.b_h \rvert$$
+As $\lvert b_m \rvert \le 2^{-\beta_o}.\lvert b_h \rvert$ $\Rightarrow$ $\lvert a.b_m \rvert \le 2^{-\beta_o}.\lvert a.b_h \rvert$ $\Rightarrow$
+$$t_3 + t_4 = a.b_m$$
+As $\lvert t_4 \rvert \le u.\lvert t_3 \rvert $ $\Rightarrow$ $(1- u). \lvert t_3 \rvert \le \lvert t_3 + t_4 \rvert$
+$$(1- u). \lvert t_3 \rvert \le \lvert a.b_m \rvert $$
+$$ \lvert t_3 \rvert \le \frac{1}{1-u}.2^{-\beta_o}.\lvert a.b_h \rvert $$
+$\Rightarrow$
+$$ \lvert t_4 \rvert \le \frac{u}{1-u}.2^{-\beta_o}.\lvert a.b_h \rvert $$
+We have $t_5 = \circ(a.b_{\ell})$ After the collary $t_5 = a.b_{\ell}.(1+\epsilon_3)$
+with $\lvert \epsilon_3 \rvert \le u$.\\
+As $\lvert b_{\ell} \rvert \le 2^{-\beta_u}.\lvert b_m \rvert \le 2^{-\beta_o -\beta_u}.\lvert b_h \rvert $ $\Rightarrow$ $\lvert a.b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}.\lvert a.b_h \rvert$ 
+$$t_5 = a.b_{\ell}.(1+\epsilon_3)$$
+$$\lvert t_5  \rvert \le \lvert a.b_{\ell} \rvert.(1+u) $$
+$$\lvert t_5  \rvert \le (1+u). 2^{-\beta_o -\beta_u}.\lvert a.b_h \rvert $$
+After calculation, we have:
+$$\lvert t_9 \rvert \le   (u  + 2^{-\beta_o}).\lvert \frac{1}{1-u}. \lvert a.b_h \rvert  $$
+$$\lvert t_7 \rvert \le   (u  + 2^{-\beta_o}).\lvert \frac{u}{1-u} .\lvert a.b_h \rvert  $$
+$$\lvert t_8 \rvert \le (\frac{u^3+u^2}{1-u}.2^{-\beta_o} + (1+u)^2. 2^{-\beta_o -\beta_u}).\lvert a.b_h \rvert$$
+$$\lvert t_{10} \rvert \le \frac{1}{u-1}(u^3+u^2 + (u^4+3.u^3+2.u^2).2^{-\beta_o}+(u^4+2.u^3-2.u-1).2^{-\beta_o - \beta_u}).\lvert a.b_h\rvert $$
+
+We know that $r_m + r_{\ell} = t_9 + t_{10}$, we start by calculating $ t_{10}$:
+$$t_{10} = (t_7 + t_8)(1+\epsilon_1)$$
+with $\lvert \epsilon_1 \rvert \le u$, then we calculate $t_8 $:
+$$t_8 = (t_4 + t_5).(1+\epsilon_2)$$
+with $\lvert \epsilon_2 \rvert \le u$, then we calculate $t_5 $:
+$$t_5 = a.b_{\ell}.(1+\epsilon_3)$$
+with $\lvert \epsilon_3 \rvert \le u$
+$$t_8 = (t_4 + a.b_{\ell}.(1+\epsilon_3)).(1+\epsilon_2)$$
+$$t_{10} = (t_7 + (t_4 + a.b_{\ell}.(1+\epsilon_3)).(1+\epsilon_2))(1+\epsilon_1)$$
+After the calculation, we have :
+$$t_{10} = t_7 + t_4 + a.b_{\ell} + \delta$$
+with $\delta = t_7.\epsilon_1 + (t_4+ a.b_{\ell}).(\epsilon_3 + \epsilon_2 +\epsilon_3.\epsilon_2 + \epsilon_1 + \epsilon_3.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_3.\epsilon_2.\epsilon_1)$
+As $r_h + r_m + r_{\ell} = r_h + t_9 + t_{10}$, we have:
+$$r_h + r_m + r_{\ell} = r_h + t_9 + t_7 + t_4 + a.b_{\ell} + \delta$$
+As $t_9 + t_7 = t_2 + t_3$ $\Rightarrow$
+$$r_h + r_m + r_{\ell} = r_h + t_2 + t_3 + t_4 + a.b_{\ell} + \delta$$
+As $r_h + t_3 = a.b_h$ and $t_3 + t_4 = a.b_m$ $\Rightarrow$
+$$r_h + r_m + r_{\ell} = a.b_h + a.b_m + a.b_{\ell} + \delta$$
+$$r_h + r_m + r_{\ell} = a.(b_h + b_m + b_{\ell}) + \delta$$
+We seek the upper bound of $\lvert \delta \rvert $ in function of $\lvert a.b_h \rvert$, So:
+$$\lvert \delta \rvert \le \lvert t_7.\epsilon_1\rvert + (\lvert t_4 \rvert + \lvert a.b_{\ell} \rvert ). \lvert \epsilon_3 + \epsilon_2 +\epsilon_3.\epsilon_2 + \epsilon_1 + \epsilon_3.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_3.\epsilon_2.\epsilon_1 \rvert$$
+As $\lvert \epsilon_i \rvert \le u$ with $1 \le i \le 3$ $\Rightarrow$
+$$\lvert \delta \rvert \le u.\lvert t_7\rvert + (3.u + 3.u^2 +u^3).(\lvert t_4 \rvert + \lvert a.b_{\ell} \rvert ) $$
+$$\lvert \delta \rvert \le u.(u  + 2^{-\beta_o}).\lvert \frac{u^2}{u-1}. \lvert a.b_h \rvert + (3.u + 3.u^2 +u^3).(\frac{u^2}{u-1}.2^{-\beta_o}.\lvert a.b_h \rvert + 2^{-\beta_o -\beta_u}.\lvert a.b_h \rvert ) $$
+$$\lvert \delta \rvert \le (\frac{u^4}{u-1} + \frac{u^5+3.u^4+4.u^3}{u-1}.2^{-\beta_o} + (u^3+3.u^2+3.u).2^{-\beta_o - \beta_u}).\lvert a.b_h \rvert $$
+We seek the upper bound of $\lvert a.b_h \rvert$ in function of $\lvert a.(b_h+b_m+b_{\ell})\rvert$.
+$$\lvert a.b_m + a.b_{\ell} \rvert \le \lvert a.b_m \rvert +  \lvert a.b_{\ell} \rvert$$
+$$\lvert a.b_m + a.b_{\ell} \rvert \le 2^{-\beta_o}.\lvert a.b_h \rvert +  2^{-\beta_o -\beta_u}.\lvert a.b_h \rvert$$
+$$\lvert a.b_m + a.b_{\ell} \rvert \le (2^{-\beta_o} +  2^{-\beta_o -\beta_u}).\lvert a.b_h \rvert$$
+So we have:
+$$\lvert a.b_h +a.b_m + a.b_{\ell} \rvert \ge (1-(2^{-\beta_o} +  2^{-\beta_o -\beta_u})).\lvert a.b_h \rvert$$
+$$ \frac{1}{1-(2^{-\beta_o} +  2^{-\beta_o -\beta_u})}\lvert a.b_h +a.b_m + a.b_{\ell} \rvert \ge \lvert a.b_h \rvert$$
+$\Rightarrow$
+$$\lvert \delta \rvert \le (\frac{u^4}{u-1} + \frac{u^5+3.u^4+4.u^3}{u-1}.2^{-\beta_o} + (u^3+3.u^2+3.u).2^{-\beta_o - \beta_u}).\frac{1}{1-(2^{-\beta_o} +  2^{-\beta_o -\beta_u})}\lvert a.b_h +a.b_m + a.b_{\ell} \rvert $$
+As $\frac{u^4}{u-1} \le u^4$, $\frac{u^5+3.u^4+4.u^3}{u-1} \le 4.u^3$
+and $u^3+3.u^2+3.u \le 4.u$ $\Rightarrow$
+$$\lvert \delta \rvert \le \frac{u^4 + 4.u^3.2^{-\beta_o} + 4.u.2^{-\beta_o - \beta_u}}{1-(2^{-\beta_o} +  2^{-\beta_o -\beta_u})}.\lvert a.b_h +a.b_m + a.b_{\ell} \rvert $$
+As $1-(2^{-\beta_o} +  2^{-\beta_o -\beta_u}) \ge \frac{1}{2}$ with $\beta_o \ge 2$ and $\beta_u \ge 2$
+$$\lvert \delta \rvert \le (2.u^4 + u^3.2^{-\beta_o+3} + u.2^{-\beta_o - \beta_u +3}).\lvert a.b_h +a.b_m + a.b_{\ell} \rvert $$
+So :
+$$\lvert \epsilon \rvert \le 2.u^4 + u^3.2^{-\beta_o+3} + u.2^{-\beta_o - \beta_u +3}$$
+\end{proof}

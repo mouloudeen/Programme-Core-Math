@@ -1,0 +1,218 @@
+\subsection{Mul333}
+See algorithm \ref{algo:Mul333}
+
+\begin{lem}[Mul333] Let $(a_h, a_m, a_{\ell})$ and $(b_h, b_m, b_{\ell})$ are   \textbf{triple-Double} number, $r_h$, $r_m$ and  $r_{\ell}$ result of $Mul333(a_h, a_m,a_{\ell},b_h,b_m,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so: $ \lvert r_{\ell} \rvert \le 6.u. \lvert r_m \rvert$, $\lvert r_m \rvert \le .(u + 2^{-\alpha_o}+2^{-\beta_o} +  2^{-\alpha_o - \beta_o+1}).\lvert r_h \rvert$ and $\lvert r_{\ell} \rvert \le u.(u + 2^{-\alpha_o}+2^{-\beta_o} +  2^{-\alpha_o - \beta_o+1}).\lvert r_h \rvert$
+\end{lem}
+
+\begin{proof} \color{-yellow} 
+According to $Mul333$, we seek for each $\lvert t_i \rvert $ with $1\le i \le 22$ their upper bound in function of $\lvert r_h \rvert$\\
+We begin to search the upper bound of $\lvert a_h.b_m \rvert$, $\lvert a_h.b_{\ell} \rvert$, $\lvert a_m.b_h \rvert$,$\lvert a_m.b_m \rvert$, $\lvert a_m.b_{\ell} \rvert$, $\lvert a_{\ell}.b_h \rvert$, $\lvert a_{\ell}.b_m \rvert$ and $\lvert a_{\ell}.b_{\ell} \rvert$ in function of $\lvert a_h.b_h$.\\
+Thanks to the conditions of $Add333$, we have:
+$$\lvert a_h.b_m \rvert \le 2^{-\beta_o}. \lvert a_h.b_h \rvert $$
+$$\lvert a_h.b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}. \lvert a_h.b_h \rvert $$
+$$\lvert a_m.b_h \rvert \le 2^{-\alpha_o}. \lvert a_h.b_h \rvert $$
+$$\lvert a_m.b_m \rvert \le 2^{-\alpha_o -\beta_o}. \lvert a_h.b_h \rvert $$
+$$\lvert a_m.b_{\ell} \rvert \le 2^{-\alpha_o -\beta_o -\beta_u}. \lvert a_h.b_h \rvert $$
+$$\lvert a_{\ell}.b_h \rvert \le 2^{-\alpha_o - \alpha_u}. \lvert a_h.b_h \rvert $$
+$$\lvert a_{\ell}.b_m \rvert \le 2^{-\alpha_o - \alpha_u -\beta_o}. \lvert a_h.b_h \rvert $$
+$$\lvert a_{\ell}.b_{\ell} \rvert \le 2^{-\alpha_o - \alpha_u -\beta_o - \beta_u}. \lvert a_h.b_h \rvert $$
+We have:
+\begin{itemize}
+    \item  $r_h + t_1 = Mul112(a_h,b_h)$ according to $Mul112$ $\Rightarrow$ $r_h + t_1 = a_h.b_h$ and $\lvert t_1 \rvert \le u. \lvert r_h \rvert$ $\Rightarrow$
+$$\lvert a_h.b_h \rvert \le (1+u).\lvert r_h \rvert$$
+
+\item  $t_2 + t_3 = Mul112(a_h,b_m)$ according to $Mul112$ $\Rightarrow$ $t_2 + t_3 = a_h.b_m$ and $\lvert t_3 \rvert \le u. \lvert t_2 \rvert$ $\Rightarrow$
+$$\lvert t_2 + t_3 \rvert \ge (1-u). \lvert t_2 \rvert $$
+$$(1-u). \lvert t_2 \rvert \le \lvert  a_h.b_m \rvert $$
+$$\lvert t_2 \rvert \le \frac{1}{1-u}.\lvert  a_h.b_m \rvert $$
+$$\lvert t_2 \rvert \le \frac{1}{1-u}.2^{-\beta_o}. \lvert a_h.b_h \rvert $$
+$$\lvert t_2 \rvert \le \frac{1}{1-u}.2^{-\beta_o}. (1+u).\lvert r_h \rvert $$
+$$\lvert t_2 \rvert \le \frac{1+u}{1-u}.2^{-\beta_o}. \lvert r_h \rvert $$
+$\Rightarrow$
+$$\lvert t_3 \rvert \le \frac{u^2+u}{1-u}.2^{-\beta_o}. \lvert r_h \rvert $$
+For $\lvert t_i \rvert $ with $4 \le i \le 7$,we don't repeat the calculations:
+$$\lvert t_4 \rvert \le \frac{1+u}{1-u}.2^{-\alpha_o}. \lvert r_h \rvert $$
+$$\lvert t_5 \rvert \le \frac{u^2+u}{1-u}.2^{-\alpha_o}. \lvert r_h \rvert $$
+$$\lvert t_6 \rvert \le \frac{1+u}{1-u}.2^{-\alpha_o -\beta_o}. \lvert r_h \rvert $$
+$$\lvert t_7 \rvert \le \frac{u^2+u}{1-u}.2^{-\alpha_o -\beta_o}. \lvert r_h \rvert $$
+\item $t_8 = \circ(a_h.b_{\ell})$ according to the collary \ref{cor:ux} $\Rightarrow$ $t_8 = a_h.b_{\ell}.(1+\epsilon_{11})$ with $\lvert \epsilon_{11} \rvert \le u$ $\Rightarrow$
+$$ \lvert t_8 \rvert \le \lvert a_h.b_{\ell} \rvert.(1+u)$$
+$$ \lvert t_8 \rvert \le 2^{-\beta_o -\beta_u}. \lvert a_h.b_h \rvert.(1+u)$$
+$$ \lvert t_8 \rvert \le 2^{-\beta_o -\beta_u}. (1+u).\lvert r_h \rvert.(1+u)$$
+$$ \lvert t_8 \rvert \le (1+u)^2.2^{-\beta_o -\beta_u}.\lvert r_h \rvert$$
+We do the same operations for $\lvert t_i \rvert $ with $9 \le i \le 11$:
+$$ \lvert t_9 \rvert \le (1+u)^2.2^{-\alpha_o - \alpha_u}. \lvert r_h \rvert$$
+$$ \lvert t_{10} \rvert \le (1+u)^2.2^{-\alpha_o -\beta_o -\beta_u}.\lvert r_h \rvert$$
+$$ \lvert t_{11} \rvert \le (1+u)^2.2^{-\alpha_o - \alpha_u -\beta_o}. \lvert r_h \rvert$$
+\item $t_{12} = \circ(t_8 + t_9)$ according to collary \ref{cor:ux}: $t_{12} = (t_8 + t_9).(1+\epsilon_7)$ with $\lvert \epsilon_7 \rvert \le u$ $\Rightarrow$ 
+$$ \lvert t_{12} \rvert \le  \lvert t_8 + t_9 \rvert .(1+ u)$$
+$$ \lvert t_{12} \rvert \le  ((1+u)^2.2^{-\beta_o -\beta_u} + (1+u)^2.2^{-\alpha_o - \alpha_u}).\lvert r_h \rvert .(1+ u)$$
+$$ \lvert t_{12} \rvert \le  ((1+u)^3.2^{-min(\beta_o +\beta_u, \alpha_o + \alpha_u )} + .\lvert r_h \rvert $$
+similarly:
+$$ \lvert t_{13} \rvert \le  ((1+u)^3.2^{-min(\alpha_o +\beta_o +\beta_u,\alpha_o + \alpha_u +\beta_o)}  \lvert r_h \rvert$$
+\item $t_{14} + t_{15} = Add112(t_1, t_6)$ according to $Add112$ $\Rightarrow$
+$t_{14} + t_{15} = t_1+ t_6$ and $\lvert t_{15} \rvert \le u. \lvert t_{14} \rvert $ $\Rightarrow$
+$$\lvert t_{14} \rvert \le \frac{1}{1-u}.\lvert  t_1 + t_6 \rvert $$
+$$\lvert t_{14} \rvert \le \frac{1}{1-u}.(u + \frac{1+u}{1-u}.2^{-\alpha_o -\beta_o} ).\lvert r_h \rvert $$
+$$\lvert t_{14} \rvert \le \frac{1}{(1-u)^2}.(u -u^2 + (1+u).2^{-\alpha_o -\beta_o} ).\lvert r_h \rvert $$
+$\Rightarrow$
+$$\lvert t_{15} \rvert \le \frac{u}{(1-u)^2}.(u -u^2 + (1+u).2^{-\alpha_o -\beta_o} ).\lvert r_h \rvert $$
+
+\item We calculate $\lvert t_i \rvert$ with $16 \le i \le 18$ as we did previously with the calculation of $\lvert t_{12} \rvert$
+$$ \lvert t_{16} \rvert \le  \frac{1+u}{(1-u)^2}.(u^2 -u^3 + (-u^3+u).2^{-\alpha_o -\beta_o}).\lvert r_h \rvert$$
+$$ \lvert t_{17} \rvert \le  (1+ u)^4.2^{-min(\alpha_o +\beta_o +\beta_u,\alpha_o + \alpha_u +\beta_o)}.\lvert r_h \rvert .$$
+$$ \lvert t_{18} \rvert \le  (\frac{1+u}{(1-u)^2}.(u^2 -u^3 + (-u^3+u).2^{-\alpha_o -\beta_o})$$
+$$ + (1+ u)^4.2^{-min(\alpha_o +\beta_o +\beta_u,\alpha_o + \alpha_u +\beta_o)}).(1+ u). \lvert r_h \rvert $$
+As $\alpha_o +\beta_o < \alpha_o +\beta_o +\beta_u$ and $\alpha_o +\beta_o < \alpha_o +\beta_o + \alpha_u$ $\Rightarrow$
+$$ \lvert t_{18} \rvert \le  (\frac{(1+u)^2}{(1-u)^2}.(u^2 -u^3 + ((-u^3+u)+(1+u)^3.(1-u^2)).2^{-\alpha_o -\beta_o})). \lvert r_h \rvert $$
+\item $t_{19} + t_{20} = Add112(t_{14}, t_{18})$ according to $Add112$ $\Rightarrow$
+$t_{19} + t_{20} = t_{14} + t_{18}$ and $\lvert t_{20} \rvert \le u.\lvert t_{19} \rvert $ $\Rightarrow$, we simplify:
+$$\lvert t_{19} \rvert \le (u+ 2^{-\alpha_o - \beta_o+1}).\lvert r_h \rvert$$
+$$\lvert t_{20} \rvert \le u.(u+ 2^{-\alpha_o - \beta_o+1}).\lvert r_h \rvert$$
+\item $t_{21}+t_{22} = Add222(t_2,t_3,t_4,t_5)$ according to $Add222$ $\Rightarrow$
+$t_{21}+t_{22} =(t_2+t_3+t_4+t_5).(1+\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le 6.u^2 $ and $\lvert t_{22} \rvert \le 6.u. \lvert t_{21} \rvert$ $\Rightarrow$
+$$\lvert t_{21} \rvert \le \frac{(u+1)^2.(1+6u^2)}{(1-u)^2}.(2^{-\alpha_o}+2^{-\beta_o}).\lvert r_h \rvert  $$
+$$\lvert t_{22} \rvert \le \frac{u.(u+1)^2.(1+6u^2)}{(1-u)^2}.(2^{-\alpha_o}+2^{-\beta_o}).\lvert r_h \rvert  $$
+
+\item $r_m+r_{\ell} = Add222(t_{21},t_{22},t_{19},t_{20})$,according to $Add222$ $\Rightarrow$ $ \lvert r_{\ell} \rvert \le 6.u. \lvert r_m \rvert$.\\
+After the calculations, we have:
+$$\lvert r_m \rvert \le \frac{1+6.u^2}{1-u^2}.(\frac{(u+1)^3.(1+6u^2)}{(1-u)^2}.(2^{-\alpha_o}+2^{-\beta_o}) + (u+1).(u+ 2^{-\alpha_o - \beta_o+1})).\lvert r_h \rvert$$
+after simplification:
+$$\lvert r_m \rvert \le .(u + 2^{-\alpha_o}+2^{-\beta_o} +  2^{-\alpha_o - \beta_o+1}).\lvert r_h \rvert$$
+and 
+$$\lvert r_{\ell} \rvert \le u.(u + 2^{-\alpha_o}+2^{-\beta_o} +  2^{-\alpha_o - \beta_o+1}).\lvert r_h \rvert$$
+\end{itemize}
+\end{proof}
+
+\begin{theo}[Relative error algorithm $Mul333$]
+
+Let $(a_h,a_m,a_{\ell})$  and $(b_h,b_m,b_{\ell})$ are \textbf{triple-double} numbers and the arguments of the function $Mul233$.\\
+So:\\
+$$r_h +r_m +r_{\ell} = (a_h +a_m + a_{\ell}). (b_h+ b_m +b_{\ell})).(1+\epsilon)$$ with $$\lvert \epsilon \rvert \le $$
+$$ 32.u^3 + 3.u.(2^{-\beta_o+2} + 2^{-\alpha_o+2}) + 2^{-\beta_o - \beta_u +3} + 2^{-\alpha_o - \alpha_u +3} + 2^{-\alpha_o - \alpha_u  - \beta_u +3} + 2^{-\alpha_o -  \beta_o -\beta_u +3}$$
+\end{theo}
+
+\begin{proof} \color{-yellow}
+According to $Mul333$, we have:
+\begin{itemize}
+    \item $r_m + r_{\ell} = Add222(t_{21}, t_{22}, t_{19}, t_{20})$ based on $Add222$ $\Rightarrow$ \\ 
+    $r_m + r_{\ell} = (t_{21}+ t_{22}+ t_{19}+ t_{20})(1+\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le 6.u^2$
+    \item $t_{21}+t_{22} =(t_2+t_3+t_4+t_5).(1+\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le 6.u^2 $
+    \item $t_2 + t_3 = a_h.b_m$ and $t_4 + t_5 = a_m . b_m$ $\Rightarrow$ \\
+    $$t_{21}+t_{22} =(a_h.b_m+a_m.b_m).(1+\epsilon_2)$$
+    $$r_m + r_{\ell} = ((a_h.b_m+a_m.b_m).(1+\epsilon_2)+ t_{19}+ t_{20})(1+\epsilon_1)$$
+    \item $t_{19}+ t_{20} = t_{14} + t_{18} $ thanks to $Add112$
+    \item $t_{18} = (t_{16} + t_{17})(1+\epsilon_3)$ with $\lvert \epsilon_3 \rvert \le u$ thanks to the collary \ref{cor:ux}
+    \item $t_{17} = (t_{12} + t_{13})(1+\epsilon_4)$ with $\lvert \epsilon_4 \rvert \le u$ thanks to the collary \ref{cor:ux}
+    \item $t_{12} = (t_8 + t_9)(1+\epsilon_7)$ with $\lvert \epsilon_7 \rvert \le u$ thanks to the collary \ref{cor:ux}
+    \item $t_{8} = (a_h.b_{\ell}).(1+\epsilon_{11})$ with $\lvert \epsilon_{11} \rvert \le u$  and $t_{9} = (a_{\ell}.b_h).(1+\epsilon_{10})$ with $\lvert \epsilon_{10} \rvert \le u$ thanks to the collary \ref{cor:ux}
+    \item $$t_{12} = ((a_h.b_{\ell}).(1+\epsilon_{11}) + (a_{\ell}.b_h).(1+\epsilon_{10}))(1+\epsilon_7)$$
+    $$t_{17} = (((a_h.b_{\ell}).(1+\epsilon_{11}) + (a_{\ell}.b_h).(1+\epsilon_{10}))(1+\epsilon_7) + t_{13})(1+\epsilon_4)$$
+    \item $t_{13} = (t_{10} + t_{11}).(1+\epsilon_6)$ with $\lvert \epsilon_6 \rvert \le u$
+    \item $t_{10} = a_m.b_{\ell}.(1+\epsilon_9)$ and $t_{11} = a_{\ell}.b_m.(1+\epsilon_8)$ with $\lvert \epsilon_8 \rvert \le u$ and $\lvert \epsilon_9 \rvert \le u$
+    $$t_{13} = (a_m.b_{\ell}.(1+\epsilon_9) + a_{\ell}.b_m.(1+\epsilon_8)).(1+\epsilon_6)$$
+    $$t_{17} = (((a_h.b_{\ell}).(1+\epsilon_{11}) + (a_{\ell}.b_h).(1+\epsilon_{10}))(1+\epsilon_7) + (a_m.b_{\ell}.(1+\epsilon_9) + a_{\ell}.b_m.(1+\epsilon_8)).(1+\epsilon_6))(1+\epsilon_4)$$
+    At the end of the calculation of $t_{17}$, we have:\\
+    $$t_{17} = a_h.b_{\ell}.(1 + \epsilon_4 + \epsilon_7 + \epsilon_{11} + 
+    \epsilon_4.\epsilon_7 + \epsilon_4.\epsilon_{11} + \epsilon_7.\epsilon_{11} + 
+    \epsilon_4.\epsilon_7.\epsilon_{11})$$
+    $$ + \  a_{\ell}.b_h.(1 + \epsilon_4 + \epsilon_7 + \epsilon_{10} + \epsilon_4.\epsilon_7 + 
+    \epsilon_4.\epsilon_{10} + \epsilon_7.\epsilon_{10} + \epsilon_4.\epsilon_7.\epsilon_{10})$$ 
+    $$ + \   a_m.b_{\ell}.(1 + \epsilon_4 + \epsilon_6 + \epsilon_9 + 
+    \epsilon_4.\epsilon_6 + \epsilon_4.\epsilon_9 + \epsilon_6.\epsilon_9 + 
+    \epsilon_4.\epsilon_6.\epsilon_9) $$ 
+    $$ + \  a_m.b_{\ell}.(1 + \epsilon_4 + \epsilon_6 + \epsilon_8 + 
+    \epsilon_4.\epsilon_6 + \epsilon_4.\epsilon_8 + \epsilon_6.\epsilon_8 + 
+    \epsilon_4.\epsilon_6.\epsilon_8)$$
+    
+    \item $t_{16} = (t_7 + t_{15}).(1+\epsilon_5)$ with $\lvert \epsilon_5 \rvert \le u$\\
+    $$t_{18} = ((t_7 + t_{15}).(1+\epsilon_5) + t_{17})(1+\epsilon_3)$$
+    $$t_{19} + t_{20} = t_{14} +((t_7 + t_{15}).(1+\epsilon_5) + t_{17})(1+\epsilon_3)$$
+    $$t_{19} + t_{20} = t_{14} +(t_7+t_{15}).(1+\epsilon_3 + \epsilon_5 + \epsilon_3.\epsilon_5)  + t_{17}.(1+\epsilon_3)$$
+    $$t_{19} + t_{20} = t_{14} + t_{15} +t_7  + (t_7+t_{15}).(\epsilon_3 + \epsilon_5 + \epsilon_3.\epsilon_5)  + t_{17}.(1+\epsilon_3)$$
+    As $t_{14} + t_{15} = t_1 + t_6$
+    $$t_{19} + t_{20} = t_1 + t_6 +t_7  + (t_7+t_{15}).(\epsilon_3 + \epsilon_5 + \epsilon_3.\epsilon_5)  + t_{17}.(1+\epsilon_3)$$
+    As $ t_6 +t_7 = a_m.b_m$
+    $$t_{19} + t_{20} = t_1 + a_m.b_m  + (t_7+t_{15}).(\epsilon_3 + \epsilon_5 + \epsilon_3.\epsilon_5)  + t_{17}.(1+\epsilon_3)$$
+    $$r_m + r_{\ell} = ((a_h.b_m+a_m.b_m).(1+\epsilon_2)+ t_1 + a_m.b_m  + (t_7+t_{15}).(\epsilon_3 + \epsilon_5 + \epsilon_3.\epsilon_5)  + t_{17}.(1+\epsilon_3))(1+\epsilon_1)$$
+    $$r_m + r_{\ell} = ((a_h.b_m+a_m.b_m).(1+\epsilon_2 + \epsilon_3 + \epsilon_2.\epsilon_3 )+ t_1.(1+ \epsilon_1) + t_{17}.(1 + \epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) $$  
+    $$ \ \ \ \ \ \  \  \  + \  a_m.b_m.(1+ \epsilon_1)  + (t_7+t_{15}).(\epsilon_3 + \epsilon_5 + \epsilon_1.\epsilon_5 + \epsilon_3.\epsilon_5 + \epsilon_1.\epsilon_3.\epsilon_5) $$
+    We add $r_h$ $\Rightarrow$ :
+    $$r_h + r_m + r_{\ell} = r_h + t_1+ (a_h.b_m+a_m.b_m).(1+\epsilon_2 + \epsilon_3 + \epsilon_2.\epsilon_3 )+ t_1.\epsilon_1 + t_{17}.(1 + \epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) $$  
+    $$ \ \ \ \ \ \  \  \  \  \  \  + \  a_m.b_m.(1+ \epsilon_1)  + (t_7+t_{15}).(\epsilon_3 + \epsilon_5 + \epsilon_1.\epsilon_5 + \epsilon_3.\epsilon_5 + \epsilon_1.\epsilon_3.\epsilon_5) $$
+    $$r_h + r_m + r_{\ell} = (a_h+a_m).(b_h,b_m,b_{\ell}) + a_{\ell}.(b_h,b_m) + \delta$$
+    with $\delta =t_1.\epsilon_1 + (a_h.b_m + a_m.b_h).(\epsilon_2 + \epsilon_3 +\epsilon_2.\epsilon_3)+ a_m.b_m.\epsilon_1 +(t_7 + t_{15}).(\epsilon_3 +\epsilon_5 +\epsilon_1.\epsilon_3 + \epsilon_1.\epsilon_5 + \epsilon_3.\epsilon_5 + \epsilon_1.\epsilon_3.\epsilon_5) + t_{17}.(1 + \epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) - (a_h.b_{\ell} + a_{\ell}.b_h + a_m.b_{\ell} + a_{\ell}.b_m) $ . \\
+    We search the upper bound of $\lvert \delta \rvert $ in function of $\lvert a_h.b_h \rvert$.\\
+    $$ \lvert \delta  \rvert \le \lvert t_1.\epsilon_1 \rvert + \lvert (a_h.b_m + a_m.b_h).(\epsilon_2 + \epsilon_3 +\epsilon_2.\epsilon_3) \rvert +  \lvert a_m.b_m.\epsilon_1 \rvert \ \ \ \ \ \ \ \ \ \ \ \ \ \ $$ 
+    $$ + \lvert (t_7 + t_{15}).(\epsilon_3 +\epsilon_5 +\epsilon_1.\epsilon_3 + \epsilon_1.\epsilon_5 + \epsilon_3.\epsilon_5 + \epsilon_1.\epsilon_3.\epsilon_5) \rvert + \lvert t_{17}.(1 + \epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) - (a_h.b_{\ell} + a_{\ell}.b_h + a_m.b_{\ell} + a_{\ell}.b_m) \rvert $$ . \\
+    We begin to calculate $t_{17}.(1 + \epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) - (a_h.b_{\ell} + a_{\ell}.b_h + a_m.b_{\ell} + a_{\ell}.b_m) $:
+    $$t_{17}.(1 + \epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) - (a_h.b_{\ell} + a_{\ell}.b_h + a_m.b_{\ell} + a_{\ell}.b_m) =$$
+    $$ a_h.b_{\ell}.((1 + \epsilon_4 + \epsilon_7 + \epsilon_{11} + 
+    \epsilon_4.\epsilon_7 + \epsilon_4.\epsilon_{11} + \epsilon_7.\epsilon_{11} + 
+    \epsilon_4.\epsilon_7.\epsilon_{11}).(1 +\epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) -1)$$
+    $$ + \  a_{\ell}.b_h.((1 + \epsilon_4 + \epsilon_7 + \epsilon_{10} + \epsilon_4.\epsilon_7 + 
+    \epsilon_4.\epsilon_{10} + \epsilon_7.\epsilon_{10} + \epsilon_4.\epsilon_7.\epsilon_{10}).(1 +\epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) -1)$$ 
+    $$ + \   a_m.b_{\ell}.((1 + \epsilon_4 + \epsilon_6 + \epsilon_9 + 
+    \epsilon_4.\epsilon_6 + \epsilon_4.\epsilon_9 + \epsilon_6.\epsilon_9 + 
+    \epsilon_4.\epsilon_6.\epsilon_9).(1 +\epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) -1) $$ 
+    $$ + \  a_m.b_{\ell}.((1 + \epsilon_4 + \epsilon_6 + \epsilon_8 + 
+    \epsilon_4.\epsilon_6 + \epsilon_4.\epsilon_8 + \epsilon_6.\epsilon_8 + 
+    \epsilon_4.\epsilon_6.\epsilon_8).(1 +\epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) -1)$$
+    As $\lvert \epsilon_i \rvert \le 6.u^2$ with $i \in [1,2]$ 
+    and $\lvert \epsilon_j \rvert \le u$ with $3 \le j \le 11$\\
+    We have so $ \lvert t_{17}.(1 + \epsilon_1 + \epsilon_3 + \epsilon_1.\epsilon_3) - (a_h.b_{\ell} + a_{\ell}.b_h + a_m.b_{\ell} + a_{\ell}.b_m) \rvert $
+    it's equal to \\
+    $ \lvert a_h.b_{\ell} + a_{\ell}.b_h + a_m.b_{\ell} + a_{\ell}.b_m \rvert .(6.u^6+24.u^5+37.u^4+23.u^3+9.u^2+6.u+1)$
+    $\Rightarrow$
+    $$ \lvert \delta  \rvert \le 6.u^2.\lvert t_1 \rvert + (6.u^3+6.u^2+u).\lvert a_h.b_m + a_m.b_h \rvert +  6.u^2.\lvert a_m.b_m \rvert$$
+    $$+ (6.u^4+12.u^3+u^2+2.u).\lvert t_7 + t_{15} \rvert$$  
+     $$+  (6.u^6+24.u^5+37.u^4+23.u^3+9.u^2+6.u+1).\lvert a_h.b_{\ell} + a_{\ell}.b_h + a_m.b_{\ell} + a_{\ell}.b_m \rvert  $$ .
+According to the conditions of $Mul333$:
+$$\lvert a_h.b_m \rvert \le 2^{-\beta_o}. \lvert a_h.b_h \rvert $$
+$$\lvert a_h.b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}. \lvert a_h.b_h \rvert $$
+$$\lvert a_m.b_h \rvert \le 2^{-\alpha_o}. \lvert a_h.b_h \rvert $$
+$$\lvert a_m.b_m \rvert \le 2^{-\alpha_o -\beta_o}. \lvert a_h.b_h \rvert $$
+$$\lvert a_m.b_{\ell} \rvert \le 2^{-\alpha_o -\beta_o -\beta_u}. \lvert a_h.b_h \rvert $$
+$$\lvert a_{\ell}.b_h \rvert \le 2^{-\alpha_o - \alpha_u}. \lvert a_h.b_h \rvert $$
+$$\lvert a_{\ell}.b_m \rvert \le 2^{-\alpha_o - \alpha_u -\beta_o}. \lvert a_h.b_h \rvert $$
+$\Rightarrow$
+$$ \lvert \delta  \rvert \le 6.u^2.\lvert t_1 \rvert + (6.u^3+6.u^2+u).(2^{-\beta_o}. \lvert a_h.b_h \rvert + 2^{-\alpha_o}. \lvert a_h.b_h \rvert) +  6.u^2.2^{-\alpha_o -\beta_o}. \lvert a_h.b_h \rvert $$
+$$+ (6.u^4+12.u^3+u^2+2.u).\lvert t_7 + t_{15} \rvert$$
+$$+ (6.u^6+24.u^5+37.u^4+23.u^3+9.u^2+6.u+1)$$
+$$ \times \  (2^{-\beta_o -\beta_u}. \lvert a_h.b_h \rvert + 2^{-\alpha_o - \alpha_u}. \lvert a_h.b_h \rvert + 2^{-\alpha_o -\beta_o -\beta_u}. \lvert a_h.b_h \rvert + 2^{-\alpha_o - \alpha_u -\beta_o}. \lvert a_h.b_h \rvert)  $$
+We seek the upper bound of $\lvert t_1 \rvert $ in function of $\lvert a_h.b_h \rvert $.\\
+As $r_h +t_1 = a_h.b_h$ thanks to $Add112$ $\Rightarrow$ $\lvert t_1 \rvert \le u. \lvert r_h \rvert$ $\Rightarrow$
+$$ \lvert r_h \rvert \le \frac{1}{1-u} .\lvert a_h.b_h \rvert $$ 
+$\Rightarrow$
+$$ \lvert t_1 \rvert \le \frac{u}{1-u} .\lvert a_h.b_h \rvert $$
+
+Now, doing the same operation  :
+$$ \lvert t_7 \rvert \le \frac{u}{1-u} .\lvert a_m.b_m \rvert $$
+$$ \lvert t_7 \rvert \le \frac{u}{1-u} .2^{-\alpha_o -\beta_o}. \lvert a_h.b_h \rvert $$
+$$ \lvert t_{15} \rvert \le \frac{u}{1-u} .\lvert t_1 + t_6 \rvert $$
+$$ \lvert t_{15} \rvert \le \frac{u}{1-u} .(\lvert t_1 \rvert + \lvert t_6 \rvert) $$
+We have: 
+$$ \lvert t_6 \rvert \le \frac{1}{1-u} .2^{-\alpha_o -\beta_o}. \lvert a_h.b_h \rvert $$
+$\Rightarrow$
+$$ \lvert t_{15} \rvert \le \frac{u}{1-u} .(\frac{u}{1-u} .\lvert a_h.b_h \rvert + \frac{1}{1-u} .2^{-\alpha_o -\beta_o}. \lvert a_h.b_h \rvert) $$
+$$ \lvert t_{15} \rvert \le \frac{u}{(1-u)^2} .(u  + 2^{-\alpha_o -\beta_o}). \lvert a_h.b_h \rvert $$.
+After simplify, we have:
+$$\lvert \delta \rvert \le (8.u^3 + 3.u.(2^{-\beta_o} + 2^{-\alpha_o}) + 2^{-\beta_o - \beta_u +1} + 2^{-\alpha_o - \alpha_u +1} + 2^{-\alpha_o - \alpha_u  - \beta_u +1} + 2^{-\alpha_o -  \beta_o -\beta_u +1}).\lvert a_h.b_h \rvert$$
+We seek the upper bound of $\lvert a_h.b_h \rvert$ in function of $\lvert a_m.(b_h,b_m,b_{\ell}) + a_{\ell}.(b_h,b_m) +a_h.( b_m,b_{\ell}) \rvert$
+$$\lvert a_m.(b_h,b_m,b_{\ell}) + a_{\ell}.(b_h,b_m) +a_h.( b_m,b_{\ell}) \rvert \le \ \ \ \ \ \ \ \ \ \  \ $$
+$$ \ \  \ \ \ \ (2^{-\beta_o}+2^{-\beta_o -\beta_u}+2^{-\alpha_o}+2^{-\alpha_o -\beta_o -\beta_u+1}+
+2^{-\alpha_o - \alpha_u+1} + 2^{-\alpha_o -\beta_o+1} + 2^{-\alpha_o - \alpha_u -\beta_o+1}). \lvert a_h.b_h \rvert
+$$
+But $1 - (2^{-\beta_o}+2^{-\beta_o -\beta_u}+2^{-\alpha_o}+2^{-\alpha_o -\beta_o -\beta_u}+
+2^{-\alpha_o - \alpha_u} + 2^{-\alpha_o -\beta_o} + 2^{-\alpha_o - \alpha_u -\beta_o})\ge \frac{1}{4}$
+We have :
+$$\lvert a_h.b_h \rvert \le 4.\lvert a_m.(b_h,b_m,b_{\ell}) + a_{\ell}.(b_h,b_m) +a_h.( b_m,b_{\ell}) \rvert$$
+So we have:
+$$\lvert \delta \rvert \le $$ 
+$$ (32.u^3 + 3.u.(2^{-\beta_o+2} + 2^{-\alpha_o+2}) + 2^{-\beta_o - \beta_u +3} + 2^{-\alpha_o - \alpha_u +3} + 2^{-\alpha_o - \alpha_u  - \beta_u +3} + 2^{-\alpha_o -  \beta_o -\beta_u +3})$$
+$$ \times \lvert (a_h+a_m+a_{\ell}).(b_h+b_m+b_{\ell})\rvert$$
+so :
+$$\lvert \epsilon \rvert \le $$
+$$ 32.u^3 + 3.u.(2^{-\beta_o+2} + 2^{-\alpha_o+2}) + 2^{-\beta_o - \beta_u +3} + 2^{-\alpha_o - \alpha_u +3} + 2^{-\alpha_o - \alpha_u  - \beta_u +3} + 2^{-\alpha_o -  \beta_o -\beta_u +3}$$
+\end{itemize}
+\end{proof}

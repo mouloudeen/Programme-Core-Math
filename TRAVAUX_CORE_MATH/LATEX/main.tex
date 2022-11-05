@@ -1,0 +1,177 @@
+\documentclass[12pt,a4paper]{memoir}
+% custom commands
+\newcommand{\version}[1]{\def\theversion{#1}}
+\newcommand{\subtitle}[1]{\def\thesubtitle{#1}}
+
+\newcommand{\authors}[1]{\def\theauthors{#1}\author{#1}}
+\newcommand{\supervisor}[1]{\def\thesupervisor{#1}}
+\newcommand{\tutor}[1]{\def\thetutor{#1}}
+
+% translation for custom words
+\newcommand{\authorname}{Author}
+\newcommand{\authorsname}{Authors}
+\newcommand{\supervisorname}{Supervisor}
+\newcommand{\tutorname}{Tutor}
+
+\newcommand{\thepartname}{Part}
+
+\ifdefined\addto{%
+\addto{\captionsfrench}{\renewcommand{\authorname}{Auteur}}%
+\addto{\captionsfrench}{\renewcommand{\authorsname}{Auteurs}}%
+\addto{\captionsfrench}{\renewcommand{\supervisorname}{Superviseur}}%
+\addto{\captionsfrench}{\renewcommand{\tutorname}{Tuteur}}}
+\addto{\captionsfrench}{\renewcommand{\thepartname}{Partie}}
+\else{}
+\fi
+
+%%%%% Setting Titlepage %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pretitle{\flushleft\Huge\textsf}
+\posttitle{\\[-.65em]\rule{\linewidth}{1.5mm}\\[-.65em]
+\ifx\thesubtitle\undefined%
+\else%
+  \hfill{\small\itshape \thesubtitle}%
+\fi
+\centering
+\vfill
+\includegraphics{Universite_de_Bordeaux.pdf}
+\vfill
+\iflanguage{french}{%
+  {\Huge\bfseries Mémoire de fin d'étude}
+% {\Huge Projet de deuxième année}
+% {\Huge Projet de première année}
+}{%
+  {\Huge Master Thesis}
+% {\Huge Master2 Project}
+% {\Huge Master1 Project}
+}\\
+\vspace{1.25em}
+\iflanguage{french}{%
+  \LARGE
+  Master \emph{Sciences et Technologies},\\
+ % Mention \emph{Informatique},\\
+Mention \emph{Mathématiques},\\
+  Parcours \emph{Cryptologie et Sécurité Informatique}.\\
+  \par\hfill%
+}{%
+  \LARGE
+  Master in \emph{Sciences and Technologies},\\
+  %Specialty in \emph{Computer Science},\\
+Specialty in \emph{Mathematics},\\
+ \emph{Cryptology and Computer Security}.\\
+  \par\hfill
+}}
+
+%% author
+\preauthor{\vspace{\fill}\\
+\ifx\theauthors\undefined%
+  \flushleft\textbf{\large\authorname}\\
+\else%
+  \flushleft\textbf{\large\authorsname}\\
+\fi
+\small}
+\postauthor{\vspace{1em}
+\ifx\thesupervisor\undefined%
+\else%
+  \newline\textbf{\large\supervisorname}\\\thesupervisor\\[1em]%
+\fi
+\ifx\thetutor\undefined%
+\else%
+  \textbf{\large\tutorname}\\\thetutor%
+\fi
+\\[-.25em]
+\rule{\linewidth}{1mm}\\[-.25em]}
+
+%% version and date
+\predate{\hspace{\fill}
+\ifx\theversion\undefined%
+\else%
+  version~\theversion~--~%
+\fi}
+\postdate{}
+
+%% chapters style %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% You may try several styles (see more in the memoir manual).
+
+%%%%\usepackage[a4paper]{geometry}
+\input{preambule/autres_packages.tex}
+
+%%%%% Report Title %%%%%
+\title{Logarithm with correct rounding}
+
+
+% If only one author use \author
+\author{Sidali Zitouni-Terki \texttt{<sid-ali.zitouni-terki@etu.u-bordeaux.fr>}}
+
+% If several authors use \authors{}
+%\authors{Jean Dupont \texttt{<jean.dupont@etu.u-bordeaux.fr>}\\
+%Stéphanie Martin \texttt{<stephanie.martin@etu.u-bordeaux.fr>}}
+
+\supervisor{Paul Zimmermann \texttt{<Paul.Zimmermann@inria.fr>}}
+
+\tutor{Gilles Zémor \texttt{<gilles.zemor@u-bordeaux.fr>}}
+\date{september 2nd 2022}
+
+\begin{document}
+
+
+\maketitle
+\input{declaration}
+\input{remerciement}
+\input{abstract}
+
+\tableofcontents
+\newpage
+
+%%%%%%Introduction %%%%%
+\input{introduction}
+
+%%%% Floating point %%%
+\input{explication/representation_flottant}
+
+%%% steps to implements cr_log 
+\input{cr_log}
+
+\chapter{Operators on Double-Double numbers}
+%% Sous-partie Additions double-double%%
+\input{algo/algo_addition/algo_addition1}
+\input{algo/algo_addition/algo_addition2}
+\input{algo/algo_addition/algo_addition3}
+
+
+
+%% Sous-partie Multiplications double-double%%
+\input{algo/algo_multiplication/algo_multiplication1}
+\input{algo/algo_multiplication/algo_multiplication2}
+\input{algo/algo_multiplication/algo_multiplication3}
+
+
+\chapter{Operators on Triple-Double numbers}
+%% Sous-partie Additions triple-double%%
+\input{algo/algo_addition/algo_addition4}
+\input{algo/algo_addition/algo_addition6}
+
+
+%% Sous-partie Multiplications triple-double%%
+\input{algo/algo_multiplication/algo_multiplication4}
+\input{algo/algo_multiplication/algo_multiplication6}
+\input{algo/algo_multiplication/algo_multiplication7}
+
+%%%%% parties sur les 3 cr_log
+\input{calcul d'erreur cr_log}
+
+%%%% conclusion
+\input{conclusion}
+%\include{bibliographie.tex}
+
+\part*{Annexes}
+\addcontentsline{toc}{part}{Annexes}
+\appendix
+\input{annexe/algorithme/algo}
+\input{annexe/C/C}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliographie}
+
+\end{document}

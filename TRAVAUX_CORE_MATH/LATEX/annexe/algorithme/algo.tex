@@ -1,0 +1,1885 @@
+In appendix,
+We find each algorithm with their programs in \textbf{Sage} and in \textbf{C}.
+
+
+\section*{Add112}
+
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Add112} (\textbf{FastTwoSum})}
+\begin{algorithmic}[1]
+\Input $a$ and $b$ are 53-bit floating-point numbers
+\Condition $\lvert a \rvert \ge \lvert b \rvert $
+\Output $s$ and $t$ are 53-bit floating-point numbers : $s$: main value and $t$: error value.
+\State $s = a+b$\\ 
+    $z = s-a$\\ 
+    $t = b-z$\\ 
+    return $s$, $t$
+\end{algorithmic}
+\label{algo:Add112}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : a and b are 53-bit floating-point numbers
+def Add112(a,b):
+    s = a+b 
+    z = s-a 
+    t = b-z 
+    # output: s and t are 53-bit floating-point numbers.
+    # s: main value and t: error value
+    return s,t
+\end{lstlisting}
+
+\begin{lstlisting}
+/*a and b are double numbers */
+void Add112(double a, double b, double *s, double *t){
+    *s = a+b ;
+    double z = *s-a;
+    *t = b-z;
+    /* (s,t) is a double-double number*/
+}
+\end{lstlisting}
+\newpage
+
+\section*{Add122}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Add122}}
+\begin{algorithmic}[1]
+\Input $a$ is $53$-bit floating-point numbers, $b_h$: main value and  $b_{\ell}$: error value
+\Condition $\lvert a \rvert \ge \lvert b_h \rvert $
+\Condition $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$ 
+\Output  $s$ and $t$ are 53-bit floating-point numbers : $s$: main value and $t$: error value.
+\State $s,\ell = Add112(a,b_h)$\\
+    $t = \ell +b_{\ell}$\\
+    return $s$, $t$
+\end{algorithmic}
+\label{algo:Add122}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : a is 53-bit floating-point numbers
+# bh: main value and  bl: error value
+def Add122(a,bh,bl):
+    s,l = Add112(a,bh)
+    t = l+bl
+    # output: s and t are 53-bit floating-point numbers.
+    # s: main value and t: error value
+    return s,t
+\end{lstlisting}
+
+\begin{lstlisting}
+/* a is double-number and (bh,bl) is double-double number*/
+void Add122(double a, double bh, double bl, double *s, double *t){
+    double l;
+    Add112(a, bh,s,&l);
+    *t = l+bl;
+    /*(s,t) is a double-double number*/
+}
+\end{lstlisting}
+\newpage
+
+\section*{Add222}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Add222}}
+\begin{algorithmic}[1]
+\Input $a_h$ and $b_h$ are main values, $a_{\ell}$ and $b_{\ell}$ are error values
+\Condition $\lvert a_h \rvert \ge \lvert b_h \rvert $
+\Condition $\lvert a_{\ell} \rvert \le u. \lvert a_h \rvert$ and $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$ 
+\Output $s$ and $t$ are 53-bit floating-point numbers : $s$: main value and $t$: error value.
+\State $s, \ell = Add112(a_h, b_h)$\\
+    $m = \ell + a_{\ell}$ \\
+    $t = m+b_{\ell}$\\
+    return $s$, $t$
+\end{algorithmic}
+\label{algo:Add222}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : ah and bh are main values
+#  al and bl are error values
+def Add222(ah,al,bh,bl):
+    s,l = Add112(ah,bh)
+    m = l+al
+    t = m+bl
+    # output: s and t are 53-bit floating-point numbers.
+    # s: main value and t: error value
+    return s,t
+\end{lstlisting}
+
+\begin{lstlisting}
+/* (ah,al) and (bh,bl) double-double numbers*/
+void Add222(double ah, double al, double bh, double bl, double *s, double *t){
+    double l,m;
+    Add112(ah,bh,s,&l);
+    m = l+al;
+    *t = m+bl;
+    /*(s,t) is a double-double number*/
+}
+\end{lstlisting}
+\newpage
+
+\section*{Mul112}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Mul112} (DEKKER-PRODUCT)}
+\begin{algorithmic}[1]
+\Input $a$ and $b$ are 53-bit floating-point numbers.
+\Output $r_1$ and $r_2$ are 53-bit floating-point numbers: $r_1$: main value and $r_2$: error value.
+\State $r1 = a\times b$\\
+$r2 = FMA(a,b,-r1)$\\
+return $(r_1,r_2)$
+\end{algorithmic}
+\label{algo:Mul112}
+\end{algorithm}
+
+\begin{lstlisting}
+/*a and b are double numbers */
+void Mul112(double a, double b, double *r1, double *r2){
+    *r1 = a * b;
+    *r2 = __builtin_fma (a, b, -*r1);
+    /* (r1,r2) is a double number */
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+#Input : a and b are 53-bit floating-point numbers
+def Mul112(a,b):
+    r1 = a*b 
+    r2 = fma(a,b,-r1)
+    # output: r1 and r2 are 53-bit floating-point numbers.
+    # r1: main value and r2: error value
+    return (r1,r2)
+\end{lstlisting}
+\newpage
+
+\section*{Mul122}
+\begin{algorithm}[htbp]
+  \caption{Algorithm  \textbf{Mul122}}
+\begin{algorithmic}[1]
+\Input $a$ is $53$-bit floating-point numbers, $b_h$: main value and  $b_{\ell}$: error value
+\Condition $\lvert b_{\ell} \rvert \le u.\lvert b_h \rvert$
+\Output $r_1$ and $r_2$ are $53$-bit floating-point numbers : $r_1$: main value and $r_2$: error value
+\State $t_1,t_2 = Mul112(a,b_h)$\\
+$t_3 = a\times b_{\ell}$\\
+$t_4 = t_2+t_3$\\
+$r_1,r_2 = Add112(t_1,t_4)$\\
+return $(r_1,r_2)$
+\end{algorithmic}
+\label{algo:Mul122}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : a is 53-bit floating-point numbers
+# bh: main value and  bl: error value
+def Mul122(a,bh,bl):
+    t1,t2 = Mul112(a,bh)
+    t3 = a*bl
+    t4 = t2+t3
+    r1,r2 = Add112(t1,t4)
+    # output: r1 and r2 are 53-bit floating-point numbers.
+    # r1: main value and r2: error value
+    return (r1,r2)
+\end{lstlisting}
+
+\begin{lstlisting}
+/* a is double-number and (bh,bl) is double-double number*/
+void Mul122(double a, double bh, double bl, double *r1, double *r2){
+    double t1,t2;
+    Mul112(a,bh,&t1,&t2);
+    double t3,t4;
+    t3 = a*bl;
+    t4 = t2+t3;
+    Add112(t1,t4,r1,r2);
+    /* (r1,r2) is a double number */
+}
+\end{lstlisting}
+\newpage
+
+\subsection*{Mul222}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Mul222}}
+\begin{algorithmic}[1]
+\Input $a_h$ and $b_h$ are main values, $a_{\ell}$ and $b_{\ell}$ are error values
+\Output $r_1$ and $r_2$ are 53-bit floating-point numbers: $r_1$: main value and $r_2$: error value.
+\State $t_1, t_2 = Mul112(a_h,b_h)$\\
+$t_3 = a_h\times b_{\ell}$\\
+$t_4 = b_h \times a_{\ell}$\\
+$t_5 = t_3 +t_4$\\
+$t_6 = t_2+t_5$\\
+$r_1, r_2 = Add112(t_1,t_6)$\\
+    return $(r_1,r_2)$
+\end{algorithmic}
+\label{algo:Mul222}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : ah and bh are main values
+#  al and bl are error values
+def Mul222(ah,al,bh,bl):
+    t1,t2 = Mul112(ah,bh)
+    t3 = ah*bl
+    t4 = bh*al
+    t5,t6 = Add112Cond(t3,t4)
+    r1,r2 = Add222Cond(t1,t2,t5,t6)
+    # output: r1 and r2 are 53-bit floating-point numbers.
+    # r1: main value and r2: error value
+    return (r1,r2)
+\end{lstlisting}
+
+\begin{lstlisting}
+/* (ah,al) and (bh,bl) double-double numbers*/
+void Mul222(double ah, double al, double bh, double bl, double *r1, double *r2){
+    double t1,t2;
+    Mul112(ah, bh, &t1, &t2);
+    double t3,t4;
+    t3 = ah*bl;
+    t4 = bh*al;
+    double t5,t6;
+    t5 = t3+t4;
+    t6 = t2+t5;
+    Add112(t1,t6,r1,r2);
+    /* (r1,r2) is a double number */
+}
+\end{lstlisting}
+\newpage
+
+\section*{Add133}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Add133}}
+\begin{algorithmic}[1]
+\Input $a$ is a double number and $b_h$, $b_m$, $b_{\ell}$ is a triple-double numbers.
+\Condition $\lvert a \rvert \ge  \lvert b_h \rvert$, $\lvert b_m \rvert \le u. \lvert b_h \rvert$, $\lvert b_{\ell} \rvert \le u. \lvert b_m \rvert$ and $\lvert b_{\ell} \rvert \le u^2. \lvert b_h \rvert$
+\Output $r_h$, $r_m$, $r_{\ell}$ is a triple-double numbers.
+\State $r_h,t_1 = Add112(a,b_h)$\\
+    $t_2,t_3 = Add112(t_1,b_m)$\\
+    $t_4 = t_3+b_{\ell}$\\
+    $r_m,r_{\ell} = Add112(t_2,t_4)$\\
+    return $r_h$, $r_m$, $r_{\ell}$
+\end{algorithmic}
+\label{algo:Add133}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : a is a double numbers
+#        bh,bm,bl is a triple-double numbers
+def Add133(a,bh,bm,bl):
+    rh,t1 = Add112(a,bh)
+    t2,t3 = Add112(t1,bm)
+    t4 = t3+bl
+    rm,rl = Add112(t2,t4)
+    #output :rh,rm,rl is a triple-double numbers
+    return rh,rm,rl
+\end{lstlisting}
+
+\begin{lstlisting}
+/* a is a double numbers
+   bh,bm,bl is a triple-double numbers*/
+void Add133(double a, double bh, double bm, double bl, double *rh, double *rm, double *rl){
+    double t1,t2,t3,t4;
+    Add112(a,bh,rh,&t1); 
+    Add112(t1,bm,&t2,&t3); 
+    t4 = t3+bl;
+    Add112(t2,t4,rm,rl);
+    /*rh,rm,rl is a triple-double numbers*/
+}
+
+\end{lstlisting}
+\newpage
+
+
+\section*{Add333}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Add333}}
+\begin{algorithmic}[1]
+\Input $a_h$, $a_m$, $a_{\ell}$ and $b_h$, $b_m$, $b_{\ell}$ are triple-double numbers
+\Condition  $\lvert b_h \rvert \le \frac{3}{4}.\lvert a_h \rvert$
+\Condition $\lvert a_m \rvert \le 2^{-\alpha_o} .\lvert a_h \rvert$
+\Condition $\lvert a_{\ell} \rvert \le 2^{-\alpha_u} .\lvert a_m \rvert$
+\Condition $\lvert b_m \rvert \le 2^{-\beta_o} .\lvert b_h \rvert$
+\Condition $\lvert b_{\ell} \rvert \le 2^{-\beta_u} .\lvert b_m \rvert$
+\Condition $\alpha_o \ge 4$, $\alpha_u \ge 1$, $\beta_o \ge 4$, $\beta_u \ge 1$
+\Output $r_h$, $r_m$, $r_{\ell}$ is a triple-double numbers.
+\State $r_h,t_1 = Add112(a_h,b_h)$\\
+    $t_2,t_3 =Add112Cond(a_m,b_m)$\\
+    $t_7,t_4 = Add112(t_1,t_2)$\\
+    $t_6 = a_{\ell}+b_{\ell}$\\
+    $t_5 = t_3+t_4$\\
+    $t_8 = t_5+t_6$\\
+    $r_m,r_{\ell} = Add112(t_7,t_8)$\\
+    return $r_h$, $r_m$, $r_{\ell}$
+\end{algorithmic}
+\label{algo:Add333}
+\end{algorithm}
+
+\begin{lstlisting}
+def Add333(ah,am,al,bh,bm,bl):
+    rh,t1 = Add112(ah,bh)
+    t2,t3 =Add112(am,bm)
+    t7,t4 = Add112(t1,t2)
+    t6 = al+bl
+    t5 = t3+t4
+    t8 = t5+t6
+    rm,rl = Add112(t7,t8)
+    #output :rh,rm,rl is a triple-double numbers
+    return rh,rm,rl
+\end{lstlisting}
+
+\begin{lstlisting}
+/*ah,am,al and bh,bm,bl are triple-double numbers*/
+void Add333(double ah, double am, double al, double bh, double bm, double bl, double *rh, double *rm, double *rl){
+    double t1,t2,t3,t4,t5,t6,t7,t8;
+    Add112(ah,bh,rh,&t1);
+    Add112Cond(am,bm,&t2,&t3);
+    Add112(t1,t2,&t7,&t4);
+    t6 = al+bl;
+    t5 = t3+t4;
+    t8 = t5+t6;
+    Add112(t7,t8,rm,rl);
+    /*rh,rm,rl is a triple-double numbers*/
+}
+\end{lstlisting}
+\newpage
+
+\section*{Mul133}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Mul133}}
+\begin{algorithmic}[1]
+\Input $a$ is a double number and $b_h$, $b_m$, $b_{\ell}$ is a triple-double numbers.
+\Condition $\lvert b_m \rvert \le 2^{-\beta_o}.\lvert b_h \rvert$ with $\beta_o \ge 2$
+\Condition $\lvert b_{\ell} \rvert \le 2^{-\beta_u}.\lvert b_m \rvert$ with $\beta_u \ge 2$
+\Output $r_h$, $r_m$, $r_{\ell}$ is a triple-double numbers.
+\State $r_h,t_2 = Mul112(a,b_h)$\\
+    $t_3,t_4 = Mul112(a,b_m)$\\
+    $t_5 = a\times b_{\ell}$\\
+    $t_9,t_7 = Add112(t_2,t_3)$\\
+    $t_8 = t_4+t_5$ \\
+    $t_{10} = t_7+t_8$\\
+    $r_m,r_{\ell} = Add112(t_9,t_{10})$\\
+    return $r_h,r_m,r_{\ell}$
+\end{algorithmic}
+\label{algo:Mul133}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : a is a double numbers
+#        bh,bm,bl is a triple-double numbers
+def Mul133(a,bh,bm,bl):
+    rh,t2 = Mul112(a,bh)
+    t3,t4 = Mul112(a,bm)
+    t5 = a*bl
+    t9,t7 = Add112Cond(t2,t3)
+    t8 = t4+t5
+    t10 = t7+t8
+    rm,rl = Add112Cond(t9,t10)
+    #output :rh,rm,rl is a triple-double numbers
+    return rh,rm,rl
+\end{lstlisting}
+
+\begin{lstlisting}
+/* a is a double numbers
+   bh,bm,bl is a triple-double numbers*/
+void Mul133(double a, double bh, double bm, double bl, double *rh, double *rm, double *rl){
+    double t2,t3,t4,t5,t7,t8,t9,t10;
+    Mul112(a,bh,rh,&t2);
+    Mul112(a,bm,&t3,&t4);
+    t5 = a*bl;
+    Add112(t2,t3,&t9,&t7);
+    t8 = t4+t5;
+    t10 = t7+t8;
+    Add112(t9,t10,rm,rl);
+    /*rh,rm,rl is a triple-double numbers*/
+}
+\end{lstlisting}
+\newpage
+
+\section*{Mul233}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Mul233}}
+\begin{algorithmic}[1]
+\Input $a_h$, $a_{\ell}$  is a double-double and $b_h$, $b_m$, $b_{\ell}$ is a triple-double numbers.
+\Condition $\lvert a_{\ell} \rvert \le u. \lvert a_h \rvert $, 
+\Condition $\lvert b_m \rvert \le 2^{-\beta_o}. \lvert b_h \rvert $ with $\beta_o \ge 2$
+\Condition $\lvert b_{\ell} \rvert \le 2^{-\beta_u}. \lvert b_m \rvert $  with $\beta_u \ge 1$.
+\Output $r_h$, $r_m$, $r_{\ell}$ is a triple-double numbers.
+\State $r_h,t_1 = Mul112(a_h,b_h)$\\
+    $t_2,t_3 = Mul112(a_h,b_m)$\\
+    $t_4,t_5 = Mul112(a_h,b_{\ell})$\\
+    $t_6,t_7 = Mul112(a_{\ell},b_h)$\\
+    $t_8,t_9 = Mul112(a_{\ell},b_m)$\\
+    $t_{10} = a_{\ell}\times b_{\ell}$\\
+    $t_{11},t_{12} = Add222(t_2,t_3,t_4,t_5)$\\
+    $t_{13},t_{14} = Add222(t_6,t_7,t_8,t_9)$\\
+    $t_{15},t_{16} = Add222(t_{11},t_{12},t_{13},t_{14})$\\
+    $t_{17},t_{18} = Add112(t_1,t_{10})$\\
+    $r_m,r_{\ell} = Add222(t_{17},t_{18},t_{15},t_{16})$\\
+    return $r_h$, $r_m$, $r_{\ell}$
+\end{algorithmic}
+\label{algo:Mul233}
+\end{algorithm}
+
+\begin{lstlisting}
+#Input : ah,al  is a double-double numbers
+#        bh,bm,bl is a triple-double numbers
+def Mul233(ah,al,bh,bm,bl):
+    rh,t1 = Mul112(ah,bh)
+    t2,t3 = Mul112(ah,bm)
+    t4,t5 = Mul112(ah,bl)
+    t6,t7 = Mul112(bh,al)
+    t8,t9 = Mul112(al,bm)
+    t10 = al*bl
+    t11,t12 = Add222Cond(t2,t3,t4,t5)
+    t13,t14 = Add222Cond(t6,t7,t8,t9)
+    t15,t16 = Add222Cond(t11,t12,t13,t14)
+    t17,t18 = Add112Cond(t1,t10)
+    rm,rl = Add222Cond(t17,t18,t15,t16)
+    #output :rh,rm,rl is a triple-double numbers
+    return rh,rm,rl
+\end{lstlisting}
+
+\begin{lstlisting}
+/* ah,al  is a double-double numbers
+   bh,bm,bl is a triple-double numbers*/
+void Mul233(double ah, double al, double bh, double bm, double bl, double *rh, double *rm, double *rl){
+    double t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
+    double t11,t12,t13,t14,t15,t16,t17,t18;
+    Mul112(ah,bh,rh,&t1);
+    Mul112(ah,bm,&t2,&t3);
+    Mul112(ah,bl,&t4,&t5);
+    Mul112(bh,al,&t6,&t7);
+    Mul112(al,bm,&t8,&t9);
+    t10 = al*bl;
+    Add222(t2,t3,t4,t5,&t11,&t12);
+    Add222(t6,t7,t8,t9,&t13,&t14);
+    Add222(t11,t12,t13,t14,&t15,&t16);
+    Add112(t1,t10,&t17,&t18);
+    Add222(t17,t18,t15,t16,rm,rl); 
+    /*rh,rm,rl is a triple-double numbers*/
+}
+\end{lstlisting}
+\newpage
+
+\section*{Mul333}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Mul333}}
+\begin{algorithmic}[1]
+\Input $a_h$, $a_m$, $a_{\ell}$ and $b_h$, $b_m$, $b_{\ell}$ are triple-double numbers
+\Condition $\lvert a_m \rvert \le 2^{-\alpha_o} .\lvert a_h \rvert$
+\Condition $\lvert a_{\ell} \rvert \le 2^{-\alpha_u} .\lvert a_m \rvert$
+\Condition $\lvert b_m \rvert \le 2^{-\beta_o} .\lvert b_h \rvert$
+\Condition $\lvert b_{\ell} \rvert \le 2^{-\beta_u} .\lvert b_m \rvert$
+\Condition $\alpha_o \ge 2$, $\alpha_u \ge 2$, $\beta_o \ge 2$, $\beta_u \ge 2$
+\Output $r_h$, $r_m$, $r_{\ell}$ is a triple-double numbers
+\State $r_h,t_1 = Mul112(a_h,b_h)$\\
+    $t_2,t_3 = Mul112(a_h,b_m)$\\
+    $t_4,t_5 = Mul112(a_m,b_h)$\\
+    $t_6,t_7 = Mul112(a_m,b_m)$\\
+    $t_8 = a_h\times b_{\ell}$\\
+    $t_9 = a_{\ell}\times b_h$\\
+    $t_{10} = a_m\times b_{\ell}$\\
+    $t_{11} = a_{\ell}\times b_m$\\ 
+    $t_{12} = t_8+t_9$\\
+    $t_{13} = t_{10}+ t_{11}$\\
+    $t_{14},t_{15} = Add112(t_1,t_6)$\\
+    $t_{16} = t_7+t_{15}$\\
+    $t_{17} = t_{12}+t_{13}$\\
+    $t_{18} = t_{16}+t_{17}$\\
+    $t_{19},t_{20} = Add112(t_{14},t_{18})$\\
+    $t_{21},t_{22} = Add222(t_2,t_3,t_4,t_5)$\\
+    $r_m,r_{\ell} = Add222(t_{21},t_{22},t_{19},t_{20})$\\
+    return $r_h$, $r_m$, $r_{\ell}$
+\end{algorithmic}
+\label{algo:Mul333}
+\end{algorithm}
+
+
+\begin{lstlisting}
+#Input : ah,am,al and bh,bm,bl are triple-double numbers
+def Mul333(ah,am,al,bh,bm,bl):
+    rh,t1 = Mul112Cond(ah,bh)
+    t2,t3 = Mul112Cond(ah,bm)
+    t4,t5 = Mul112Cond(bh,am)
+    t6,t7 = Mul112Cond(am,bm)
+    t8 = ah*bl
+    t9 = al*bh
+    t10 = am*bl
+    t11 = al*bm 
+    t12 = t8+t9
+    t13 = t10+t11
+    t14,t15 = Add112Cond(t1,t6)
+    t16 = t7+t15
+    t17 = t12+t13
+    t18 = t16+t17
+    t19,t20 = Add112Cond(t14,t18)
+    t21,t22 = Add222Cond(t2,t3,t4,t5)
+    rm,rl = Add222Cond(t21,t22,t19,t20)
+    #output :rh,rm,rl is a triple-double numbers
+    return rh,rm,rl
+\end{lstlisting}
+
+\begin{lstlisting}
+/*ah,am,al and bh,bm,bl are triple-double numbers*/
+void Mul333(double ah, double am, double al, double bh, double bm, double bl, double *rh, double *rm, double *rl){
+    double t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
+    double t11,t12,t13,t14,t15,t16,t17,t18,t19,t20;
+    double t21,t22;
+    Mul112(ah,bh,rh,&t1);
+    Mul112(ah,bm,&t2,&t3);
+    Mul112(am,bh,&t4,&t5);
+    Mul112(am,bm,&t6,&t7);
+    t8 = ah*bl;
+    t9 = al*bh;
+    t10 = am*bl;
+    t11 = al*bm; 
+    t12 = t8+t9;
+    t13 = t10+t11;
+    Add112(t1,t6,&t14,&t15);
+    t16 = t7+t15;
+    t17 = t12+t13;
+    t18 = t16+t17;
+    Add112(t14,t18,&t19,&t20);
+    Add222(t4,t5,t2,t3,&t21,&t22);
+    Add222(t21,t22,t19,t20,rm,rl);
+    /*rh,rm,rl is a triple-double numbers*/
+}
+\end{lstlisting}
+\newpage
+
+\section*{crlogfast}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{$crlog_{fast}$ for $x$ is not to close to $1$ }}
+\begin{algorithmic}[1]
+\Condition $x$ is a \textbf{double} number and is not to close to $1$.
+\Condition $m_1$ and $i$ are results made after calculating $x$.
+\Condition $table_{\alpha_{i}}$  $table_{\log(\alpha_{i})}$ and are calculated with our method with \textbf{Tang} and \textbf{Gal}'s method.
+\Condition $log(2)$ in \textbf{double-double}: $h_{\log2} = 0x1.62e42fefa38p-1$ and $l_{\log2} = 0x1.ef35793c7673p-45$ 
+\Input $m_1$ is a \textbf{double} number, $i$ is a \textbf{Integer} number.
+and $table_{\alpha_{i}}$ and $table_{\log(\alpha_{i})}$ are  tables of \textbf{double} numbers and $f$ a polynomial of degree with coefficient $f_j$ calculated with \textbf{Sollya}
+with $1\le j \le 7$
+\Condition $1 \le m_1 \le 2 $, $0 \le i < 256$ and size of $table_{\alpha_{i}} = 256$
+and size of $table_{\log (\alpha_{i})} = 256$, $\alpha_i = table_{\alpha_{i}}[i]$ and $\log_{\alpha_i} = table_{\log (\alpha_{i})}[i]$
+\Output $\log(x)$ in \textbf{double} number.
+\State $h_r,\ell_r = Mul112(m_1, \alpha_i )$\\
+$h,\ell = Add122(-1,h_r,\ell_r)$\\
+$hh_2 = h \times h$\\
+$ff_5 = f_5 \times h$\\
+$ff_4 = f_4 + ff_5$\\
+$ff_7 = f_7 \times h$\\
+$ff_6 = f_6 + ff_7$\\
+$cr_{logfast_2} = hh_2  \times ff_6$\\
+$cr_{logfast_1} = ff_4  + cr_{logfast_2}$\\
+$hh_2,\ell\ell_2 = Mul222(h,\ell,h,\ell)$\\
+$hh_4,\ell\ell_4 = Mul222(hh_2,\ell\ell_2,hh_2,\ell\ell_2)$\\
+$ffh_0,ff\ell_0 = Mul122(f_1,h,\ell)$\\
+$ffh_3,ff\ell_3 = Mul122(f_3,h,\ell)$\\
+$ffh_2,ff\ell_2 = Add122(f_2,ffh_3,ff\ell_3)$\\
+$fhx_2,ff\ell x_2 = Mul222(hh_2,\ell\ell_2,ffh_2,ff\ell_2)$\\
+$ffhx_4,ff\ell x_4 = Mul122(cr_{logfast_1},hh_4,\ell\ell_4)$\\
+$ffhx_0,ff\ell x_0 = Add222(ffh_0, ff\ell_0, ffhx_2, ff\ell x_2)$\\
+$h_4,\ell_4 = Add222(ffhx_0,ff\ell x_0, ffhx_4,ff\ell x_4)$\\
+$h_5,\ell_5 = Add122(\log_{\alpha_i}, h_4, \ell_4)$\\
+$e_{hlog2},e_{\ell log2} = Mul122(e, h_{\log2}, \ell_{\log2})$\\
+$h_6, \ell_6 = Add222(e_{hlog2}, e_{\ell log2},h_5,\ell_5)$\\
+return  $(h_6, \ell_6)$
+\end{algorithmic}
+\label{algo:crlogfast}
+\end{algorithm}
+
+\begin{lstlisting}
+# Input : x is a 53-bit floating-point numbers 
+#         f is an approximation polynomial of log(1+x)
+def cr_log_fast_path(x,f):
+
+    #If x is NAN return NAN
+    if x==NaN:
+        return NaN
+    
+    # If x=+0 or -0 return -INFINITY
+    if x == 0:
+        return -oo
+    
+    # If x = +INFINITY return +INFINITY
+    if x == +oo:
+        return +oo
+    
+    # if  x<1 and close to 1 return with the function f 
+    if  (x> RR('0x1.fe7814e49392fp-1',16) and x<1) : 
+       
+        # we calculated len(f.list())
+        F =f.list()
+        F.reverse()
+        lenf = len(F)
+        
+        hr,lr =Add112(-1,x)
+        
+        # F[i] is the coefficient of each monomial :x^(len(F)-1-i)
+    
+        #We are turning F[0] in hf,lf with hf,: main value
+        #                                  lf: error value
+        hf,lf = Split(F[0])
+
+        # multiply (hr,lr) by (hf,lf) result (h,l)
+        h,l = Mul222(hf,lf,hr,lr)
+        
+        for i in range(1,lenf-1):
+            #We are turning F[i] in hfi,lfi with hfi: main value
+            #                                    lfi: error value
+            hfi,lfi = Split(F[i])
+
+            # add (hfi,lfi) by (h,l) result (h1,l1)
+            h1,l1   = Add222(hfi,lfi,h,l)
+
+            # multiply (hr,lr) by (h1,l1) result (h,l)
+            h,l = Mul222(h1,l1,hr,lr)
+            
+        return h,l
+    
+    # if x>1 and close to 1 return with function f
+    if x> 1 and x < RR('0x1.00068db8bac71p+0',16) :
+         # we calculated len(f.list())
+        F =f.list()
+        F.reverse()
+        lenf = len(F)
+        
+        hr,lr =Add112(x,-1)
+        
+        # F[i] is the coefficient of each monomial :x^(len(F)-1-i)
+    
+        #We are turning F[0] in hf,lf with hf,: main value
+        #                                  lf: error value
+        hf,lf = Split(F[0])
+
+        # multiply (hr,lr) by (hf,lf) result (h,l)
+        h,l = Mul222(hf,lf,hr,lr)
+        
+        for i in range(1,lenf-1):
+            #We are turning F[i] in hfi,lfi with hfi: main value
+            #                                    lfi: error value
+            hfi,lfi = Split(F[i])
+
+            # add (hfi,lfi) by (h,l) result (h1,l1)
+            h1,l1   = Add222(hfi,lfi,h,l)
+
+            # multiply (hr,lr) by (h1,l1) result (h,l)
+            h,l = Mul222(h1,l1,hr,lr)
+            
+        return h,l
+
+
+    #s represents the sign 
+    #e  represents the exposant 
+    #m represents fraction
+    (s,m,e)=RR(x).sign_mantissa_exponent()
+    #e=e-53 
+    
+    
+    e = e+53
+    
+    
+    #If x is a negative number return NAN
+    if s==-1 and e!=0:                   
+        return NaN
+    
+    # If x is a subnormal
+    if s==1 and e<0 and m!=0:
+        
+        v = m
+        e = e-1
+        
+        while v< 2^52:
+            v*=2
+            
+            e=e-1
+        m1 =v*2.^(-52)
+        
+
+    #If x is normal
+    else:
+        #print(s,e,m)
+        m1 = m*2.^(-52)
+        e =e-1
+    
+    
+    
+    
+    binary = RR(m1).str(2)[2:10] # we recover the 8 bits after the initial 1.
+    i = int(binary,2)         # i is the 8-bit integer
+    
+    
+    halpha_i_m,lalpha_i_m = Split(RR(table_alpha_modified[i],16)) #table computed for all i of alpha_i_m
+                                      # such that log(alpha_i_m) is 71 bits accurate.
+    hlog_alpha_i_m,llog_alpha_i_m= Split(RR(table_log_alpha_modified[i],16)) 
+    
+    # multiply (halpha_i_m,lalpha_i_m) by (hm,lm)
+    hr,lr = Mul122(m1,halpha_i_m,lalpha_i_m)
+    
+    # add hR,lR by (-1) in double,double
+    h,l = Add122(-1,hr,lr)
+    
+    # we calculated len(f.list())
+    F =f.list()
+    F.reverse()
+    lenf = len(F)
+
+    # F[i] is the coefficient of each monomial :x^(len(F)-1-i)
+    
+    #We are turning F[0] in hf,lf with hf,: main value
+    #                                  lf: error value
+    hf,lf = Split(F[0])
+
+    # multiply (hr,lr) by (hf,lf) result (h,l)
+    h1,l1 =Mul222(hf,lf,h,l)
+
+    for i in range(1,lenf-1):
+        #We are turning F[i] in hfi,lfi with hfi: main value
+        #                                    lfi: error value
+        hfi,lfi = Split(F[i])
+
+        # add (hfi,lfi) by (h1,l1) result (h2,l2)
+        h2,l2   = Add222(hfi,lfi,h1,l1)
+
+        # multiply (h,l) by (h2,l2) result (h1,l1)
+        h1,l1 = Mul222(h2,l2,h,l)
+        
+    
+    
+    # Add (h1,l1) by (hlog_alpha_i_m,llog_alpha_i_m)
+    h5,l5 = Add222(hlog_alpha_i_m,llog_alpha_i_m,h1,l1)
+    
+    
+    # log(2) =(h_log2,l_log2)
+    h_log2 =RR('0x1.62e42fefa38p-1',16)
+    l_log2 = RR('0x1.ef35793c7673p-45',16)
+    
+    #e*log(2)
+    elog2_h,elog2_l = Mul122(RR(e),h_log2,l_log2)
+   
+
+    hlog_fi,llog_fi = Add222(elog2_h,elog2_l,h5,l5)
+    
+    
+    #output: hlog_fi and llog_fi are 53-bit floating-point numbers.
+    # hlog_fi: main value and llog_fi: error value
+    
+    return RR(hlog_fi),RR(llog_fi)
+\end{lstlisting}
+
+\begin{lstlisting}
+static double cr_log_fast_path(double x, double *h6, double *l6){ 
+    int s;
+    int e;
+    uint64_t m;
+    extract (x,&s,&e, &m);
+    
+    /* If x is a negative number return NAN*/
+    if ((s == 1) && (e != 0)){
+        return NAN;
+    }
+    /*If x is NAN return NAN*/
+    if ((s == 0)  && (e == 0x7ff) && (m != 0)){
+        return NAN;
+    }
+    /*If x=+0 ou -0 return INFINITY*/
+    if (((s==1) && (e == 0) && (m == 0)) || ((s == 0) && (e == 0) && (m == 0))){
+        return -(0x1p1023 +0x1p1023);
+    }
+    /*If x = +INFINITY return +INFINITY */
+    if ((s == 0) && (e == 0x7ff)){
+        return 0x1p1023 +0x1p1023;
+    }
+    /*The coefficients of the approximation polynomial of degree 7.  */
+    double f7 =  0x1.2152a2de69894p-3;
+    double f6 =  -0x1.555147415c204p-3;
+    double f5 =  0x1.999997342c184p-3;
+    double f4 =  -0x1.ffffffff57268p-3;
+    double f3 =  0x1.55555555554cep-2;
+    double f2 =  -0x1p-1;
+    double f1 =  0x1p+0;
+
+    if ( (x> 0x1.fe7814e49392fp-1) && (x<1)) {
+        double xx2 =(x-1) * (x-1);
+        double ff4 = f4 + f5 * (x-1);
+        double ff6 = f6 + f7 * (x-1);
+        
+
+        double cr_log_fast_1 = ff4 + xx2 * ff6;
+
+        /* Add x by -1 result hr,lr */
+        double hr,lr;
+        Add112(x, -1, &hr, &lr);
+
+        
+        double hr2,lr2;
+        /* Multiply (hr,lr) by (hr,lr) result (hr2,lr2) */
+        Mul222(hr,lr,hr,lr,&hr2,&lr2);
+
+        double hr4,lr4;
+        /* Multiply (hr2,lr2) by (hr2,lr2) result (hr4,lr4) */
+        Mul222(hr2,lr2,hr2,lr2,&hr4,&lr4);
+
+        double ffh0,ffl0;
+        /*  Multiply f1 by (hr,lr) result (ffh0,ffl0) */
+        Mul122(f1,hr,lr,&ffh0,&ffl0);
+
+        double ffh3,ffl3;
+        /* Multiply f3 by (hr,lr) result (ffh3,ffl3) */
+        Mul122(f3,hr,lr,&ffh3,&ffl3);
+
+        double ffh2,ffl2;
+        /*Add f2 by (ffh3,ffl3) result (ffh2,ffl2) */
+        Add122(f2,ffh3,ffl3,&ffh2,&ffl2);
+
+        double ffhx2,fflx2;
+        /* Multiply (hr2,lr2) by (ffh2,ffl2) result (ffhx2,fflx2) */
+        Mul222(hr2,lr2,ffh2,ffl2,&ffhx2,&fflx2);
+
+        double ffhx4,fflx4;
+        /* Multiply (hr4,lr4) by cr_log_fast_1 result (ffhx4,fflx4) */
+        Mul122(cr_log_fast_1,hr4,lr4,&ffhx4,&fflx4);
+
+        double ffhx0,fflx0;
+        /* Add (ffh0,ffl0) by (ffhx2,fflx2) result (ffhx0,fflx0) */
+        Add222(ffh0, ffl0, ffhx2, fflx2, &ffhx0,&fflx0);
+        
+        /* Add (ffhx0,fflx0) by (ffhx4,fflx4) result (h6,l6) */
+        Add222(ffhx0,fflx0, ffhx4,fflx4,h6,l6);
+
+        return (*h6+*l6);
+
+    
+    }
+    
+    if ((x> 1) && (x < 0x1.00068db8bac71p+0)){
+     
+        double xx2 =(x-1) * (x-1);
+        double ff4 = f4 + f5 * (x-1);
+        double ff6 = f6 + f7 * (x-1);
+        
+
+        double cr_log_fast_1 = ff4 + xx2 * ff6;
+
+        /* Add x by -1 result hr,lr */
+        double hr,lr;
+        Add112(x, -1, &hr, &lr);
+
+        
+        double hr2,lr2;
+        /* Multiply (hr,lr) by (hr,lr) result (hr2,lr2) */
+        Mul222(hr,lr,hr,lr,&hr2,&lr2);
+
+        double hr4,lr4;
+        /* Multiply (hr2,lr2) by (hr2,lr2) result (hr4,lr4) */
+        Mul222(hr2,lr2,hr2,lr2,&hr4,&lr4);
+
+        double ffh0,ffl0;
+        /*  Multiply f1 by (hr,lr) result (ffh0,ffl0) */
+        Mul122(f1,hr,lr,&ffh0,&ffl0);
+
+        double ffh3,ffl3;
+        /* Multiply f3 by (hr,lr) result (ffh3,ffl3) */
+        Mul122(f3,hr,lr,&ffh3,&ffl3);
+
+        double ffh2,ffl2;
+        /*Add f2 by (ffh3,ffl3) result (ffh2,ffl2) */
+        Add122(f2,ffh3,ffl3,&ffh2,&ffl2);
+
+        double ffhx2,fflx2;
+        /* Multiply (hr2,lr2) by (ffh2,ffl2) result (ffhx2,fflx2) */
+        Mul222(hr2,lr2,ffh2,ffl2,&ffhx2,&fflx2);
+
+        double ffhx4,fflx4;
+        /* Multiply (hr4,lr4) by cr_log_fast_1 result (ffhx4,fflx4) */
+        Mul122(cr_log_fast_1,hr4,lr4,&ffhx4,&fflx4);
+
+        double ffhx0,fflx0;
+        /* Add (ffh0,ffl0) by (ffhx2,fflx2) result (ffhx0,fflx0) */
+        Add222(ffh0, ffl0, ffhx2, fflx2, &ffhx0,&fflx0);
+        
+        /* Add (ffhx0,fflx0) by (ffhx4,fflx4) result (h6,l6) */
+        Add222(ffhx0,fflx0, ffhx4,fflx4,h6,l6);
+
+        return (*h6+*l6);
+
+    }
+    
+    double m1;
+    /*If x is a subnormal */
+    if ((s ==0) && (e == 0) && (m !=0)) {
+        uint64_t v = m;
+        e = e - 1023;
+        v = v*2;
+        while (v < 0x10000000000000) {
+            v *= 2;
+            e--;
+        }
+        
+        m1 =v *0x1p-52;
+       
+        u u;
+        u.x = m1;
+        m = u.i & 0xFFFFFFFFFFFFF;
+    }
+    /*If x is normal */
+    else {
+        m1 = 1 + m*0x1p-52;
+       
+        e = e - 1023;
+    }
+    /*We shift by 44 bits for to get the first 8 bits.*/
+    uint64_t i = m>>44;
+    
+    /*k=8
+    alpha_i_m is the double close to 2^k/(2^k+i) such that its log is very close to a double.*/
+    double alpha_i_m = table_alpha_i_modified[(int)i];
+    
+   
+    double hr,lr;
+    /*multiply (hm1,lm1) by (halpha_i_m,lalpha_i_m)*/
+    Mul112(m1,alpha_i_m,&hr,&lr);
+    
+    double h,l;
+    /*add (hr,lr) by -1*/
+    Add122(-1,hr,lr,&h,&l);
+
+    
+    
+    
+        double hh2 = h * h;
+        double ff4 = f4 + f5 * h;
+        double ff6 = f6 + f7 * h;
+        
+
+    double cr_log_fast_1 = ff4 +hh2*ff6;
+    
+    double ll2,hh4,ll4;
+    
+    /* Multiply (h,l) by (h,l) result (hh2,ll2) */
+    Mul222(h,l,h,l,&hh2,&ll2);
+    
+    /* Multiply (hh2,ll2) by (hh2,ll2) result (hh4,ll4) */
+    Mul222(hh2,ll2,hh2,ll2,&hh4,&ll4);
+    
+    double ffh0,ffl0;
+    /*  Multiply f1 by (h,l) result (ffh0,ffl0) */
+    Mul122(f1,h,l,&ffh0,&ffl0);
+
+    double ffh3,ffl3;
+    /* Multiply f3 by (h,l) result (ffh3,ffl3) */
+    Mul122(f3,h,l,&ffh3,&ffl3);
+
+    double ffh2,ffl2;
+    /*Add f2 by (ffh3,ffl3) result (ffh2,ffl2) */
+    Add122(f2,ffh3,ffl3,&ffh2,&ffl2);
+
+    double ffhx2,fflx2;
+    /* Multiply (hh2,ll2) by (ffh2,ffl2) result (ffhx2,fflx2) */
+    Mul222(hh2,ll2,ffh2,ffl2,&ffhx2,&fflx2);
+
+    double ffhx4,fflx4;
+    /* Multiply (hh4,ll4) by cr_log_fast_1 result (ffhx4,fflx4) */
+    Mul122(cr_log_fast_1,hh4,ll4,&ffhx4,&fflx4);
+
+    double ffhx0,fflx0;
+    /* Add (ffh0,ffl0) by (ffhx2,fflx2) result (ffhx0,fflx0) */
+    Add222(ffh0, ffl0, ffhx2, fflx2, &ffhx0,&fflx0);
+    
+    double h4,l4;
+    /* Add (ffhx0,fflx0) by (ffhx4,fflx4) result (h4,l4) */
+    Add222(ffhx0,fflx0, ffhx4,fflx4,&h4,&l4);
+    
+    double log_alpha_i_m = table_log_alpha_i_modified[i];
+   
+    
+    double h5,l5;
+    /* add (hlog_alpha_i_m, llog_alpha_i_m)*/
+    Add122(log_alpha_i_m, h4, l4, &h5, &l5);
+    
+    
+    
+    
+    double h_log2 = 0x1.62e42fefa38p-1;
+    double l_log2 = 0x1.ef35793c7673p-45;
+    double e_hlog2,e_llog2;
+    /* e*log(2) in (double,double) precision.*/
+    Mul122(e, h_log2, l_log2, &e_hlog2, &e_llog2);
+    
+   
+
+    /*adding with (h10,l10)*/
+    Add222(e_hlog2, e_llog2,h5,l5,h6,l6);
+    
+    return (*h6+*l6);
+}
+\end{lstlisting}
+\newpage
+
+\section*{crlogaccurate}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{$crlog_{accurate}$ for $x$ is not to close to $1$ }}
+\begin{algorithmic}[1]
+\Condition $x$ is a \textbf{double} number and is not to close to $1$.
+\Condition $m_1$ and $i$ are results made after calculating $x$.
+\Condition $table_{\alpha_{i}}$  $table_{\log(\alpha_{i})}$ are of tables of \textbf{Double-Double} and are calculated with \textbf{Tang}.
+\Condition $log(2)$ in \textbf{double-double}: $h_{\log2} = 0x1.62e42fefa39efp-1$ and $l_{\log2} = 0x1.abc9e3b39803fp-56$ 
+\Input $m_1$ is a \textbf{double} number, $i$ is a \textbf{Integer} number.
+and $table_{\alpha_{i}}$ and $table_{\log(\alpha_{i})}$ are  tables of \textbf{double-double} numbers and $f$ a polynomial of degree $11$ with coefficient $f_j$ calculated with \textbf{Sollya}
+with $1\le j \le 11$ and transformed into \textbf{double-double}, $G$ is table of $f_j$
+\Condition $1 \le m_1 \le 2 $, $0 \le i < 256$ and size of $table_{\alpha_{i}} = 256$
+and size of $table_{\log (\alpha_{i})} = 256$, $\alpha_i = table_{h\alpha_{i},l\alpha_{i}}[i]$ and $\log_{\alpha_i} = table_{h\log (\alpha_{i}),l\log (\alpha_{i})}[i]$
+\Output $\log(x)$ in \textbf{double} number.
+\State $h_r,\ell_r = Mul122(m_1, \alpha_i )$\\
+$h,\ell = Add122(-1,h_r,\ell_r)$\\
+$h_1, \ell_1 = Mul222(G[0][0], G[0][1],h,\ell)$\\
+$for \ (i = 1, i<11,i++)$\\
+$\ \ h_2,\ell_2 = Add222(G[i][0], G[i][1],h_1, \ell_1)$\\
+$\ \  h_1, \ell_1 = Mul222(h_2,\ell_2,h,\ell)$ \\
+$h_5,\ell_5 = Add222(\log_{\alpha_i}, h_1, \ell_1)$\\
+$e_{hlog2},e_{\ell log2} = Mul122(e, h_{\log2}, \ell_{\log2})$\\
+$h_6, \ell_6 = Add222(e_{hlog2}, e_{\ell log2},h_5,\ell_5)$\\
+return  $(h_6, \ell_6)$
+\end{algorithmic}
+\label{algo:crlogaccurate}
+\end{algorithm}
+
+\begin{lstlisting}
+# Input : x is a 53-bit floating-point numbers 
+#         F is a list with Coefficient of f decomposed into double,double 
+def cr_log_accurate_path(x,F):
+
+    # if  x<1 and close to 1 return with the function f 
+    if  x> RR('0x1.fe73451b9c74fp-1',16) and x<1  :
+       
+       
+        # we calculated len(F)
+        lenf = len(F)
+        
+        hr,lr = Add112(-1,x)
+       
+        # F[i] is the coefficient of each monomial :x^(len(F)-1-i)
+    
+        #We are turning F[0] in hf,lf with hf,: main value
+        #                                  lf: error value
+        hf,lf = RR(F[0][0],16),RR(F[0][1],16)
+
+        # multiply (hr,lr) by (hf,lf) result (h,l)
+        h,l = Mul222(hr,lr,hf,lf)
+       
+        for i in range(1,lenf):
+            #We are turning F[i] in hfi,lfi with hfi: main value
+            #                                    lfi: error value
+            hfi,lfi = RR(F[i][0],16),RR(F[i][1],16)
+
+            # add (hfi,lfi) by (h,l) result (h1,l1)
+            h1,l1   = Add222(hfi,lfi,h,l)
+
+            # multiply (hr,lr) by (h1,l1) result (h,l)
+            h,l = Mul222(hr,lr,h1,l1)
+            
+        return h,l
+
+    
+    
+     # if x>1 and close to 1 return with function f
+    if x> 1 and x <= RR('0x1.0178e5916f543p+0',16) :
+       
+       
+        # we calculated len(F)
+        lenf = len(F)
+        
+        hr,lr = Add112(x,-1)
+       
+        # F[i] is the coefficient of each monomial :x^(len(F)-1-i)
+    
+        #We are turning F[0] in hf,lf with hf,: main value
+        #                                  lf: error value
+        hf,lf = RR(F[0][0],16),RR(F[0][1],16)
+
+        # multiply (hr,lr) by (hf,lf) result (h,l)
+        h,l = Mul222(hr,lr,hf,lf)
+       
+        for i in range(1,lenf):
+            #We are turning F[i] in hfi,lfi with hfi: main value
+            #                                    lfi: error value
+            hfi,lfi = RR(F[i][0],16),RR(F[i][1],16)
+
+            # add (hfi,lfi) by (h,l) result (h1,l1)
+            h1,l1   = Add222(hfi,lfi,h,l)
+
+            # multiply (hr,lr) by (h1,l1) result (h,l)
+            h,l = Mul222(hr,lr,h1,l1)
+            
+        return h,l
+
+    #s represents the sign 
+    #e  represents the exposant 
+    #m represents fraction
+    (s,m,e)=RR(x).sign_mantissa_exponent()
+    #e=e-53 
+    
+    
+    e = e+53
+    
+    # If x is a subnormal
+    if s==1 and e<=0 and m!=0:
+        
+        v = m
+        e = e-1
+        
+        while v< 2^52:
+            v*=2
+            
+            e=e-1
+        m1 =v*2.^(-52)
+        
+
+    #If x is normal
+    else:
+        #print(s,e,m)
+        m1 = m*2.^(-52)
+        e =e-1
+    
+    
+    
+    
+    binary = RR(m1).str(2)[2:10] # we recover the 8 bits after the initial 1.
+    i = int(binary,2)         # i is the 8-bit integer
+    
+    
+    halpha_i,lalpha_i = RR(table_alpha_i[i][0],16),RR(table_alpha_i[i][1],16) #table computed for all i of alpha_i_m
+                                      # such that log(alpha_i_m) is 71 bits accurate.
+    hlog_alpha_i,llog_alpha_i= RR(table_log_alpha_i[i][0],16),RR(table_log_alpha_i[i][1],16)
+    
+    # multiply (halpha_i_m,lalpha_i_m) by m1
+    hr,lr = Mul122(m1,halpha_i,lalpha_i)
+    
+    # add hr,lr by (-1) in double,double
+    h,l = Add122(-1.0,hr,lr)
+    
+    # we calculated len(f.list())
+    lenf = len(F)
+
+    # F[i] is the coefficient of each monomial :x^(len(F)-1-i) in double,double
+    
+    #We are turning F[0] in hf,lf with hf,: main value
+    #                                  lf: error value
+    hf,lf = RR(F[0][0],16),RR(F[0][1],16)
+
+    # multiply (hr,lr) by (hf,lf) result (h,l)
+    h1,l1 = Mul222(hf,lf,h,l)
+    
+    for i in range(1,lenf):
+        #We are turning F[i] in hfi,lfi with hfi: main value
+        #                                    lfi: error value
+        hfi,lfi = RR(F[i][0],16),RR(F[i][1],16)
+
+        # add (hfi,lfi) by (h1,l1) result (h2,l2)
+        h2,l2   = Add222(hfi,lfi,h1,l1)
+
+        # multiply (h,l) by (h2,l2) result (h1,l1)
+        h1,l1 = Mul222(h2,l2,h,l)
+        
+    
+    
+    # Add (h1,l1) by (hlog_alpha_i,llog_alpha_i
+    h5,l5 = Add222(hlog_alpha_i,llog_alpha_i,h1,l1)
+    
+    
+    # log(2) =(h_log2,l_log2)
+    h_log2 =RR('0x1.62e42fefa39efp-1',16)
+    l_log2 = RR('0x1.abc9e3b39803fp-56',16)
+    
+    #e*log(2)
+    elog2_h,elog2_l = Mul122(RR(e),h_log2,l_log2)
+   
+
+    hlog_fi,llog_fi = Add222(elog2_h,elog2_l,h5,l5)
+    
+    
+    #output: hlog_fi and llog_fi are 53-bit floating-point numbers.
+    # hlog_fi: main value and llog_fi: error value
+    
+    return hlog_fi,llog_fi
+\end{lstlisting}
+
+\begin{lstlisting}
+static double cr_log_accurate_path(double x, double *h6, double *l6){
+    int s;
+    int e;
+    uint64_t m;
+    extract (x,&s,&e, &m);
+/* Special case*/
+    if (x == 0x1.fb85251a3f26fp-1){
+        *h6 = -0x1.1ff9b8e8b38bep-7;
+        *l6 = -0x1.0b393919c1fa3p-109;
+        return (*h6+*l6);
+    }
+
+    if (x == 0x1.fc65aa1908a66p-1){
+        *h6 = -0x1.cecc4ad8d358bp-8;
+        *l6 = -0x1.65a43e3cf2b61p-107;
+        return (*h6+*l6);
+    }
+
+    /*The coefficients in double,double of the approximation polynomial of degree 11.  */
+    static const double G[11][2]= {
+        {0x1.6d24dd22a92bp-4, 0x1.3e16deaf82f98p-58},   /* g11 decomposed into double,double*/
+        {-0x1.99889bcf944ecp-4, -0x1.14f5635667f7p-58}, /* g10 decomposed into double,double*/       
+        {0x1.c71c5b2ab9b1bp-4, -0x1.bba8402b8dab8p-58}, /* g9 decomposed into double,double*/
+        {-0x1.ffffffed56645p-4, 0x1.fa475383e2fep-60},  /* g8 decomposed into double,double*/
+        {0x1.249249248d599p-3, 0x1.a5c92da9d350cp-57},  /* g7 decomposed into double,double*/
+        {-0x1.555555555553bp-3, 0x1.887e7d473e27p-57},  /* g6 decomposed into double,double*/
+        {0x1.999999999999ap-3, -0x1.affa1a4be0d04p-57}, /* g5 decomposed into double,double*/
+        {-0x1p-2, 0x1.590555132p-72},                   /* g4 decomposed into double,double*/
+        {0x1.5555555555555p-2, 0x1.55555540b5114p-56},  /* g3 decomposed into double,double*/
+        {-0x1p-1, 0x1.b78p-98},                         /* g2 decomposed into double,double*/
+        {0x1p+0, 0x0p+0}                                /* g1 decomposed into double,double*/
+    };  
+
+    
+    if ((x> 0x1.fe73451b9c74fp-1) && (x<1)) {
+        double hr,lr ;
+        /*Add x by -1 result hr,lr*/
+        Add112(-1,x,&hr,&lr);
+       
+        double hf = G[0][0];
+        double lf = G[0][1];
+        
+        double h,l;
+        /*Multiply (hf,lf) by r result (h,l)*/
+        Mul222(hr,lr,hf,lf,&h,&l);
+        
+        double hfi,lfi,h1,l1;
+
+        for (int i = 1;i<11;i++){
+            hfi = G[i][0];
+            lfi = G[i][1];
+
+            /*Add (hfi,lfi) by (h,l) result (h1,l1)*/
+            Add222(hfi,lfi,h,l,&h1,&l1);
+
+            /*multiply (hr,lr) by (h1,l1) result (h,l)*/
+            Mul222(hr,lr,h1,l1,&h,&l);
+            
+        }
+        *h6 = h;
+        *l6 = l;
+        
+        return (h+l);
+    }
+
+    if ((x> 1) && (x <= 0x1.0178e5916f543p+0)){
+        double hr,lr ;
+        /*Add x by -1 result r*/
+        Add112(x,-1,&hr,&lr);
+       
+        double hf = G[0][0];
+        double lf = G[0][1];
+        
+        double h,l;
+        /*Multiply (hf,lf) by r result (h,l)*/
+        Mul222(hr,lr,hf,lf,&h,&l);
+        
+        double hfi,lfi,h1,l1;
+
+        for (int i = 1;i<11;i++){
+            hfi = G[i][0];
+            lfi = G[i][1];
+
+            /*Add (hfi,lfi) by (h,l) result (h1,l1)*/
+            Add222(hfi,lfi,h,l,&h1,&l1);
+
+            /*multiply (hr,lr) by (h1,l1) result (h,l)*/
+            Mul222(hr,lr,h1,l1,&h,&l);
+            
+        }
+        *h6 = h;
+        *l6 = l;
+        
+        return (h+l);
+    }
+    double m1;
+    /*If x is a subnormal */
+    if ((s ==0) && (e == 0) && (m !=0)) {
+        uint64_t v = m;
+        e = e - 1023;
+        v = v*2;
+        while (v < 0x10000000000000) {
+            v *= 2;
+            e--;
+        }
+        
+        m1 =v *0x1p-52;
+       
+        u u;
+        u.x = m1;
+        m = u.i & 0xFFFFFFFFFFFFF;
+    }
+    /*If x is normal */
+    else {
+        m1 = 1 + m*0x1p-52;
+       
+        e = e - 1023;
+    }
+
+    /*We shift by 44 bits for to get the first 8 bits.*/
+    uint64_t i = m>>44;
+
+    /*k=8
+    halpha_i,lalpha_i is the double,double of 2^k/(2^k+i).*/
+    double halpha_i = table_alpha_i[(int)i][0];
+    double lalpha_i = table_alpha_i[(int)i][1];
+    
+    double hr,lr;
+    /*Multiply (halpha_i,lalpha_i_m) by m1 result (hr,lr) */
+    Mul122(m1,halpha_i, lalpha_i,&hr,&lr);
+    
+    double h,l;
+    /*Add (hr,lr) by (-1) result (h,l)*/
+    Add122(-1,hr,lr,&h,&l);
+    
+    double hf = G[0][0];
+    double lf = G[0][1];
+
+    double h1,l1;
+    /*Multiply (hf,lf) by (h,l) result (h1,l1)*/
+    Mul222(hf,lf,h,l,&h1,&l1);
+    
+    double hfi,lfi,h2,l2;
+
+    for (int i = 1;i<11;i++){
+        hfi = G[i][0];
+        lfi = G[i][1];
+
+        /*Add (hfi,lfi) by (h1,l1) result (h2,l2)*/
+        Add222(hfi,lfi,h1,l1,&h2,&l2);
+
+        /*multiply (h,l) by (h2,l2) result (h1,l1)*/
+        Mul222(h2,l2,h,l,&h1,&l1);
+       
+    }
+    /*k=8
+    hlog_alpha_i,llog_alpha_i is the double,double of log(2^k/(2^k+i)).*/
+    double hlog_alpha_i = table_log_alpha_i[(int)i][0];
+    double llog_alpha_i = table_log_alpha_i[(int)i][1];
+
+
+    double h5,l5;
+    /*Add (h1,l1) by (hlog_alpha_i,llog_alpha_i) result (h5,l5)*/
+    Add222(hlog_alpha_i,llog_alpha_i,h1,l1,&h5,&l5);
+   
+    double h_log2 = 0x1.62e42fefa39efp-1;
+    double l_log2 = 0x1.abc9e3b39803fp-56;
+    double e_hlog2,e_llog2;
+    /* e*log(2) in (double,double) precision.*/
+    Mul122(e, h_log2, l_log2, &e_hlog2, &e_llog2);
+    
+    
+
+    /*adding (e_hlog2,e_llog2) by (h5,l5) result (h6,l6)*/
+    Add222(e_hlog2, e_llog2, h5, l5, h6,l6);
+    
+    return (*h6+*l6);
+
+
+}
+\end{lstlisting}
+\newpage
+
+\section*{crlogadvanced}
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{$crlog_{advanced}$ for $x$ is not to close to $1$ }}
+\begin{algorithmic}[1]
+\Condition $x$ is a \textbf{double} number and is not to close to $1$.
+\Condition $m_1$ and $i$ are results made after calculating $x$.
+\Condition $table_{\alpha_{i}}$  $table_{\log(\alpha_{i})}$ are of tables of \textbf{triple-Double} and are calculated with \textbf{Tang}.
+\Condition $log(2)$ in \textbf{triple-double}: $h_{\log2} = 0x1.62e42fefa39efp-1$, $lm_{\log2} = 0x1.abc9e3b39803fp-56$ and $\ell_{\log2}= 0x1.7b57a079a1934p-111$
+\Input $m_1$ is a \textbf{double} number, $i$ is a \textbf{Integer} number.
+and $table_{\alpha_{i}}$ and $table_{\log(\alpha_{i})}$ are  tables of \textbf{triple-double} numbers and $f$ a polynomial of degree $13$ with coefficient $f_j$ calculated with \textbf{Sollya}
+with $1\le j \le 13$ and transformed into \textbf{triple-double}, $U$ is table of $f_j$
+\Condition $1 \le m_1 \le 2 $, $0 \le i < 256$ and size of $table_{\alpha_{i}} = 256$
+and size of $table_{\log (\alpha_{i})} = 256$, $\alpha_i = table_{h\alpha_{i},m\alpha_{i},l\alpha_{i}}[i]$ and $\log_{\alpha_i} = table_{h\log (\alpha_{i}),m\log (\alpha_{i},l\log (\alpha_{i})}[i]$
+\Output $\log(x)$ in \textbf{double} number.
+\State $h_r,m_r,\ell_r = Mul133(m_1, \alpha_i )$\\
+$h,m,\ell = Add133(-1,h_r,m_r,\ell_r)$\\
+$h_1, m_1,\ell_1 = Mul222(U[0][0], U[0][1],U[0][2],h,m,\ell)$\\
+$for \ (i = 1, i<13,i++)$\\
+$\ \ h_2,\ell_2 = Add222(U[i][0], U[i][1],U[i][2], h_1, m_1, \ell_1)$\\
+$\ \  h_1, m_1,\ell_1 = Mul222(h_2,m_2,\ell_2,h,m,\ell)$ \\
+$h_5,m_5,\ell_5 = Add222(\log_{\alpha_i}, h_1, m_1,\ell_1)$\\
+$e_{hlog2},e_{m log2},e_{\ell log2} = Mul122(e, h_{\log2}, m_{\log2}, \ell_{\log2})$\\
+$h_6, m_6,\ell_6 = Add222(e_{hlog2},e_{m log2}, e_{\ell log2},h_5,m_5,\ell_5)$\\
+$m_{\ell}= m_6+\ell_6$
+return  $(h_6,m_{\ell})$
+\end{algorithmic}
+\label{algo:crlogadvanced}
+\end{algorithm}
+
+\begin{lstlisting}
+# Input : x is a 53-bit floating-point numbers 
+#         F is a list with Coefficient of f decomposed into triple-double 
+def cr_log_accurate_path_advanced(x,F):
+
+    # if x> 1.17549435*10^(-38) and x<1 return with the function f 
+    if  x> RR('0x1.fba5e353f7ceep-1',16) and x<1  :
+       
+       
+        # we calculated len(F)
+        lenf = len(F)
+        
+        hr,lr = Add112(-1.0,x)
+        
+        # F[i] is the coefficient of each monomial :x^(len(F)-1-i)
+    
+        #We are turning F[0] in hf,lf with hf,: main value
+        #                                  lf: error value
+        hf,mf,lf = RR(F[0][0],16),RR(F[0][1],16),RR(F[0][2],16)
+
+        # multiply (hr,lr) by (hf,lf) result (h,l)
+        h,m,l = Mul233(hr,lr,hf,mf,lf)
+       
+        for i in range(1,lenf):
+            #We are turning F[i] in hfi,lfi with hfi: main value
+            #                                    lfi: error value
+            hfi,mfi,lfi = RR(F[i][0],16),RR(F[i][1],16),RR(F[i][2],16)
+
+            # add (hfi,lfi) by (h,l) result (h1,l1)
+            h1,m1,l1   = Add333(hfi,mfi,lfi,h,m,l)
+
+            # multiply (hr,lr) by (h1,l1) result (h,l)
+            h,m,l = Mul233(hr,lr,h1,m1,l1)
+            
+        return h,m,l
+    
+    
+    
+    # if x> 1.17549435*10^(-38) and x<1 return with the function f 
+    if  x> 1 and x <= RR('0x1.0178e5916f543p+0',16) :
+       
+       
+        # we calculated len(F)
+        lenf = len(F)
+        
+        hr,lr = Add112(x,-1.0)
+        
+        # F[i] is the coefficient of each monomial :x^(len(F)-1-i)
+    
+        #We are turning F[0] in hf,lf with hf,: main value
+        #                                  lf: error value
+        hf,mf,lf = RR(F[0][0],16),RR(F[0][1],16),RR(F[0][2],16)
+
+        # multiply (hr,lr) by (hf,lf) result (h,l)
+        h,m,l = Mul233(hr,lr,hf,mf,lf)
+        
+        for i in range(1,lenf):
+            #We are turning F[i] in hfi,lfi with hfi: main value
+            #                                    lfi: error value
+            hfi,mfi,lfi = RR(F[i][0],16),RR(F[i][1],16),RR(F[i][2],16)
+
+            # add (hfi,lfi) by (h,l) result (h1,l1)
+            h1,m1,l1   = Add333(hfi,mfi,lfi,h,m,l)
+
+            # multiply (hr,lr) by (h1,l1) result (h,l)
+            h,m,l = Mul233(hr,lr,h1,m1,l1)
+           
+        return h,m,l
+
+    #s represents the sign 
+    #e  represents the exposant 
+    #m represents fraction
+    (s,m,e)=RR(x).sign_mantissa_exponent()
+    #e=e-53 
+    
+    
+    e = e+53
+    
+    # If x is a subnormal
+    if s==1 and e<=0 and m!=0:
+        
+        v = m
+        e = e-1
+        
+        while v< 2^52:
+            v*=2
+            
+            e=e-1
+        m1 =v*2.^(-52)
+        
+   #If x is normal
+    else:
+        #print(s,e,m)
+        m1 = m*2.^(-52)
+        e =e-1
+    
+    binary = RR(m1).str(2)[2:10] # we recover the 8 bits after the initial 1.
+    i = int(binary,2)         # i is the 8-bit integer
+   
+    
+    halpha_i,malpha_i,lalpha_i = RR(table_alpha_i_triple[i][0],16),RR(table_alpha_i_triple[i][1],16),RR(table_alpha_i_triple[i][2],16) #table computed for all i of alpha_i_m
+                                      # such that log(alpha_i_m) is 71 bits accurate.
+    hlog_alpha_i,mlog_alpha_i,llog_alpha_i= RR(table_log_alpha_i_triple[i][0],16),RR(table_log_alpha_i_triple[i][1],16),RR(table_log_alpha_i_triple[i][2],16)
+    
+    # multiply (halpha_i_m,lalpha_i_m) by m1
+    hr,mr,lr = Mul133(m1,halpha_i,malpha_i,lalpha_i)
+   
+    # add hr,mr,lr by (-1) in triple-double
+    h,m,l = Add133(-1.0,hr,mr,lr)
+    
+    # we calculated len(f.list())
+    lenf = len(F)
+
+    # F[i] is the coefficient of each monomial :x^(len(F)-1-i) in double,double
+    
+    #We are turning F[0] in hf,lf with hf,: main value
+    #                                  lf: error value
+    hf,mf,lf = RR(F[0][0],16),RR(F[0][1],16),RR(F[0][2],16)
+
+    # multiply (hr,lr) by (hf,lf) result (h,l)
+    h1,m1,l1 = Mul333(h,m,l,hf,mf,lf)
+    
+    for i in range(1,lenf):
+        #We are turning F[i] in hfi,lfi with hfi: main value
+        #                                    lfi: error value
+        hfi,mfi,lfi = RR(F[i][0],16),RR(F[i][1],16),RR(F[i][2],16)
+
+        # add (hfi,lfi) by (h1,l1) result (h2,l2)
+        h2,m2,l2   = Add333(hfi,mfi,lfi,h1,m1,l1)
+
+        # multiply (h,l) by (h2,l2) result (h1,l1)
+        h1,m1,l1 = Mul333(h,m,l,h2,m2,l2) 
+        
+    
+    
+    # Add (h1,l1) by (hlog_alpha_i,llog_alpha_i
+    h5,m5,l5 = Add333(hlog_alpha_i,mlog_alpha_i,llog_alpha_i,h1,m1,l1)
+    
+    
+    # log(2) =(h_log2,l_log2)
+    h_log2 =RR('0x1.62e42fefa39efp-1',16)
+    m_log2 =RR('0x1.abc9e3b39803fp-56',16)
+    l_log2 = RR('0x1.7b57a079a1934p-111',16)  
+    
+    #e*log(2)
+    elog2_h,elog2_m,elog2_l = Mul133(RR(e),h_log2,m_log2,l_log2)
+   
+
+    hlog_fi,mlog_fi,llog_fi = Add333(elog2_h,elog2_m,elog2_l,h5,m5,l5)
+    
+    
+    #output: hlog_fi and llog_fi are 53-bit floating-point numbers.
+    # hlog_fi: main value and llog_fi: error value
+    
+    return hlog_fi, mlog_fi, llog_fi
+\end{lstlisting}
+
+\begin{lstlisting}
+static double cr_log_accurate_advanced_path(double x){
+    int s;
+    int e;
+    uint64_t m;
+    double h6,ml;
+    /*special cases*/
+    if (x == 0x1.c7e1077f9aec2p-1) {
+        h6 = -0x1.db88b1160524bp-4;
+        ml = -0x1.ffffffffffffcp-58;
+         return (h6+ml);
+    }
+    if (x == 0x1.f8db13b0e98a3p-1) {
+        h6 = -0x1.cc7365166e597p-7;
+        ml = 0x1.fffffffffffccp-61;
+         return (h6+ml);
+    }
+    if (x == 0x1.acb8cf13bc769p-2) {
+        h6 = -0x1.bdc7955d1482cp-1;
+        ml = 0x1.6c68c50e2ff8p-105;
+         return (h6+ml);
+    }
+    if (x == 0x1.9309142b73ea6p-1) {
+        h6 = -0x1.ea16274b0109bp-3;
+        ml = 0x1.705633d4614a5p-106;
+         return (h6+ml);
+    }
+    if (x == 0x1.98a04e0833091p-1) {
+        h6 = -0x1.cddf723d3e52fp-3;
+        ml = 0x1.a0636ba8c84a5p-106;
+         return (h6+ml);
+    }
+    if (x == 0x1.baded30cbf1c4p-1) {
+        h6 = -0x1.290ea09e36479p-3;
+        ml = 0x1.3339fcb8b1c92p-111;
+         return (h6+ml);
+    }
+    if (x == 0x1.c7f14af0a08ebp-1) {
+        h6 = -0x1.daf693d64fadap-4;
+        ml = 0x1.4f60080a4d88dp-109;
+        return (h6+ml);
+    }
+
+    if (x == 0x1.f3c35328f1d5dp-1) {
+        h6 = -0x1.8c56ff5326197p-6;
+        ml = 0x1.24265dc55252p-105;
+         return (h6+ml);
+    }
+
+    if (x == 0x1.f8156947924c8p-1) {
+        h6 = -0x1.fe9ad6761218dp-7;
+        ml = 0x1.39b6b04fc1d53p-105;
+         return (h6+ml);
+    }
+
+    extract (x,&s,&e, &m);
+    
+    
+    /*The coefficients in triple-double numbers of the approximation polynomial of degree 14. */
+    static const double U[14][3]= {
+        {-0x1.1d35b84c5cc56p-4, 0x1.780337dcf5705p-58, -0x1.b91450d691e2p-114}, /* u14 decomposed into triple-double*/
+        {0x1.3afccbd40d20fp-4, 0x1.9c4dd4dab116p-58, 0x1.3a1e112af7efp-112}, /* u13 decomposed into triple-double*/
+        {-0x1.55552b4de4c76p-4, -0x1.50aa78415c4bfp-59, 0x1.2fafbf95a1a8p-115}, /* u12 decomposed into triple-double*/
+        {0x1.745d171352e2dp-4, -0x1.b9a4b0517c2c6p-58, -0x1.6128b0932efc8p-112}, /* u11 decomposed into triple-double*/
+        {-0x1.999999996fed4p-4, 0x1.8ec6a7a38be73p-58, -0x1.85507f01f5868p-112}, /* u10 decomposed into triple-double*/
+        {0x1.c71c71c71c59ap-4, 0x1.1e1945381ebebp-58, -0x1.b30f3065fce38p-112}, /* u9 decomposed into triple-double*/
+        {-0x1.fffffffffffffp-4, -0x1.89d824c2891b7p-58, 0x1.b4f656bbfa58p-115}, /* u8 decomposed into triple-double*/
+        {0x1.2492492492492p-3, 0x1.2438b8708dbd8p-57, 0x1.e00436fa1c45p-113}, /* u7 decomposed into triple-double*/
+        {-0x1.5555555555555p-3, -0x1.5555440ddf7efp-57, 0x1.0fce30dd1d9p-116}, /* u6 decomposed into triple-double*/
+        {0x1.999999999999ap-3, -0x1.9999999bc2648p-57, 0x1.4e3f5d1a3a7p-117}, /* u5 decomposed into triple-double*/
+        {-0x1p-2, 0x1.4b03dac3ad4d9p-100, 0x1.78p-156}, /* u4 decomposed into triple-double*/
+        {0x1.5555555555555p-2, 0x1.5555555555555p-56, 0x1.219f0c0c44756p-110}, /* u3 decomposed into triple-double*/
+        {-0x1p-1, 0x1.9745a799cp-127, 0x0p+0}, /* u2 decomposed into triple-double*/
+        {0x1p+0, -0x1.09f14p-143, 0x0p+0}, /* u1 decomposed into triple-double*/
+    };
+
+   if ((x> 0x1.fc65aa1908a66p-1) && (x<1)) {
+        double hr,lr ;
+        /*Add x by -1 result hr,lr*/
+        Add112(-1.0,x,&hr,&lr);
+       
+       double hf = U[0][0];
+        double mf = U[0][1];
+        double lf = U[0][2];
+        
+        double h,m,l;
+        /*Multiply (hf,mf,lf) by r result (h,m,l)*/
+        Mul233(hr,lr,hf,mf,lf,&h,&m,&l);
+        /*printf("i = 0, h = %la, m = %la, l = %la \n",h,m,l);*/
+        double hfi,mfi,lfi,h1,m1,l1;
+
+        for (int i = 1;i<14;i++){
+            hfi = U[i][0];
+            mfi = U[i][1];
+            lfi = U[i][2];
+            /*Add (hfi,mfi,lfi) by (h,m,l) result (h1,m1,l1)*/
+            Add333(hfi,mfi,lfi,h,m,l,&h1,&m1,&l1);
+
+            /*multiply (hr,lr) by (h1,m1,l1) result (h,m,l)*/
+            Mul233(hr,lr,h1,m1,l1,&h,&m,&l);
+            
+       }
+        
+       return h+m;
+    }
+    
+    if ((x> 1) && (x <= 0x1.0178e5916f543p+0)) {
+        double hr,lr ;
+        /*Add x by -1 result hr,lr*/
+     Add112(x,-1.0,&hr,&lr);
+        
+        double hf = U[0][0];
+        double mf = U[0][1];
+        double lf = U[0][2];
+        
+        double h,m,l;
+        /*Multiply (hf,mf,lf) by r result (h,m,l)*/
+        Mul233(hr,lr,hf,mf,lf,&h,&m,&l);
+        
+        double hfi,mfi,lfi,h1,m1,l1;
+
+        for (int i = 1;i<14;i++){
+            hfi = U[i][0];
+            mfi = U[i][1];
+            lfi = U[i][2];
+            /*Add (hfi,mfi,lfi) by (h,m,l) result (h1,m1,l1)*/
+            Add333(hfi,mfi,lfi,h,m,l,&h1,&m1,&l1);
+
+            /*multiply (hr,lr) by (h1,m1,l1) result (h,m,l)*/
+            Mul233(hr,lr,h1,m1,l1,&h,&m,&l);
+            
+        }
+        
+       
+        return h+m;
+    }
+    double m1;
+    /*If x is a subnormal */
+    if ((s ==0) && (e == 0) && (m !=0)) {
+        uint64_t v = m;
+        e = e - 1023;
+        v = v*2;
+        while (v < 0x10000000000000) {
+            v *= 2;
+            e--;
+        }
+        
+        m1 =v *0x1p-52;
+       
+        u u;
+        u.x = m1;
+        m = u.i & 0xFFFFFFFFFFFFF;
+    }
+    /*If x is normal */
+    else {
+        m1= 1 + m*0x1p-52;
+       
+        e = e - 1023;
+    }
+
+    /*We shift by 44 bits for to get the first 8 bits.*/
+    uint64_t i = m>>44;
+    
+    
+    /*k=8
+    halpha_i,lalpha_i is the double,double of 2^k/(2^k+i).*/
+    double halpha_i = table_alpha_i_triple[(int)i][0];
+    double malpha_i = table_alpha_i_triple[(int)i][1];
+    double lalpha_i = table_alpha_i_triple[(int)i][2];
+
+      double hr,mr,lr;
+    /*Multiply (halpha_i, malpha_i,lalpha_i_m) by m1 result (hr, mr, lr) */
+    Mul133(m1,halpha_i, malpha_i, lalpha_i,&hr,&mr,&lr);
+    
+    double h,mprime,l;
+    /*Add (hr,lr) by (-1) result (h,m,l)*/
+    Add133(-1,hr,mr,lr,&h,&mprime,&l);
+    
+    double hf = U[0][0];
+    double mf = U[0][1];
+    double lf = U[0][2];
+    double h1, m1prime, l1;
+    /*Multiply (hf,mf,lf) by (h,m,l) result (h1,m1,l1)*/
+    Mul333(h,mprime,l,hf,mf,lf,&h1,&m1prime,&l1);
+    
+    double hfi,mfi,lfi,h2,m2,l2;
+
+    for (int i = 1;i<14;i++){
+        hfi = U[i][0];
+        mfi = U[i][1];
+        lfi = U[i][2];
+        /*Add (hfi,mfi,lfi) by (h1,m1,l1) result (h2,m2,l2)*/
+        Add333(hfi,mfi,lfi,h1,m1prime,l1,&h2,&m2,&l2);
+
+        /*multiply (h,m,l) by (h2,m2,l2) result (h1,m1,l1)*/
+        Mul333(h,mprime,l,h2,m2,l2,&h1,&m1prime,&l1);
+       
+    }
+    /*k=8
+    hlog_alpha_i,llog_alpha_i is the double,double of log(2^k/(2^k+i)).*/
+    double hlog_alpha_i = table_log_alpha_i_triple[(int)i][0];
+    double mlog_alpha_i = table_log_alpha_i_triple[(int)i][1];
+    double llog_alpha_i = table_log_alpha_i_triple[(int)i][2];
+
+
+    double h5,m5,l5;
+    /*Add (h1,m1,l1) by (hlog_alpha_i,mlog_alpha_i,llog_alpha_i) result (h5,m5,l5)*/
+    Add333(hlog_alpha_i,mlog_alpha_i,llog_alpha_i,h1,m1prime,l1,&h5,&m5,&l5);
+    
+    double h_log2 =0x1.62e42fefa39efp-1;
+    double m_log2 =0x1.abc9e3b39803fp-56;
+    double l_log2 = 0x1.7b57a079a1934p-111;
+    double e_hlog2,e_mlog2,e_llog2;
+    /* e*log(2) in triple-double precision.*/
+    Mul133(e, h_log2, m_log2, l_log2, &e_hlog2, &e_mlog2, &e_llog2);
+    
+    double m6,l6;
+
+    /*adding (e_hlog2,e_mlog2,e_llog2) by (h5,m5,l5) result (h6,m6,l6)*/
+    Add333(e_hlog2, e_mlog2, e_llog2, h5, m5, l5, &h6, &m6, &l6);
+    
+    
+    
+    ml = m6+l6;
+    
+    
+    
+    double m62 = 2*m6;
+   if ( (fabs(m6) == ulp_0_5(h6)) && m6>0){
+        if (l6>0){
+            ml = nextafter(m6,m62);
+        }
+        if (l6<0){
+             ml= nextafter(m6,0);
+        }
+    }
+    if ( (fabs(m6) == ulp_0_5(h6)) && (m6<0)) {
+        if (l6<0){
+            ml = nextafter(m6,m62);
+        }
+        if (l6>0){
+            ml= nextafter(m6,0);
+        }
+    }
+    return h6+ml;
+}
+\end{lstlisting}
+\newpage
+
+\section*{log}
+\begin{algorithm}[htbp]
+  \caption{Algorithm $\log$}
+\begin{algorithmic}[1]
+\Condition $x$ is a \textbf{double} number.
+\Condition $err_{fast} = 0x1.6b6b11ea279ecp-59$ and $err_{accurate} = 0x1.810c9a86fc45ep-99$
+\Output $\log(x)$ in \textbf{double} number.
+\State $y,h_6,l_6 = cr\log_{fast}(x)$\\
+$left  = h6 + FMA(-errfast, h6, l6)$\\
+$right = h6 + FMA(+errfast, h6, l6)$\\
+$if right== left$\\
+\ \ return $y$\\
+$y,h_6,l_6 = cr\log_{accurate}(x)$\\
+$right = h6 + FMA(+errfast, h6, l6)$\\
+$if right== left$\\
+\ \ return $y$\\
+$y = cr\log_{advanced}(x)$\\
+return $y$
+\end{algorithmic}
+\label{algo:log}
+\end{algorithm}
+
+\begin{lstlisting}
+/* x is double*/
+double cr_log(double x){
+    double h6 = 0;
+    double l6 = 0;
+    double right,left;
+    double y;
+    double errfast = 0x1.6b6b11ea279ecp-59;
+    /*  We started with the variable errfast = 0x1.01c7d6c404f05p-63 according to
+    document (CR-LIBM A library of correctly rounded elementary functions in double-precision : 2006).
+    we had errors in all 4 rounding modes.
+    We increased the power by 1 until we found only one error in the RNDN rounding mode 
+    and no other errors in the other rounding modes. After, we had err = 0x1p-64.
+    We searched by dichotomy after the dot. If we had errors on the equality between cr_log_fast(x) and mpfr_log(x)
+     we increase either we decrease until we have 2 consecutive digits.
+    We started again until we optimize errfast and also erracc.
+    */
+    
+    y = cr_log_fast_path(x,&h6,&l6);
+    left  = h6 + __builtin_fma (-errfast, h6, l6);
+    right = h6 + __builtin_fma (+errfast, h6, l6);
+    
+    if (right== left){
+        
+        return y;
+    }
+    double erracc = 0x1.810c9a86fc45ep-99;
+    /* We started with the variable erracc = 0x1p-102,  Result obtained by calculating with sage.
+    We do as we did with errfast*/
+    y = cr_log_accurate_path(x,&h6,&l6);
+    left  = h6 + __builtin_fma (-erracc, h6, l6);
+    right = h6 + __builtin_fma (+erracc, h6, l6);
+    
+    if (right== left){
+       
+        return y;
+    }
+
+    y = cr_log_accurate_advanced_path(x);
+    return y;
+
+/* log(x) in double*/
+}
+\end{lstlisting}

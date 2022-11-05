@@ -1,0 +1,30 @@
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}.
+This thesis aims to explain in a mathematical way the steps for the implementation of the logarithm with correct rounding on floating numbers.
+This function is one of the functions of the COREMATH\footnote{\url{https://core-math.gitlabpages.inria.fr}} project. \\
+This project implements mathematical functions with correct rounding to be able to integrate into mathematical libraries for the new revision of the
+standard $IEEE 754$.\\
+\ \\
+The definition of correct rounding given by the $IEEE 754$ standard is as follows \enquote{Given a mathematical function $f$ and a floating point number $x$,
+the correct rounding of $f(x)$ is the floating number $y$ closest to $f(x)$ according to the given rounding mode (nearest, towards zero, towards $-\infty$ or towards
+$+\infty$)}. This standard imposes the correct rounding for the four elementary arithmetic operations which are addition, subtraction,
+multiplication and division. But it does not impose for mathematical functions. For now, there is no mathematical library that gives us
+exactly the correct rounding.\\
+\ \\
+This project already has the implementation of this logarithm for single precision ($binary32$ format of $ IEEE 754$). The calculation steps of our logarithm will be in
+function of double precision ($binary64$ format of $IEEE 754$). We will use basic floating point algorithms which are \textbf{FastSum} and
+\textbf{DEKKER-PRODUCT}. \\
+\ \\
+My research paper will be devited into five chapters. \\
+In the first chapter, we explain floating point and the $IEEE754$ standard with some definitions. Then we integrate some arithmetic tools that will be used for calculations in chapters $4$, and $5$. Then we give some notation rules.\\
+\ \\
+In the second chapter, we detail the steps of the $cr\log$. first, we talk about the special cases. Then, we explain the argument reduction with the
+algorithms of \textbf{Tang} and \textbf{Gal}. After, we calculate and evaluate the approximation polynomial thanks to the formula of \textbf{Taylor}.\\
+\ \\
+For the third chapter, we define the addition and multiplication algorithms which will give us results in \textbf{Double-Double} type and
+calculate their relative errors for each of these functions.\\
+\ \\
+In the fourth chapter, we define other addition and multiplication algorithms which give us results in \textbf{Triple-Double} type and
+we calculate their relative errors.\\
+\ \\
+The last chapter explain how the logarithm will unfold with its three $cr\log$.

@@ -1,0 +1,25 @@
+\chapter{log}
+\section{crlogfast}
+See algorithm \ref{algo:crlogfast}
+
+In practice with the C program, we found as an error bound $err_{fast} = 2^{58.4}$. (see the C program in appendix).
+
+\section{crlogaccurate}
+See algorithm \ref{algo:crlogaccurate}
+
+In practice with the C program, we found as an error bound $err_{accurate} = 2^{98.4}$. (see appendix the C program).
+
+\section{crlogadvanced}
+See algorithm \ref{algo:crlogadvanced}
+\section{log}
+See algorithm \ref{algo:log}\\
+The $\log$ function is composed of the $3$ $cr\log$.
+We start using $crlog_{fast}$, if this function cannot find the result of the $\log$, it returns to $cr\log_{accurate}$, it does the same thing as the previous function. The last $cr\log$ which is $cr\log_{advanced}$ will calculate all the calculations not solved by the previous $cr\log$.\\
+The relative errors calculated  for  $crlog_{fast}$ and $cr\log_{accurate}$, will be used for the function to know if the calculation passes for each.\\
+Let $x$ be a \textbf{double} ,$err_{fast}$ is the relative error calculated for $cr\log_{fast}$ and $err_{acc}$ is that of $cr\log_{accurate}$.\\ 
+The computation of $\log(x)$ proceeds by first computing $cr\log_{fast}(x)$ which gives us a \textbf{double-double}. We will name this \textbf{double-double} $(h_1,\ell_1)$. \\
+We take $right = h_1+err_{fast}*h_1+\ell_1$ and $left = h_1-err_{fast}*h_1+\ell_1$.\\
+If $right = left$ then we have the result of $\log(x)$ otherwise we calculate with $cr\log_{accurate}(x)$. Let $(h_2,\ell_2)$ be the result of $cr\log_{accurate}(x)$.\\
+We set $right = h_2+err_{accurate}*h_2+\ell_2$ and $left = h_2-err_{accurate}*h_2+\ell_2$.\\
+If $right = left$ then we have the result of $\log(x)$ otherwise we calculate with $cr\log_{advancedaccurate}(x)$.
+At the end of the $\log$ function calculation, we have the real double value of $\log(x)$.

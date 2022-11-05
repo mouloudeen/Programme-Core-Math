@@ -1,0 +1,69 @@
+\subsection{Mul222}
+See algorithm \ref{algo:Mul222}
+\begin{lem}[Mul222] Let $(a_h,a_{\ell})$  and $(b_h,b_{\ell})$ are  \textbf{Double-Double} numbers, $r_1$ and $r_2$ result of $Mul222(a_h,a_{\ell},b_h,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so $ \lvert r_1 \rvert \le u.\lvert r_2 \rvert $.
+\end{lem}
+
+\begin{proof} \color{-yellow}
+We know $\lvert b_{\ell} \rvert \le u.\lvert b_h \rvert$\\
+In the algorithme $Mul222$, we see $r_1, r_2 = Add112(t_1, t_6)$, based on the lemma \ref{lem:add112}, we have $\lvert r_2 \rvert \le u.\lvert r_1 \rvert$.
+\end{proof}
+
+\begin{theo}[Relative error algorithm $Mul222$]
+Let $(a_h,a_{\ell})$  and $(b_h,b_{\ell})$ are \textbf{double-double} numbers and are the arguments of the function $Mul222$:\\
+so:\\
+$$r_1+r_2 = ((a_h+a_{\ell}) \times (b_h+b_{\ell}))(1+\epsilon)$$ with $\lvert \epsilon \rvert \le 7.u^2$.
+\end{theo}
+
+$7.u^2 = 2^{-103.19}$ for $RNDN$ and $7.u^2 = 2^{-101.19}$ for the other rounding modes.
+
+\begin{proof} \color{-yellow}
+According to the calculation technique of the theorem $4.7$ proof's(\cite{lauter2005basic}).\\
+We have from Algorithm $7$:\\
+$r_1,r_2 = Add112(t_1,t_6)$ according to $Add112$ $\Rightarrow$ $r_1+r_2 = t_1+t_6$\\
+$t_6 = \circ (t_2+t_5)$ $\Rightarrow$ $t_6 = (t_2+t_5)(1+\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le u$\\
+$t_5 = \circ (t_3+t_4)$ $\Rightarrow$ $t_5 = (t_3+t_4)(1+\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le u$\\
+$t_4 = \circ (b_h \times a_{\ell})$ $\Rightarrow$ $t_4 = (b_h . a_{\ell}).(1+\epsilon_3)$ with $\lvert \epsilon_3 \rvert \le u$\\
+$t_3 = \circ (a_h\times b_{\ell})$ $\Rightarrow$ $t_3 = (a_h.b_l).(1+\epsilon_4)$ with $\lvert \epsilon_4 \rvert \le u$\\
+$t_1,t_2 = Mul112(a_h,b_h)$ according to $Mul112$  $\Rightarrow$ $\lvert t_2 \rvert \le u .\lvert t_1 \rvert$ and $t_1 + t_2 = a_h.b_h$\\
+So we have :
+$$t_6 = (t_2+((a_h . b_{\ell}).(1+\epsilon_4)+(b_h. a_{\ell}).(1+\epsilon_3)).(1+\epsilon_2)).(1+\epsilon_1)$$
+As $r_1+r_2 = t_1+t_6$ $\Rightarrow$
+$$r_1+r_2 = t_1 +(t_2+((a_h . b_{\ell}).(1+\epsilon_4)+(b_h. a_{\ell}).(1+\epsilon_3)).(1+\epsilon_2)).(1+\epsilon_1) $$
+$$r_1+r_2 = t_1 +t_2+a_h . b_{\ell}+b_h. a_{\ell} + \delta $$ 
+with 
+$$\delta = t_2.\epsilon_1 +a_h.b_l.(\epsilon_4 + \epsilon_2 + \epsilon_4.\epsilon_2 + \epsilon_1 + \epsilon_4.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_4.\epsilon_2.\epsilon_1) +a_l.b_h.(\epsilon_3 + \epsilon_2 + \epsilon_3.\epsilon_2 + \epsilon_1 + \epsilon_3.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_3.\epsilon_2.\epsilon_1)  $$
+So we have:
+$$ \lvert \delta \rvert \le \lvert t_2.\epsilon_1 \rvert + \lvert a_h.b_l.(\epsilon_4 + \epsilon_2 + \epsilon_4.\epsilon_2 + \epsilon_1 + \epsilon_4.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_4.\epsilon_2.\epsilon_1) \rvert + \lvert a_l.b_h.(\epsilon_3 + \epsilon_2 + \epsilon_3.\epsilon_2 + \epsilon_1 + \epsilon_3.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_3.\epsilon_2.\epsilon_1) \rvert  $$
+$$ \lvert \delta \rvert \le \lvert t_2.\epsilon_1 \rvert + \lvert a_h.b_l \rvert . \lvert \epsilon_4 + \epsilon_2 + \epsilon_4.\epsilon_2 + \epsilon_1 + \epsilon_4.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_4.\epsilon_2.\epsilon_1 \rvert + \lvert a_l.b_h \rvert . \lvert \epsilon_3 + \epsilon_2 + \epsilon_3.\epsilon_2 + \epsilon_1 + \epsilon_3.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_3.\epsilon_2.\epsilon_1 \rvert  $$
+as we know that $\lvert \epsilon_i \rvert \le u$ with $1\le i \le 4$ $\Rightarrow$
+$$ \lvert \delta \rvert \le \lvert t_2.\epsilon_1 \rvert + (\lvert a_h.b_l \rvert +\lvert a_l.b_h \rvert ). \lvert \epsilon_4 + \epsilon_2 + \epsilon_4.\epsilon_2 + \epsilon_1 + \epsilon_4.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_4.\epsilon_2.\epsilon_1 \rvert $$
+According to the conditions of the algorithm:\\
+$\lvert a_{\ell} \rvert \le u. \lvert a_h \rvert$ and $\lvert b_{\ell} \rvert \le u. \lvert b_h \rvert$ $\Rightarrow$
+$\lvert a_{\ell} \times b_h \rvert \le u. \lvert a_h \times b_h\rvert$ and $\lvert a_h \times b_{\ell} \rvert \le u. \lvert a_h \times b_h\rvert$.   
+So:
+$$ \lvert \delta \rvert \le \lvert t_2.\epsilon_1 \rvert + (u. \lvert a_h . b_h\rvert +u \lvert a_h . b_h\rvert ). \lvert \epsilon_4 + \epsilon_2 + \epsilon_4.\epsilon_2 + \epsilon_1 + \epsilon_4.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_4.\epsilon_2.\epsilon_1 \rvert $$
+We search the upper bound of $\lvert t_2 \rvert $ in function of $\lvert a_h.b_h \rvert$, we begin with the upper bound of $\lvert t_1 \rvert $, as $ t_1 + t_2 = a_h.b_h$ and $\lvert t_2 \rvert \le u.\lvert t_1 \rvert$, we have that:
+$$\lvert t_1 + t_2 \rvert \ge (1 - u) . \lvert t_1 \rvert$$
+$$\lvert t_1 \rvert \le \frac{1}{1-u}. \lvert a_h.b_h \rvert$$
+and so:
+$$\lvert t_2 \rvert \le \frac{u}{1-u}. \lvert a_h.b_h \rvert$$
+
+$$ \lvert \delta \rvert \le  \frac{u}{1-u}. \lvert a_h . b_h\rvert. \lvert \epsilon_1 \rvert + 2.u. \lvert a_h . b_h\rvert . \lvert \epsilon_4 + \epsilon_2 + \epsilon_4.\epsilon_2 + \epsilon_1 + \epsilon_4.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_4.\epsilon_2.\epsilon_1 \rvert $$
+$$ \lvert \delta \rvert \le   \lvert a_h . b_h\rvert.(\frac{u}{1-u}. \lvert \epsilon_1 \rvert + 2.u. \lvert \epsilon_4 + \epsilon_2 + \epsilon_4.\epsilon_2 + \epsilon_1 + \epsilon_4.\epsilon_1 + \epsilon_2.\epsilon_1 + \epsilon_4.\epsilon_2.\epsilon_1 \rvert) $$
+After calculation,
+$\Rightarrow$
+$$ \lvert \delta \rvert \le   \lvert a_h . b_h\rvert.\frac{-2.u^5 - 4.u^4 + 7.u^2}{1-u}$$
+Now , we search a lower bound for $\lvert (a_h + a_{\ell}).(b_h + b_{\ell}) \rvert $ in function of  $\lvert a_h.b_h \rvert $.\\
+To calculate this lower bound, we need to search the upper bound of $\lvert a_h.b_{\ell} +a_{\ell}.b_h + a_{\ell}.b_{\ell} \rvert$. So we have:
+$$\lvert a_h.b_{\ell} +a_{\ell}.b_h + a_{\ell}.b_{\ell} \rvert \le \lvert a_h.b_{\ell} \rvert + \lvert  a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_{\ell} \rvert $$
+$$\lvert a_h.b_{\ell} +a_{\ell}.b_h + a_{\ell}.b_{\ell} \rvert \le u.\lvert a_h.b_h \rvert + u.\lvert  a_h.b_h \rvert + u^2.\lvert a_h.b_h \rvert $$
+$$\lvert a_h.b_{\ell} +a_{\ell}.b_h + a_{\ell}.b_{\ell} \rvert \le (u^2+2.u).\lvert a_h.b_h \rvert $$
+So we have:
+$$\lvert (a_h +a_{\ell}).(b_h + b_{\ell}) \rvert \ge (1 - (u^2+2.u)).\lvert a_h.b_h \rvert  $$
+For the calculation of relative error, we have:
+$$\lvert \delta \rvert \le   \frac{-2.u^5 - 4.u^4 + 7.u^2}{(1-u).(1 - (u^2+2.u))}.\lvert (a_h + a_{\ell}).(b_h + b_{\ell})\rvert $$
+but $\frac{-2.u^5 - 4.u^4 + 7.u^2}{(1-u).(1 - (u^2+2.u))} \le 7.u^2$
+$\Rightarrow$ $\lvert \delta \rvert \le  7.u^2.\lvert (a_h + a_{\ell}).(b_h + b_{\ell}) \lvert $.\\
+For $r_1+r_2 = ((a_h+a_{\ell}). (b_h+b_{\ell})).(1+\epsilon)$
+so $\lvert \epsilon \rvert \le 7.u^2$
+\end{proof}

@@ -1,0 +1,25 @@
+(14, entre 2^(-1) et 2^(0))
+(3, entre 2^(0) et 2^(1))
+
+
+nombre d'erreur en dessous de 101 bits de précisions est 17
+le minimum de précisions est 97 pour '0x1.fe5755f3a16e2p-1'
+le maximum de précision est 159 pour '0x1.0000000000001p+0'
+Les valeurs avec leurs précisons < 101:
+97 pour '0x1.fe5755f3a16e2p-1'
+97 pour '0x1.fe73451b9c74fp-1'
+98 pour '0x1.fd0c0e7dd7224p-1'
+99 pour '0x1.fdb5cfd02fdedp-1'
+99 pour '0x1.f5fc2766afcafp-1'
+99 pour '0x1.f73a4fd8f0b8p-1'
+99 pour '0x1.f9cad9a722afp-1'
+100 pour '0x1.06464ae9d3aabp+0'
+100 pour '0x1.ec95d91c6dcd1p-1'
+100 pour '0x1.066e8c9ca7589p+0'
+100 pour '0x1.f53a751d7db49p-1'
+100 pour '0x1.f58fe8896a19p-1'
+100 pour '0x1.fb85251a3f26fp-1'
+100 pour '0x1.f8db13b0e98a3p-1'
+100 pour '0x1.f24958305ce63p-1'
+100 pour '0x1.fbb7bb5f1b045p-1'
+100 pour '0x1.04792c90b25ep+0'

@@ -1,0 +1,17 @@
+\subsection{Algorithme avec additions et multiplications}
+
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{TwoSum-DEKKER}}
+\begin{algorithmic}[1]
+\Input $a$ is $53$-bit floating-point numbers, $b_h$ and $c_h$: main value and  $b_l$ and $c_l$: error value
+\Output $r_1$ and $r_2$ are 53-bit floating-point numbers: $r_1$: main value and $r_2$: error value.
+\State $a_h, a_{\ell} =Split(a)$\\
+    $x, y_1 = TwoSum(a_h, b_h)$\\
+    $y = y_1+b_{\ell}+a_{\ell}$\\
+    $r1,r_2 =DEKKER-ProdModified1(x, y, c_h, c_{\ell})$\\
+    return $r_1$, $r_2$
+\end{algorithmic}
+\end{algorithm}
+
+
+

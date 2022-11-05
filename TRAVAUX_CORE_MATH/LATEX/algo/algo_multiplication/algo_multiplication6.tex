@@ -1,0 +1,151 @@
+\subsection{Mul233 }
+See algorithm \ref{algo:Mul233}
+
+\begin{lem}[Mul233] Let $(a_h,a_{\ell})$ a \textbf{double-double} number and $(b_h, b_m, b_{\ell})$ a   \textbf{triple-Double} number, $r_h$, $r_m$ and  $r_{\ell}$ result of $Mul233(a_h,a_{\ell},b_h,b_m,b_{\ell})$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so: $ \lvert r_{\ell} \rvert \le 4.u. \lvert r_m \rvert$ , $\lvert r_m \rvert \le u.(2.u + 2^{-\beta_o} +2^{-\beta_o -\beta_u}). \lvert r_h \rvert$ and $\lvert r_{\ell} \rvert \le u.(2.u + 2^{-\beta_o} +2^{-\beta_o -\beta_u}). \lvert r_h \rvert$.
+\end{lem}
+
+\begin{proof} \color{-yellow}
+According to $Mul233$,we have:
+\begin{itemize}
+    \item $r_h + t_1 = Mul112(a_h,b_h)$ according to $Mul112$ $\Rightarrow$  $r_h + t_1 = a_h.b_h $ and  $\lvert t_1 \rvert \le u. \lvert r_h \rvert$ $\Rightarrow$
+    $$\lvert a_h.b_h \rvert \le (1 + u). \lvert r_h \rvert $$
+    $$\lvert a_h.b_h \rvert \le \frac{1}{u+1}. \lvert r_h \rvert $$
+    \item $t_2 + t_3 = Mul112(a_h,b_m)$ according to $Mul112$ $\Rightarrow$ $t_2 + 
+    t_3 = a_h.b_m$ and $\lvert t_3 \rvert \le u. \lvert t_2 \rvert$ $\Rightarrow$
+    $$\lvert t_2 + t_3 \rvert \le \lvert a_h.b_m \rvert$$
+    As $\lvert b_m \rvert \le 2^{-\beta_o}. \lvert b_h \rvert$ $\Rightarrow$ $\lvert a_h.b_m \rvert \le 2^{-\beta_o}. \lvert a_h.b_h \rvert$ $\Rightarrow$
+    $$\lvert t_2 + t_3 \rvert \le 2^{-\beta_o}. \lvert a_h.b_h \rvert$$
+    As $\lvert a_h.b_h \rvert \le \frac{1}{u+1}. \lvert r_h \rvert $
+    $$\lvert t_2 + t_3 \rvert \le 2^{-\beta_o}. \frac{1}{u+1}. \lvert r_h \rvert$$
+    As $\lvert t_3 \rvert \le u. \lvert t_2 \rvert$ $\Rightarrow$
+    $$ (1-u). \lvert t_2 \rvert \le \lvert t_2 + t_3 \rvert $$
+    $$ (1-u). \lvert t_2 \rvert \le 2^{-\beta_o}. \frac{1}{u+1}. \lvert r_h \rvert $$
+     $$  \lvert t_2 \rvert \le 2^{-\beta_o}. \frac{1}{1-u^2}. \lvert r_h \rvert $$
+     $\Rightarrow$
+     $$  \lvert t_3 \rvert \le 2^{-\beta_o}. \frac{u}{1-u^2}. \lvert r_h \rvert $$
+     So not to write the repetitive calculations, I give the results for $\lvert t_i \rvert $ with $4 \le i \le 9$:
+     $$  \lvert t_4 \rvert \le 2^{-\beta_o -\beta_u}. \frac{1}{1-u^2}. \lvert r_h \rvert $$
+     $$  \lvert t_5 \rvert \le 2^{-\beta_o -\beta_u}. \frac{u}{1-u^2}. \lvert r_h \rvert $$
+      $$  \lvert t_6 \rvert \le \frac{u}{1-u^2}. \lvert r_h \rvert $$
+      $$  \lvert t_7 \rvert \le \frac{u^2}{1-u^2}. \lvert r_h \rvert $$
+      $$  \lvert t_8 \rvert \le 2^{-\beta_o}. \frac{u}{1-u^2}. \lvert r_h \rvert $$
+      $$  \lvert t_9 \rvert \le 2^{-\beta_o}. \frac{u^2}{1-u^2}. \lvert r_h \rvert $$
+    \item $t_{10} = \circ(a_{\ell}.b_{\ell})$ According to collary \ref{cor:ux}:  $t_{10} = a_{\ell}.b_{\ell}(1+\epsilon_5)$ with $\lvert \epsilon_5 \rvert \le u$ 
+    but $\lvert a_{\ell} \rvert \le u. \lvert a_h \rvert$ and $\lvert b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}. \lvert b_h \rvert$ $\Rightarrow$
+    $$\lvert t_{10} \rvert \le u.2^{-\beta_o -\beta_u}.\lvert a_h.b_h \rvert.(1+u)$$
+    $$\lvert t_{10} \rvert \le u.(1+u).2^{-\beta_o -\beta_u}.\frac{1}{u+1}. \lvert r_h \rvert$$
+    $$\lvert t_{10} \rvert \le u.2^{-\beta_o -\beta_u}. \lvert r_h \rvert$$ 
+    \item $t_{11} + t_{12} = Add222(t_2, t_3, t_4, t_5)$ according to $Add222$ $\Rightarrow$ $t_{11} + t_{12} = (t_2+ t_3 + t_4 + t_5).(1 + \epsilon_4)$ with $\lvert \epsilon_4 \rvert \le 6.u^2$ and $\lvert t_{12} \rvert \le 6.u.\lvert t_{11} \rvert$ $\Rightarrow$
+    $$\lvert t_{11} + t_{12} \rvert \ge (1 - 6.u). \lvert t_{11} \rvert$$
+    $\Rightarrow$
+    $$(1 - 6.u). \lvert t_{11} \rvert \le (\lvert t_2 \rvert + \lvert t_3 \rvert + \lvert t_4 \rvert + \lvert t_5 \rvert).(1 + 6.u^2)$$
+    $$\lvert t_{11} \rvert \le \frac{1 + 6.u^2}{1 - 6.u}(\lvert t_2 \rvert + \lvert t_3 \rvert + \lvert t_4 \rvert + \lvert t_5 \rvert)$$
+    
+    $$\lvert t_{11} \rvert \le \frac{1 + 6.u^2}{1 - 6.u}.(2^{-\beta_o}. \frac{1}{1-u^2}. \lvert r_h \rvert + 2^{-\beta_o}. \frac{u}{1-u^2}. \lvert r_h \rvert + 2^{-\beta_o -\beta_u}. \frac{1}{1-u^2}. \lvert r_h \rvert$$ 
+    $$+ 2.2^{-\beta_o -\beta_u}. \frac{u}{1-u^2}. \lvert r_h \rvert)$$
+    $$\lvert t_{11} \rvert \le \frac{(1 + 6.u^2).(u+1)}{(1 - 6.u).(1-u^2)}.(2^{-\beta_o} + 2^{-\beta_o -\beta_u}). \lvert r_h \rvert $$
+    $$\lvert t_{12} \rvert \le \frac{(1 + 6.u^2).(u^2+u)}{(1 - 6.u).(1-u^2)}.(2^{-\beta_o} + 2^{-\beta_o -\beta_u}). \lvert r_h \rvert $$
+    
+    \item $t_{13} + t_{14} = Add222(t_6, t_7, t_8, t_9)$ according to $Add222$ 
+    $\Rightarrow$ $t_{13} + t_{14} = (t_6+ t_7+ t_8 +t_9).(1 + \epsilon_3)$with 
+    $\lvert \epsilon_3 \rvert \le 6.u^2$ and $\lvert t_{14} \rvert \le 6.u.\lvert t_{13} \rvert$ \\
+    We do the same calculations as before.\\
+    $\Rightarrow$ 
+    $$\lvert t_{13} \rvert \le \frac{1}{1-6.u}.(\lvert t_6 \rvert + \lvert t_7 \rvert + \lvert t_8 \rvert + \lvert t_9 \rvert).(1 + 6.u^2)$$
+    $$\lvert t_{13} \rvert \le \frac{1 + 6.u^2}{1-6.u}.(\frac{u}{1-u^2}. \lvert r_h \rvert + \frac{u^2}{1-u^2}. \lvert r_h \rvert + 2^{-\beta_o}. \frac{u}{1-u^2}. \lvert r_h \rvert + 2^{-\beta_o}. \frac{u^2}{1-u^2}. \lvert r_h \rvert).$$
+    $$\lvert t_{13} \rvert \le \frac{(1 + 6.u^2).(u^2+u).(u+1)^2}{(1-6.u).(1-u^2)}.(1 +  2^{-\beta_o}) .\lvert r_h \rvert.$$
+    $$\lvert t_{14} \rvert \le \frac{(1 + 6.u^2).(u^3+u^2).(u+1)^2}{(1-6.u).(1-u^2)}.(1 +  2^{-\beta_o}) .\lvert r_h \rvert.$$
+    we do the same calculation for $t_{15}$ and $t_{16}$, after the calculations then the simplifications, we have:
+    $$\lvert t_{15} \rvert \le \frac{(1+6.u^2).(u+1)^2}{(1-6.u).(1-u^2)}.(u.(u+1)^2 + (u^3+2.u^2+u+1).2^{-\beta_o} +2^{-\beta_o -\beta_u}). \lvert r_h \rvert$$
+    $$\lvert t_{16} \rvert \le \frac{u.(1+6.u^2).(u+1)^2}{(1-6.u).(1-u^2)}.(u.(u+1)^2 + (u^3+2.u^2+u+1).2^{-\beta_o} +2^{-\beta_o -\beta_u}). \lvert r_h \rvert$$
+    \item $t_{17} +t_{18} = Add112(t_1,t_{10})$ according to $Add112$ $\Rightarrow$
+    $t_{17} +t_{18} = t_1+t_{10}$ and $\lvert t_{18} \rvert \le u.\lvert t_{17} \rvert$, as done before  $\Rightarrow$
+    $$\lvert t_{17} \rvert \le \lvert \frac{1}{1-u} \rvert .(\lvert t_1 \rvert + \lvert t_{10} \rvert)$$
+    $$\lvert t_{17} \rvert \le \lvert \frac{1}{1-u} \rvert .(u. \lvert r_h \rvert + u.2^{-\beta_o -\beta_u}. \lvert r_h \rvert)$$
+    $$\lvert t_{17} \rvert \le \lvert \frac{u}{1-u} \rvert .(\lvert r_h \rvert + 2^{-\beta_o -\beta_u}. \lvert r_h \rvert)$$
+   $$\lvert t_{18} \rvert \le \lvert \frac{u^2}{1-u} \rvert .(\lvert r_h \rvert + 2^{-\beta_o -\beta_u}. \lvert r_h \rvert)$$
+    \item $r_m+r_{\ell} = Add222(t_{17},t_{18},t_{15},t_{16})$ according to $Add222$ $\Rightarrow$ $r_m+r_{\ell} = (t_{17}+t_{18}+t_{15}+t_{16})(1+\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le 6.u^2$ and $\lvert r_{\ell} \rvert \le 6.u.\lvert r_m \rvert $, after calculation :
+    $$\lvert r_m \rvert \le \frac{1}{1-6.u}.(\lvert t_{17} \rvert + \lvert t_{18} \rvert + \lvert t_{15} \rvert + \lvert t_{16} \rvert).(1 + 6.u^2)$$
+    after we calculate:
+    $$\lvert r_m \rvert \le (2.u + 2^{-\beta_o} +2^{-\beta_o -\beta_u}). \lvert r_h \rvert$$
+    
+    and 
+    $$\lvert r_{\ell} \rvert \le u.(2.u + 2^{-\beta_o} +2^{-\beta_o -\beta_u}). \lvert r_h \rvert$$
+\end{itemize}
+\end{proof}
+
+\begin{theo}[Relative error algorithm $Mul233$]
+Let $(a_h,a_{\ell})$ a \textbf{double-double} number and $(b_h,b_m,b_{\ell})$ a \textbf{triple-double} number are the arguments of the function $Mul233$.\\
+So:\\
+$$r_h +r_m +r_{\ell} = (a_h + a_{\ell}). (b_h+ b_m +b_{\ell})).(1+\epsilon)$$ with $\lvert \epsilon \rvert \le \frac{24.u^3  + 19.u^2.2^{-\beta_o} + 20.u^2.2^{-\beta_o -\beta_u}}{1 - (u + (1+ u).2^{-\beta_o} + (1+u).2^{-\beta_o -\beta_u})} \le  48.u^3  + 19.u^2.2^{-\beta_o+1} + 5.u^2.2^{-\beta_o -\beta_u+3}$
+\end{theo}
+\begin{proof}[10pt] \color{-yellow}
+According to  the conditions of $Mul233$, we begin to calculate $r_m + r_{\ell}$:\\
+$r_m + r_{\ell} = Add222(t_{17},t_{18},t_{15},t_{16})$ According to $Add222$ $\Rightarrow$ $r_m + r_{\ell} = (t_{17}+t_{18}+t_{15}+t_{16}).(1+\epsilon_1)$ with $\lvert \epsilon_1 \rvert \le 6.u^2$
+As $t_{17}+t_{18} = t_1 + t_{10}$ and $t_{15}+t_{16} = 
+(t_{11}+t_{12}+t_{13}+t_{14}).(1+\epsilon_2)$ with $\lvert \epsilon_2 \rvert \le 6.u^2$
+$$r_m + r_{\ell} = (t_1 + 
+t_{10}+(t_{11}+t_{12}+t_{13}+t_{14}).(1+\epsilon_2)).(1+\epsilon_1) $$
+As $t_{13}+t_{14} = (t_6+t_7+t_8+t_9)(1+\epsilon_3)$ and $t_{11}+t_{12} = 
+(t_2+t_3+t_4+t_5)(1+\epsilon_4)$ with $\lvert \epsilon_2 \rvert \le 6.u^2$ and $\lvert 
+\epsilon_3 \rvert \le 6.u^2$ $\Rightarrow$
+$$r_m + r_{\ell} = (t_1 + 
+t_{10}+((t_2+t_3+t_4+t_5)(1+\epsilon_4)+(t_6+t_7+t_8+t_9)(1+\epsilon_3)).(1+\epsilon_2))
+.(1+\epsilon_1) $$
+As $t_2+t_3 = a_h.b_m$, $t_4 + t_5 = a_h.b_{\ell}$, $t_6+t_7 = a_{\ell}.b_h$ and $t_8 + 
+t_9 = a_{\ell}.b_m$ $\Rightarrow$
+$$r_m + r_{\ell} = (t_1 + 
+t_{10}+((a_h.b_m+a_h.b_{\ell})(1+\epsilon_4)+(a_{\ell}.b_h+a_{\ell}.b_m)(1+\epsilon_3)).(1+\epsilon_2))
+.(1+\epsilon_1) $$
+As $t_{10} = a_{\ell}.b_{\ell}.(1+\epsilon_5)$ with $\lvert \epsilon_5 \rvert \le u$ 
+$\Rightarrow$
+$$r_m + r_{\ell} = (t_1 + 
+a_{\ell}.b_{\ell}.(1+\epsilon_5)+((a_h.b_m+a_h.b_{\ell})(1+\epsilon_4)+(a_{\ell}.b_h+a_{\ell}.b_m)(1+\epsilon_3)).(1+\epsilon_2))
+.(1+\epsilon_1) $$
+As $r_h +t_1 = a_h.b_h$ $\Rightarrow$
+$$r_h + r_m + r_{\ell} = (a_h + a_{\ell}).(b_h + b_m + b_{\ell})+\delta $$
+with $\delta = t_1.\epsilon_1 +  a_{\ell}.b_{\ell}.(\epsilon_1 + \epsilon_5 + \epsilon_1.\epsilon_5) + (a_h.b_m + a_h.b_{\ell}).(\epsilon_1 +\epsilon_2 \epsilon_4 + \epsilon_1.\epsilon_2 + \epsilon_1.\epsilon_4 + \epsilon_2.\epsilon_4 + \epsilon_1.\epsilon_2.\epsilon_4)
++ (a_{\ell}.b_h + a_{\ell}.b_m).(\epsilon_1 +\epsilon_3 \epsilon_4 + \epsilon_1.\epsilon_3 + \epsilon_1.\epsilon_4 + \epsilon_3.\epsilon_4 + \epsilon_1.\epsilon_3.\epsilon_4)$.\\
+We seek the upper bound of $\lvert \delta \rvert$ in function of $\lvert a_h.b_h \rvert$:
+$$\lvert \delta \rvert \le \lvert t_1.\epsilon_1 \rvert +  \lvert a_{\ell}.b_{\ell}.(\epsilon_1 + \epsilon_5 + \epsilon_1.\epsilon_5) \rvert  + ( \lvert a_h.b_m \rvert + \lvert a_h.b_{\ell} \rvert).\lvert \epsilon_1 +\epsilon_2 \epsilon_4 + \epsilon_1.\epsilon_2 + \epsilon_1.\epsilon_4 + \epsilon_2.\epsilon_4 + \epsilon_1.\epsilon_2.\epsilon_4 \rvert $$
+$$+ (\lvert a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_m \rvert). \lvert \epsilon_1 +\epsilon_3 \epsilon_4 + \epsilon_1.\epsilon_3 + \epsilon_1.\epsilon_4 + \epsilon_3.\epsilon_4 + \epsilon_1.\epsilon_3.\epsilon_4 \rvert$$
+$$\lvert \delta \rvert \le 6.u^2.\lvert t_1 \rvert +  (6.u^3 +6.u^2 +u).\lvert a_{\ell}.b_{\ell}. \rvert  + (216.u^6+108.u^4 + 18.u^2).( \lvert a_h.b_m \rvert + \lvert a_h.b_{\ell} \rvert + \lvert a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_m \rvert) $$
+We seek the upper bound of $ \lvert a_h.b_m \rvert$, $\lvert a_h.b_{\ell} \rvert$, $\lvert a_{\ell}.b_h \rvert$, $\lvert a_{\ell}.b_m \rvert$ and $\lvert a_{\ell}.b_{\ell} \rvert $ in function of $\lvert a_h.b_h \rvert $.\\
+We have:
+$$ \lvert a_h.b_m \rvert \le 2^{-\beta_o}.\lvert a_h.b_h \rvert$$
+$$ \lvert a_h.b_{\ell} \rvert \le 2^{-\beta_o -\beta_u}.\lvert a_h.b_h \rvert$$
+$$ \lvert a_{\ell}.b_h \rvert \le u.\lvert a_h.b_h \rvert$$
+$$ \lvert a_{\ell}.b_m \rvert \le u.2^{-\beta_o}.\lvert a_h.b_h \rvert$$
+$$ \lvert a_{\ell}.b_{\ell} \rvert \le u.2^{-\beta_o -\beta_u}.\lvert a_h.b_h \rvert$$
+We search the upper bound of  $(\lvert a_h.b_m \rvert + \lvert a_h.b_{\ell} \rvert + \lvert a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_m \rvert )$ in function of $\lvert a_h.b_h \rvert$
+$$\lvert a_h.b_m \rvert + \lvert a_h.b_{\ell} \rvert + \lvert a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_m \rvert \le 2^{-\beta_o}.\lvert a_h.b_h \rvert + 2^{-\beta_o -\beta_u}.\lvert a_h.b_h \rvert + u.\lvert a_h.b_h \rvert + u.2^{-\beta_o}.\lvert a_h.b_h \rvert $$
+$$\lvert a_h.b_m \rvert + \lvert a_h.b_{\ell} \rvert + \lvert a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_m \rvert \le (u + (1+ u).2^{-\beta_o} + 2^{-\beta_o -\beta_u}).\lvert a_h.b_h \rvert $$
+as $\lvert a_{\ell}.b_{\ell} \rvert \le u.2^{-\beta_o -\beta_u}.\lvert a_h.b_h \rvert$ \\
+According to $Mul112$, we have :
+$$\lvert t_1 \rvert \le u. \lvert r_h \rvert \ and \ r_h + t_1 = a_h.b_h$$
+We begin to calculate the lower bound of $\lvert r_h + t_1 \rvert $ compared to $\lvert r_h \rvert$.\\
+As $\lvert t_1 \rvert \le u. \lvert r_h \rvert$, we have :
+$$\lvert r_h + t_1 \rvert \ge (1 - u). \lvert r_h \rvert$$
+$\Rightarrow$
+$$(1 - u). \lvert r_h \rvert \le \lvert a_h.b_h \rvert$$
+$$ \lvert r_h \rvert \le \frac{1}{1-u}.\lvert a_h.b_h \rvert$$
+$\Rightarrow$
+$$ \lvert t_1 \rvert \le \frac{u}{1-u}.\lvert a_h.b_h \rvert$$
+$$\lvert \delta \rvert \le (\frac{6u^3}{1-u}. +  (6.u^3 +6.u^2 +u).u.2^{-\beta_o -\beta_u}  + (216.u^6+108.u^4 + 18.u^2).(u + (1+ u).2^{-\beta_o} + 2^{-\beta_o -\beta_u})).\lvert a_h.b_h \rvert $$
+we simplify with the upper bounds of each coefficient.
+$$\lvert \delta \rvert \le (24.u^3  + 19.u^2.2^{-\beta_o} + 20.u^2.2^{-\beta_o -\beta_u}).\lvert a_h.b_h \rvert $$
+Now, we seek the lower bound of $\lvert a_h.b_h \rvert $ in function of $\lvert (a_h +a_{\ell}).(b_h + b_m +b_{\ell}) \rvert$, as $\lvert a_h.b_m \rvert + \lvert a_h.b_{\ell} \rvert + \lvert a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_m \rvert \le (u + (1+ u).2^{-\beta_o} + 2^{-\beta_o -\beta_u}).\lvert a_h.b_h \rvert $ and $\lvert a_{\ell}.b_{\ell} \rvert \le u.2^{-\beta_o -\beta_u}.\lvert a_h.b_h \rvert$ $\Rightarrow$
+$$\lvert a_h.b_m+a_h.b_{\ell}+a_{\ell}.b_h+a_{\ell}.b_m + a_{\ell}.b_{\ell}\rvert \le \lvert a_h.b_m \rvert + \lvert a_h.b_{\ell} \rvert + \lvert a_{\ell}.b_h \rvert + \lvert a_{\ell}.b_m \rvert + \lvert a_{\ell}.b_{\ell} \rvert $$
+$$\lvert a_h.b_m+a_h.b_{\ell}+a_{\ell}.b_h+a_{\ell}.b_m + a_{\ell}.b_{\ell}\rvert \le 
+(u + (1+ u).2^{-\beta_o} + (1+u).2^{-\beta_o -\beta_u}).\lvert a_h.b_h \rvert$$
+So we have:
+$$\lvert (a_h +a_{\ell}).(b_h + b_m +b_{\ell}) \rvert \ge (1 - (u + (1+ u).2^{-\beta_o} + (1+u).2^{-\beta_o -\beta_u})).\lvert a_h.b_h \rvert$$
+$$\lvert a_h.b_h \rvert \le \frac{1}{1 - (u + (1+ u).2^{-\beta_o} + (1+u).2^{-\beta_o -\beta_u})}.\lvert (a_h +a_{\ell}).(b_h + b_m +b_{\ell}) \rvert$$
+at the end:
+$$\lvert \delta \rvert \le \frac{24.u^3  + 19.u^2.2^{-\beta_o} + 20.u^2.2^{-\beta_o -\beta_u}}{1 - (u + (1+ u).2^{-\beta_o} + (1+u).2^{-\beta_o -\beta_u})}.\lvert (a_h +a_{\ell}).(b_h + b_m +b_{\ell}) \rvert $$
+$\Rightarrow$
+$\lvert \epsilon \rvert \le \frac{24.u^3  + 19.u^2.2^{-\beta_o} + 20.u^2.2^{-\beta_o -\beta_u}}{1 - (u + (1+ u).2^{-\beta_o} + (1+u).2^{-\beta_o -\beta_u})} $\\
+\ \\
+As $\beta_o \ge 2$ and $\beta_u \ge 1$ $\Rightarrow$ $1 - (u + (1+ u).2^{-\beta_o} + (1+u).2^{-\beta_o -\beta_u}) \ge \frac{1}{2}$ $\Rightarrow$\\
+$\lvert \epsilon \rvert \le 48.u^3  + 19.u^2.2^{-\beta_o+1} + 5.u^2.2^{-\beta_o -\beta_u+3} $
+\end{proof}

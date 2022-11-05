@@ -1,0 +1,134 @@
+\section{Addition Operators}
+
+\subsection{Add112}
+
+See algorithm \ref{algo:Add112}
+\begin{lem}[Add112]\label{lem:add112}
+Let $a$ and $b$  floating point numbers, with $\lvert a \rvert \ge \lvert b \rvert $, $s$ and $t$ result of $Add112(a,b)$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so :
+\begin{itemize}
+ \item  $(1)$ $s+t$ is exactly equal to $a+b$.              
+\item  $(2)$ $ \lvert t \rvert \le 2^{-53}\lvert s \rvert $ for $RNDN$ and $ \lvert t \rvert \le 2^{-52}\lvert s \rvert $ for direct rounding modes.
+\end{itemize} 
+\end{lem}
+
+\begin{proof} \color{-yellow}
+$(1)$:\\
+According to the calculation technique of  \textbf{Fast2Sum algorithm} proof's (\cite{muller2010handbook}), this proof shown that for the closest rounding mode ($RNDN$).\\
+We suppose that $\lvert a \rvert \ge \lvert b \rvert $ and  there is no \textbf{overflow}.\\
+ We suppose $a > 0$ and $b > 0$ (respectively  $a < 0$ and $b < 0$).\\
+ We take $b = b_h + b_{\ell}$ with $b_h$ a multiple of $ulp(a)$ ,$\lvert b_{\ell}\rvert
+< ulp(a)$ and  $b_{\ell}$ is of the same sign that $b$ (and $b_h$).\\
+
+
+
+Either we have $0 \le \lvert b_{\ell} \rvert  < 2^{-53}. \lvert a \rvert$ or  $ 2^{-53}. \lvert a \rvert \le\lvert b_{\ell} \rvert \le  2^{-52}. \lvert a \rvert$.\\
+If $0 \le \lvert b_{\ell} \rvert  < 2^{-53}. \lvert a \rvert$ for the modes of Rounding $RNDZ$, $RNDN$ and $RNDD$ (respectively $RNDZ$, $RNDN$ and $RNDU$) then $b_{\ell}$ will be ignored
+otherwise $RNDU$(respectively  $RNDD$) $b_{\ell}$ is not ignore, so  $\circ (b) = b_h + ulp(a)$;\\
+If $ 2^{-53}. \lvert a \rvert \le\lvert b_{\ell} \rvert \le  2^{-52}. \lvert a \rvert$ for the modes of Rounding $RNDZ$ and $RNDD$ (respectively $RNDZ$ and 
+$RNDU$) then $b_{\ell}$ will be also ignored for $RNDN$(closest round) and $RNDU$(respectively $RNDN$ and $RNDD$).\\
+The first case when $b_{\ell}$ is ignored so we have $\circ (b) = b_h $.
+$\Rightarrow$:
+\begin{itemize}
+\item $s = \circ (a+b)$ $\Rightarrow$ $s = a + b_h$
+\item $z = \circ (s-a)$ $\Rightarrow$ $z = a + b_h - a$  $\Rightarrow$ $z = b_h$
+\item $t = \circ (b-z)$ $\Rightarrow$ $t = b - b_h$ we have that $b = b_h+b_{\ell}$ $\Rightarrow$ $t = b_{\ell}$
+\end{itemize}
+So we have that $s+t = a+b_h+b_{\ell}$ $\Rightarrow$ $s+t$ is exactly equal to $a+b$.\\
+
+
+The second case when $b_{\ell}$ is not ignored so we have $\circ (b) = b_h +ulp(a)$.
+$\Rightarrow$ :
+\begin{itemize}
+    \item $s = \circ (a+b)$ $\Rightarrow$ $s = a + b_h + ulp(a)$
+    \item $z = \circ (s-a)$ $\Rightarrow$ $z = a + b_h + ulp(a) - a$  $\Rightarrow$ $z = b_h + ulp(a)$
+    \item $t = \circ (b-z)$ $\Rightarrow$ $t = b - (b_h+ ulp(a))$ we have that $b = b_h+b_{\ell}$ $\Rightarrow$ $t = b_{\ell} - ulp(a)$
+\end{itemize}
+So we have that $s+t = a+b_h+ulp(a)+b_{\ell}-ulp(a)$ $\Rightarrow$ $s+t$ is exactly equal to $a+b$.\\
+
+We suppose $a > 0$ and $b > 0$ (respectively  $a < 0$ and $b < 0$).
+We suppose that $\lvert b \rvert < ulp(a)$. Either we have $ 0 < \lvert b \rvert < 2^{-53}. \lvert a \rvert $ or  $ 2^{-53} \lvert a  \rvert \le \lvert b \rvert \le  2^{-52}. \lvert a \rvert$.\\
+If $ 0 < \lvert b \rvert < 2^{-53}. \lvert a \rvert $ for the modes of Rounding $RNDZ$, $RNDN$ and $RNDD$ (respectively $RNDZ$, $RNDN$ and $RNDU$) then $b$ will be ignored
+otherwise $RNDU$(respectively  $RNDD$) $b$ is not ignore, so  we have $\circ (b) =  ulp(a)$;\\
+If $ 2^{-53} \lvert a  \rvert \le \lvert b \rvert \le  2^{-52}. \lvert a \rvert$ for the modes of Rounding $RNDZ$ and $RNDD$ (respectively $RNDZ$ and $RNDU$) 
+then $b_{\ell}$ will be also ignored  for $RNDN$(closest round) and $RNDU$(respectively $RNDN$ and $RNDD$).\\
+
+The first case when $b$ is ignored so we have :
+\begin{itemize}
+\item $s = \circ (a+b)$ $\Rightarrow$ $s = a$
+\item $z = \circ (s-a)$ $\Rightarrow$ $z = a  - a$  $\Rightarrow$ $z = 0$
+\item $t = \circ (b-z)$ $\Rightarrow$ $t = b - 0$  $\Rightarrow$ $t = b$
+\end{itemize}
+So we have that $s+t = a+b$ $\Rightarrow$ $s+t$ is exactly equal to $a+b$.\\
+
+The second case when $b$ is not ignored so we have $\circ (b) = ulp(a)$.
+\begin{itemize}
+    \item $s = \circ (a+b)$ $\Rightarrow$ $s = a + ulp(a)$
+    \item $z = \circ (s-a)$ $\Rightarrow$ $z = a  + ulp(a) - a$  $\Rightarrow$ $z = ulp(a)$
+    \item $t = \circ (b-z)$ $\Rightarrow$ $t = b - ulp(a)$  
+\end{itemize}
+So we have that $s+t = a+ulp(a)+b-ulp(a)$ $\Rightarrow$ $s+t$ is exactly equal to $a+b$.\\
+
+We suppose that $a >0$ and $b<0$ (respectively $a <0$ and $b>0$):\\
+If $\lvert b \rvert \ge \lvert \frac{a}{2} \rvert$.\\
+So we have:
+\begin{itemize}
+    \item $s = \circ (a+b)$, we have $\frac{-b}{2} \le a \le -2b$  after the \textbf{Sterbenz}'s lemma (lemma \ref{lem:ster}) , we have $s$ is exactly equal to $a+b$
+    \item $z = \circ (s-a)$ $\Rightarrow$ $z =\circ ((a+b)-a)$ $\Rightarrow$ $z = \circ (b) = b$ $\Rightarrow$ $z=b$
+    \item $t= \circ (b-z)$  $\Rightarrow$ $t = \circ (b-b)$ $\Rightarrow$ $t=0$
+\end{itemize}
+So we have, $s+t$ is exactly equal to $a+b$.\\
+
+If $\lvert b \rvert < \lvert \frac{a}{2} \rvert$:
+\begin{itemize}
+    \item $s = \circ (a+b)$ $\Rightarrow$ $\frac{a}{2} < s \le \ a$ $\Rightarrow$ $\frac{a}{2} \le s \le \ 2a$
+    \item $z = \circ (s-a)$ $\Rightarrow$ and  $\frac{a}{2} \le s \le \ 2a$ after the \textbf{Sterbenz}'s lemma (lemma \ref{lem:ster}) , we have $z$ is exactly equal to $s-a$.
+    \item $t = \circ (b-z)$ $\Rightarrow$ $t = \circ (b - (s-a)$ $\Rightarrow$ $t = \circ(a+b -s)$  $\Rightarrow$ $t = \circ(a+(b-s))$ or $-\frac{a}{2} < b < 0$\\
+    and $\frac{a}{2} \le s \le \ 2a$  $\Rightarrow$ $\frac{a}{2} -0 < s - b < 2a - (-\frac{a}{2})$ $\Rightarrow$ $\frac{a}{2}< s - b < \frac{3a}{2}$ $\Rightarrow$ $\frac{a}{2} \le s - b \le 2a$ after the \textbf{Sterbenz}'s lemma (lemma \ref{lem:ster}), we have $t$ is exactly equal to $a+b-s$.\\
+\end{itemize}
+We have $s+t = a+b-s+s$ $\Rightarrow$ $s+t = a+b$.\\
+(By symetric, we have the same results for $a<0$ and $b>0$.)\\
+The $4$ modes of rounding for $Add112$ have an exact equality between $s+t$ and $a+b$.\\
+
+$(2)$:\\
+According to Proof$(1)$ , We have $6$ possibilities for the result of $s$ and $t$:\\
+\begin{itemize}
+
+\item If $s = a+b$ and $t = 0$ so   $ \lvert t \rvert \le 2^{-53} \lvert s \rvert$ for  $RNDN$ and  $ \lvert t \rvert \le 2^{-52} \lvert s \rvert$ for the direct rounding modes.\\
+
+\item If $s = a$ and $t =b$ ($a$ and $b$ have the same sign) with  $\lvert b \rvert < 2^{-53}.\lvert a \rvert$
+$\Rightarrow$ $ \lvert t \rvert \le 2^{-53} \lvert s \rvert$ for $RNDN$ a fortiori  $ \lvert t \rvert \le 2^{-52} \lvert s \rvert$ for the direct rounding modes.\\
+
+\item If $s=a+b_h$ and $t = b_l$ ($a$, $b_h$ and $b_{\ell}$ are the same sign). 
+We suppose that $a >0$, $b_h > 0$ and $b_{\ell} > 0$.
+We know that $0 \le  b_{\ell}   < 2^{-53}.  a $ 
+$\Rightarrow$ $  a  >  2^{53}.  b_{\ell} $ and that $b_h$ is a multiple of 
+$ulp(a)$ $\Rightarrow$ $  b_h  > 2.  b_{\ell} $. So we have $a + b_h > 2^{53}b_{\ell} + 2b_{\ell}$ $\Rightarrow$ $a + b_h > (2^{53} + 2).b_{\ell}$
+or $2^{53} +2 > 2^{53}$ $\Rightarrow$ $a + b_h > 2^{53}b_{\ell}$ 
+$\Rightarrow$ $s > 2^{53}.t $ $\Rightarrow$ $t \le 2^{-53}.s$ $\Rightarrow$ $ \lvert t \rvert \le 2^{-53} .\lvert s \rvert$ (and similarly if $a <0$, $b_h <0$ and $b_{\ell} < 0$).\\
+
+\item If $s = a +ulp(a)$ and $t = b -ulp(a)$:\\
+We know according to  proof($1$) that $\lvert b \rvert \le 2^{-53} \lvert a \rvert$.\\
+We suppose that $a>0$ and $b>0$, so we have:\\
+$t \le t+ulp(a)$ $\Rightarrow$ $t \le b - ulp(a) + ulp(a)$ $\Rightarrow$ $t \le b$ 
+$\Rightarrow$ $\lvert t \rvert \le 2^{-53} \lvert a \rvert $\\
+We search the upper bound of $\lvert a \rvert $ as a function of $\lvert s \rvert$:\\
+$s = a+ ulp(a)$ $\Rightarrow$ $s \ge a$ $\Rightarrow$ $\lvert s \rvert \ge \lvert a \rvert $ so:\\
+$\lvert t \rvert \le 2^{-53} \lvert s \rvert $ \\
+(and similarly if $a<0$ and $b<0$).\\
+
+
+\item If $s = a + b_h + ulp(a)$ and $t = b_{\ell} -ulp(a)$\\
+We know according to  proof($1$) that $\lvert b_{\ell} \rvert \le 2^{-53} \lvert b_h \rvert$.\\
+We suppose that $a>0$ and $b_h>0$, so we have:\\
+$t \le t+ulp(a)$ $\Rightarrow$ $t \le b_{\ell} - ulp(a) + ulp(a)$ $\Rightarrow$ $t \le b_{\ell}$ 
+$\Rightarrow$ $\lvert t \rvert \le 2^{-53} \lvert b_h\rvert $  $\Rightarrow$ $\lvert t \rvert \le 2^{-53} \lvert a +b_h\rvert $\\
+We search the upper bound of $\lvert a + b_h \rvert $ as a function of $\lvert s \rvert$:\\
+$s = a+ b_h +ulp(a)$ $\Rightarrow$ $s \ge a + b_h$ $\Rightarrow$ $\lvert s \rvert \ge \lvert a + b_h \rvert $ so:\\
+$\lvert t \rvert \le 2^{-53} \lvert s \rvert $ \\
+(and similarly if $a<0$ and $b<0$).\\
+
+\item If $t = a+b -s$ , so  $\lvert t \rvert = \lvert a+b-s \rvert = \lvert s-(a+b) \rvert $  according to collary \ref{coroll:UX} $\Rightarrow$ :\\
+$$\lvert s-(a+b) \rvert \le u.\lvert s \rvert$$ with $u$ is the \textbf{unit Roundoff}(see \ref{sub:U}).
+\end{itemize}
+For all cases,  we have $\lvert t \rvert \le u. \lvert s \rvert$ so for $RNDN$: $\lvert t \rvert \le 2^{-53}. \lvert s \rvert$ and for the others rounding modes: $\lvert t \rvert \le 2^{-52}. \lvert s \rvert$.
+\end{proof}

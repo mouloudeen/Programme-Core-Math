@@ -1,0 +1,31 @@
+\section{Multiplication Operators}
+
+\subsection{Mul112}
+See algorithm \ref{algo:Mul112}
+\begin{lem}[Mul112]
+Let $a$ and $b$  floating point numbers,  $s$ and $t$ result of $Mul112(a,b)$ for the $4$ modes of rounding, considering that there is no \textbf{overflow} so :
+\begin{itemize}
+ \item  $(1)$ $r_1+r_2$ is exactly equal to $a.b$.              
+\item  $(2)$ $ \lvert r_2 \rvert \le u.\lvert r_1 \rvert $
+\end{itemize} 
+\end{lem}
+
+\begin{proof} \color{-yellow}
+$(1)$
+According to \cite{muller2010handbook},  $FMA(a,b,-c)$ is exacty equal to $a+b-c$ for the $4$ modes of rounding .\\
+Based on Algorithm $Mul112$, we have :\\
+$r_2 = FMA(a,b,-r1)$ that supposed $\Rightarrow$ $r_2 = a*b -r_1$\\
+So 
+$$r_1 + r_2 = a*b-r_1 +r_1$$
+$$r_1 + r_2 = a*b$$
+
+$(2)$ 
+$r1 = \circ (a*b)$ according to the collary \ref{coroll:UX}
+$\Rightarrow$
+$r1 =  a*b +\epsilon$ with $\lvert \epsilon \rvert \le u.\lvert r_1 \rvert$
+We know that $r2$ is exactly equal to $a*b -r_1$.\\
+$\Rightarrow$ $r_2 = a*b -r1$ $\Rightarrow$
+$$r_2 = a*b -(a*b+\epsilon)$$
+$$r_2 = -\epsilon$$
+That $\lvert \epsilon \rvert \le u.\lvert r_1 \rvert$ $\Rightarrow$ $\lvert r_2 \rvert \le u.\lvert r_1 \rvert $.\\
+\end{proof}

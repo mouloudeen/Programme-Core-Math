@@ -1,0 +1,17 @@
+\subsubsection{double-double multiplication result triple-double}
+
+\begin{algorithm}[htbp]
+  \caption{Algorithm \textbf{Mul223}}
+\begin{algorithmic}[1]
+\Input $a_h$, $a_{\ell}$ and $b_h$, $b_{\ell}$ are  double-double numbers
+\Output $r_h$, $r_m$, $r_{\ell}$ is a triple-double numbers.
+\State $r_h,t_1 = Mul112(a_h,b_h)$\\
+    $t_2,t_3 = Mul112(a_h,b_{\ell})$\\
+    $t_4,t_5 = Mul112(a_{\ell},b_h)$\\
+    $t_6 = a_{\ell}\times b_{\ell}$\\
+    $t_7,t_8 = Add222Cond(t_2,t_3,t_4,t_5)$\\
+    $t_9,t_{10} = Add112Cond(t_1,t_6)$\\
+    $r_m,r_{\ell} = Add222Cond(t_7,t_8,t_9,t_{10})$\\
+    return $r_h$, $r_m$, $r_{\ell}$
+\end{algorithmic}
+\end{algorithm}
