@@ -1,5 +1,6 @@
 # Logarithme avec arrondi correct
-Le travail réalisé pour mon stage de fin d'étude qui a pour sujet "Le logarithme avec arrondi correct"
+Le travail réalisé pour mon stage de fin d'étude qui a pour sujet "Le logarithme avec arrondi correct".\
+Le sujet de mon stage est écrit sur le fichier cr_log.pdf.\
 Dans le dossier TRAVAUX-CORE_MATH, c'est mes travaux effectués pendant le stage.
 Ce dossier est partagé en 5 autres dossiers:
 - BEAMER : les diapositives de ma soutenance
